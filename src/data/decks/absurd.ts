@@ -1,3 +1,4 @@
+import { absurdCharacterAdditions, absurdPowerAdditions } from './ashton';
 import { deckCards } from './build';
 
 const characters = [
@@ -24,6 +25,7 @@ const characters = [
   ['mouse', 'A famous cartoon mouse', 'Gloves on. Smile ready. The shorts are policy.'],
   ['sponge', 'A square yellow sea sponge', 'Square, yellow, and enthusiastic about the tide.'],
   ['ogre', 'A grumpy swamp ogre', 'Wants the swamp quiet and the mud left alone.'],
+  ...absurdCharacterAdditions,
 ] as const;
 
 const powers = [
@@ -53,6 +55,7 @@ const powers = [
   ['immortal', 'Immortal but allergic to everything', 'Forever, between sneezes.'],
   ['teleport', 'Can teleport, but only 3 feet', 'Arrives slightly to the left of the point.'],
   ['tall', 'Is 50 feet tall', 'Ducks through doorways that were not the plan.'],
+  ...absurdPowerAdditions,
 ] as const;
 
 export const absurdDeck = {

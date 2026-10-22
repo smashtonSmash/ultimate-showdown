@@ -1,3 +1,4 @@
+import { horrorCharacterAdditions, horrorPowerAdditions } from './ashton';
 import { deckCards } from './build';
 
 const characters = [
@@ -27,6 +28,7 @@ const characters = [
   ['zombie', 'Zombie', 'Slow, sincere, and not done walking.'],
   ['ghost', 'Ghost', 'Present, mostly. The chair stays cold.'],
   ['monster', "Frankenstein's Monster", 'Stitched together and looking for a fair fight.'],
+  ...horrorCharacterAdditions,
 ] as const;
 
 const powers = [
@@ -50,6 +52,7 @@ const powers = [
   ['key', 'Key to the wrong door', 'Opens a closet deeper than the building allows.'],
   ['margin', 'Margin ghost', 'Pencil notes appear. Usually helpful. Sometimes fussy.'],
   ['battery', 'Story flashlight', 'The battery lasts exactly as long as the scene needs.'],
+  ...horrorPowerAdditions,
 ] as const;
 
 export const horrorDeck = {

@@ -64,7 +64,7 @@ test('the sample deck is original, unique, and large enough to deal', () => {
   assert.equal(new Set(cardIds).size, cardIds.length);
   for (const card of cards) {
     assert.ok(card.title.trim().length > 0);
-    assert.ok(card.detail.trim().length > 0);
+    assert.equal(card.detail, card.detail.trim());
     const marker = card.kind === 'character' ? '.character.' : '.attribute.';
     assert.equal(card.id.includes(marker), true);
   }
@@ -207,13 +207,13 @@ test('a player view hides the other fighter until the showdown is public', () =>
 
 test('every deck has at least 20 original characters and 20 powers', () => {
   const sizes: Record<string, readonly [characters: number, powers: number]> = {
-    house: [30, 24],
-    fantasy: [24, 20],
-    'sci-fi': [25, 21],
-    horror: [26, 20],
-    anime: [22, 20],
-    everyday: [26, 20],
-    absurd: [23, 26],
+    house: [113, 34],
+    fantasy: [36, 24],
+    'sci-fi': [31, 23],
+    horror: [42, 21],
+    anime: [23, 20],
+    everyday: [46, 22],
+    absurd: [43, 37],
   };
   const placed: Record<string, readonly string[]> = {
     house: [
@@ -231,17 +231,46 @@ test('every deck has at least 20 original characters and 20 powers', () => {
       'Super strength',
       'Shoots lasers from their eyes',
       'Has a bazooka',
+      'Armed with a flamethrower',
+      'Armed with a sniper rifle',
+      'Can blow 200-mph winds',
+      'Can breathe underwater',
+      'Can become any animal',
+      'Teleports',
+      'Controls magnetism',
+      'X-ray vision',
+      'Sonic scream',
+      'Unaffected by impact',
     ],
-    fantasy: ['A grey-bearded wizard', 'Dragon', 'Wizard', 'Knight'],
+    fantasy: [
+      'A grey-bearded wizard',
+      'Dragon',
+      'Wizard',
+      'Knight',
+      'Armed with holy hand grenades',
+      'Breathes fire',
+      'Berserker rage',
+      'Riding a depressed centaur',
+    ],
     'sci-fi': [
       'A giant atomic sea lizard',
       'A skyscraper-climbing giant ape',
       'A heavy-breathing space knight',
       'Robot',
       'Alien',
-      'Has a lightsaber-style energy sword',
+      'Has a laser sword',
+      'Armed with a shrink ray',
+      'Wearing a jet-pack',
     ],
-    horror: ['Vampire', 'Werewolf', 'Mummy', 'Zombie', 'Ghost', "Frankenstein's Monster"],
+    horror: [
+      'Vampire',
+      'Werewolf',
+      'Mummy',
+      'Zombie',
+      'Ghost',
+      "Frankenstein's Monster",
+      'Can become mist while holding breath',
+    ],
     anime: ['A spiky-haired anime fighter', 'An electric pocket monster'],
     everyday: [
       'Your grandma',
@@ -250,6 +279,8 @@ test('every deck has at least 20 original characters and 20 powers', () => {
       'A goose',
       'A soccer mom',
       'A big-box store greeter',
+      'Has shampoo in eyes',
+      'Cries uncontrollably',
     ],
     absurd: [
       'A famous cartoon mouse',
@@ -261,6 +292,17 @@ test('every deck has at least 20 original characters and 20 powers', () => {
       'Immortal but allergic to everything',
       'Can teleport, but only 3 feet',
       'Is 50 feet tall',
+      'Armed with a shotgun that shoots shotguns',
+      'Armed with a superglue fire hose',
+      'Armed with an infinite sausage lasso',
+      'Locked in a shark cage',
+      'Made of guacamole',
+      'Believes they are invisible',
+      'Really stupid',
+      'No bones',
+      'Flying at the speed of molasses',
+      'Bottom half is a unicycle',
+      'Constantly playing a kazoo',
     ],
   };
   const seen = new Set<string>();
@@ -279,12 +321,24 @@ test('every deck has at least 20 original characters and 20 powers', () => {
       titles.add(card.title);
       deckTitles.add(card.title);
       assert.ok(card.title.trim().length > 0);
-      assert.ok(card.detail.trim().length > 0);
+      assert.equal(card.detail, card.detail.trim());
       assert.equal(card.id.startsWith(`${deck.id}.`), true);
     }
     for (const title of placed[deck.id]) {
       assert.equal(deckTitles.has(title), true, `${deck.id} missing ${title}`);
     }
+  }
+  for (const title of [
+    'Roundhouse Ranger',
+    'Dark Space Lord',
+    'Soccer Mom',
+    'Frankenstein',
+    'Electric Pocket Mouse',
+    'Kung Fu Legend',
+    'Has a lightsaber',
+    'Has a lightsaber-style energy sword',
+  ]) {
+    assert.equal(titles.has(title), false, title);
   }
 });
 

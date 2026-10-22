@@ -1,3 +1,4 @@
+import { fantasyCharacterAdditions, fantasyPowerAdditions } from './ashton';
 import { deckCards } from './build';
 
 const characters = [
@@ -25,6 +26,7 @@ const characters = [
   ['dragon', 'Dragon', 'Hoards quietly, and counts.'],
   ['wizard', 'Wizard', 'Pointed hat. Unfinished spell. Full confidence.'],
   ['sworn-knight', 'Knight', 'Shiny enough to be seen coming.'],
+  ...fantasyCharacterAdditions,
 ] as const;
 
 const powers = [
@@ -48,6 +50,7 @@ const powers = [
   ['manners', 'Polite interrupt', 'Can cut in, but only after saying excuse me.'],
   ['picnic', 'Summoned picnic', 'Calls a blanket, three apples, and a ceasefire long enough to eat.'],
   ['loan', 'Borrowed flame', 'May take a puff of dragonfire. It has to come back unsinged.'],
+  ...fantasyPowerAdditions,
 ] as const;
 
 export const fantasyDeck = {

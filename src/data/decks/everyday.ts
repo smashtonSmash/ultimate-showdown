@@ -1,3 +1,4 @@
+import { everydayCharacterAdditions, everydayPowerAdditions } from './ashton';
 import { deckCards } from './build';
 
 const characters = [
@@ -27,6 +28,7 @@ const characters = [
   ['goose', 'A goose', 'Owns the path. You are visiting.'],
   ['soccermom', 'A soccer mom', 'The minivan is already in position.'],
   ['greeter', 'A big-box store greeter', 'Knows the aisle, and that you are welcome.'],
+  ...everydayCharacterAdditions,
 ] as const;
 
 const powers = [
@@ -50,6 +52,7 @@ const powers = [
   ['umbrella', 'Two-argument umbrella', 'Both sides stay dry. Neither has to admit they needed it.'],
   ['spot', 'Parking karma', 'A spot appears, slightly far, exactly in time.'],
   ['scissors', 'The good scissors', 'They cut the thing. They do not wander off.'],
+  ...everydayPowerAdditions,
 ] as const;
 
 export const everydayDeck = {

@@ -1,3 +1,4 @@
+import { animeCharacterAdditions } from './ashton';
 import { deckCards } from './build';
 
 const characters = [
@@ -23,6 +24,7 @@ const characters = [
   ['runner', 'Closing-credits runner', 'Always in frame when the music swells, even at a bus stop.'],
   ['spiky', 'A spiky-haired anime fighter', 'The hair enters the fight first.'],
   ['spark', 'An electric pocket monster', 'Fits in a pocket. The pocket regrets it.'],
+  ...animeCharacterAdditions,
 ] as const;
 
 const powers = [

@@ -22,7 +22,7 @@ export function PlayingCard({
         {selected ? <Text style={styles.picked}>Picked</Text> : null}
       </View>
       <Text style={styles.title}>{card.title}</Text>
-      <Text style={styles.detail}>{card.detail}</Text>
+      {card.detail.trim() ? <Text style={styles.detail}>{card.detail}</Text> : null}
     </>
   );
 
@@ -43,7 +43,11 @@ export function PlayingCard({
     <Pressable
       accessibilityRole="button"
       accessibilityState={{ selected }}
-      accessibilityLabel={`${kindLabel}: ${card.title}. ${card.detail}`}
+      accessibilityLabel={
+        card.detail.trim()
+          ? `${kindLabel}: ${card.title}. ${card.detail}`
+          : `${kindLabel}: ${card.title}`
+      }
       onPress={onPress}
       style={({ pressed }) => [
         styles.card,

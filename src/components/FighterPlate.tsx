@@ -27,8 +27,12 @@ export function FighterPlate({
       <Text style={styles.character}>{build.character.title}</Text>
       <Text style={styles.with}>with</Text>
       <Text style={styles.attribute}>{build.attribute.title}</Text>
-      <Text style={styles.detail}>{build.character.detail}</Text>
-      <Text style={styles.detail}>{build.attribute.detail}</Text>
+      {build.character.detail.trim() ? (
+        <Text style={styles.detail}>{build.character.detail}</Text>
+      ) : null}
+      {build.attribute.detail.trim() ? (
+        <Text style={styles.detail}>{build.attribute.detail}</Text>
+      ) : null}
     </>
   );
 

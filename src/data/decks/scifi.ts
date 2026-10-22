@@ -1,3 +1,4 @@
+import { scifiCharacterAdditions, scifiPowerAdditions } from './ashton';
 import { deckCards } from './build';
 
 const characters = [
@@ -26,6 +27,7 @@ const characters = [
   ['knight', 'A heavy-breathing space knight', 'The helmet does the talking, slowly.'],
   ['robot', 'Robot', 'Beeps when the plan is bad.'],
   ['alien', 'Alien', 'From somewhere else, and in no hurry to explain.'],
+  ...scifiCharacterAdditions,
 ] as const;
 
 const powers = [
@@ -49,7 +51,8 @@ const powers = [
   ['forecast', 'Orbital forecast', 'Knows the weather on ground you have not reached.'],
   ['mute', 'Engine mute', 'Can hush a machine. People are on their own.'],
   ['confetti', 'Emergency confetti', 'Deploys in a crisis. Morale rises. Cleanup is later.'],
-  ['energy-sword', 'Has a lightsaber-style energy sword', 'It hums. The room gets serious.'],
+  ['energy-sword', 'Has a laser sword', ''],
+  ...scifiPowerAdditions,
 ] as const;
 
 export const scifiDeck = {

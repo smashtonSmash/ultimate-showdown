@@ -1,4 +1,5 @@
 import type { GameCard } from '../game/types';
+import { houseCharacterAdditions, housePowerAdditions } from './decks/ashton';
 
 /**
  * House deck for local play. Themed expansions live in src/data/decks.
@@ -152,6 +153,7 @@ export const CHARACTERS: readonly GameCard[] = [
   character('ninja', 'Ninja', 'Already in the room. Has been.'),
   character('pirate', 'Pirate', 'Keeps a map, a grudge, and decent manners aboard.'),
   character('cowboy', 'Cowboy', 'Tips the hat, then settles it.'),
+  ...houseCharacterAdditions.map(([id, title, detail]) => character(id, title, detail)),
 ];
 
 export const ATTRIBUTES: readonly GameCard[] = [
@@ -259,4 +261,5 @@ export const ATTRIBUTES: readonly GameCard[] = [
   attribute('strength', 'Super strength', 'Lifts the heavy part, including the mood.'),
   attribute('lasers', 'Shoots lasers from their eyes', 'Looks at the problem until it glows.'),
   attribute('bazooka', 'Has a bazooka', 'Brought the loud option.'),
+  ...housePowerAdditions.map(([id, title, detail]) => attribute(id, title, detail)),
 ];
