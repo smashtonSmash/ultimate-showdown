@@ -8,7 +8,7 @@ type GameApi = {
   deckIds: DeckId[];
   setPendingNames: (names: string[]) => void;
   toggleDeck: (id: DeckId) => void;
-  startTable: (names: string[]) => void;
+  startTable: (names: string[], fighters: readonly [string, string]) => void;
   dispatch: (action: GameAction) => void;
   reset: () => void;
 };
@@ -28,8 +28,8 @@ export function GameProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const startTable = useCallback(
-    (names: string[]) => {
-      setSession(createSession(names, Math.random, deckIds));
+    (names: string[], fighters: readonly [string, string]) => {
+      setSession(createSession(names, Math.random, deckIds, fighters));
       setPendingNames(null);
     },
     [deckIds],

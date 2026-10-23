@@ -56,18 +56,32 @@ export function createSession(
   names: readonly string[],
   rng: Rng = Math.random,
   deckIds: readonly DeckId[] = ['house'],
+  openingFighters?: readonly [string, string],
 ): GameSession {
   const cleaned = names.map((name) => name.trim());
   const problem = validateNames(cleaned);
   if (problem) {
     throw new Error(problem);
   }
-  const players = cleaned.map((name, index) => ({
+  const seated = openingFighters ? seatOpeningPair(cleaned, openingFighters) : cleaned;
+  const players = seated.map((name, index) => ({
     id: `player-${index + 1}`,
     name,
     score: 0,
   }));
   return openRound({ players, history: [], deckIds: normalizeDeckIds(deckIds) }, 0, rng);
+}
+
+/** Put the chosen pair first. Later rounds rotate one seat forward from that order. */
+export function seatOpeningPair(
+  names: readonly string[],
+  fighters: readonly [string, string],
+): string[] {
+  const [left, right] = [fighters[0].trim(), fighters[1].trim()];
+  if (left === right || !names.includes(left) || !names.includes(right)) {
+    throw new Error('Pick two players at the table.');
+  }
+  return [left, right, ...names.filter((name) => name !== left && name !== right)];
 }
 
 export function reduce(
@@ -288,14 +302,19 @@ function pairForRound(players: readonly Player[], roundNumber: number): [string,
   return [players[first].id, players[second].id];
 }
 
-/** Round 1 of a new table: the same pair `createSession` deals, and everyone else judging. */
-export function openingLineup(names: readonly string[]): {
+/** Round 1 lineup. A chosen pair is seated first; otherwise the first two names fight. */
+export function openingLineup(
+  names: readonly string[],
+  fighters?: readonly [string, string],
+): {
   fighters: readonly [string, string];
   judges: readonly string[];
 } {
-  const players = names.map((name, index) => ({
+  const cleaned = names.map((name) => name.trim());
+  const seated = fighters ? seatOpeningPair(cleaned, fighters) : cleaned;
+  const players = seated.map((name, index) => ({
     id: `player-${index + 1}`,
-    name: name.trim(),
+    name,
     score: 0,
   }));
   const [leftId, rightId] = pairForRound(players, 1);

@@ -89,6 +89,48 @@ test('the opening lineup is the first rotated pair, and everyone else judges', (
   assert.deepEqual(openingLineup(['Alex', 'Jordan', 'Sam']).judges, ['Sam']);
 });
 
+test('a chosen opening pair is round 1, and later rounds rotate from that pair', () => {
+  const names = ['Alex', 'Jordan', 'Sam', 'Riley'] as const;
+  const lineup = openingLineup(names, ['Sam', 'Alex']);
+  assert.deepEqual(lineup.fighters, ['Sam', 'Alex']);
+  assert.deepEqual(lineup.judges, ['Jordan', 'Riley']);
+
+  const rng = mulberry32(21);
+  let session = createSession(names, rng, ['house'], ['Sam', 'Alex']);
+  assert.deepEqual(
+    session.players.map((player) => player.name),
+    ['Sam', 'Alex', 'Jordan', 'Riley'],
+  );
+  assert.deepEqual(
+    session.fighterIds.map((id) => getPlayer(session, id).name),
+    ['Sam', 'Alex'],
+  );
+
+  session = playShowdown(session, [0, 0], rng);
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.deepEqual(
+    session.fighterIds.map((id) => getPlayer(session, id).name),
+    ['Alex', 'Jordan'],
+  );
+
+  session = playShowdown(session, [0, 0], rng);
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.deepEqual(
+    session.fighterIds.map((id) => getPlayer(session, id).name),
+    ['Jordan', 'Riley'],
+  );
+
+  session = playShowdown(session, [0, 0], rng);
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.deepEqual(
+    session.fighterIds.map((id) => getPlayer(session, id).name),
+    ['Riley', 'Sam'],
+  );
+
+  assert.throws(() => createSession(names, rng, ['house'], ['Sam', 'Sam']));
+  assert.throws(() => createSession(names, rng, ['house'], ['Sam', 'Nobody']));
+});
+
 test('names need three unique people', () => {
   assert.match(validateNames(['Ada', 'Bea']) ?? '', /at least 3/);
   assert.match(validateNames(['Ada', 'Bea', 'ada']) ?? '', /share a name/);

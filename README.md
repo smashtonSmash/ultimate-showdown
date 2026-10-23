@@ -6,13 +6,13 @@ The house deck and the themed expansions are original. They are not taken from a
 
 ## How a showdown works
 
-1. Seat 3 to 8 players, in the order they should rotate.
-2. Choose expansions if you want them. The house deck is always in the deal. Fantasy, Sci-Fi, Horror, Anime, Everyday Chaos, and Absurd / Silly can be switched on to mix in.
-3. Tap Next. The table sees who fights first, taps the Name vs. Name button, and sees who is judging. Then those two seats are dealt 3 characters and 3 powers from that mix. Cards in a showdown do not overlap.
+1. Seat 3 to 8 players.
+2. Tap Next, then choose decks. The house deck is always in the deal. Fantasy, Sci-Fi, Horror, Anime, Everyday Chaos, and Absurd / Silly can be switched on to mix in.
+3. Choose the first two fighters. The first two seats start selected. Tap Name vs. Name, and everyone else is judging. Later rounds rotate one seat forward from that pair. Those two are dealt 3 characters and 3 powers from the mix. Cards in a showdown do not overlap.
 4. Each fighter privately keeps one character and one power. Pass the phone so the other side cannot see the hand.
 5. Both fighters are revealed. They argue the matchup.
 6. Each judge votes in secret. The winner gets one point. A tie scores nothing, and the votes are written on the sheet.
-7. The next showdown rotates one seat forward: 1 vs 2, then 2 vs 3, then 3 vs 4, and so on. Later rounds keep the same decks.
+7. The next showdown rotates one seat forward from the opening pair: those two, then the second fighter against the next seat, and so on around the table. Later rounds keep the same decks.
 
 This build keeps the whole table on one device. Nothing is saved if you close the app.
 
