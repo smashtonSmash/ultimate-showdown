@@ -19,7 +19,7 @@ const accents: Record<DeckId, string> = {
 
 export function DecksScreen() {
   const router = useRouter();
-  const { pendingNames, deckIds, toggleDeck, startTable } = useGame();
+  const { pendingNames, deckIds, toggleDeck } = useGame();
   const enabled = new Set(deckIds);
   const pool = poolForDecks(deckIds);
 
@@ -40,13 +40,7 @@ export function DecksScreen() {
           <Text style={styles.summary}>
             {`${deckSummary(deckIds)}. ${pool.characters.length} characters and ${pool.attributes.length} powers in the deal.`}
           </Text>
-          <Button
-            label="Start the showdown"
-            onPress={() => {
-              startTable(pendingNames);
-              router.replace('/table');
-            }}
-          />
+          <Button label="Done" onPress={() => router.back()} />
         </>
       }
     >

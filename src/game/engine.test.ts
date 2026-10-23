@@ -6,9 +6,11 @@ import {
   HAND_SIZE,
   createSession,
   decideWinner,
+  openingLineup,
   getBuild,
   getHand,
   getJudges,
+  getPlayer,
   projectForPlayer,
   reduce,
   tallyVotes,
@@ -68,6 +70,23 @@ test('the sample deck is original, unique, and large enough to deal', () => {
     const marker = card.kind === 'character' ? '.character.' : '.attribute.';
     assert.equal(card.id.includes(marker), true);
   }
+});
+
+test('the opening lineup is the first rotated pair, and everyone else judges', () => {
+  const names = ['Alex', 'Jordan', 'Sam', 'Riley'] as const;
+  const lineup = openingLineup(names);
+  assert.deepEqual(lineup.fighters, ['Alex', 'Jordan']);
+  assert.deepEqual(lineup.judges, ['Sam', 'Riley']);
+  const session = createSession(names, mulberry32(3));
+  assert.deepEqual(
+    session.fighterIds.map((id) => getPlayer(session, id).name),
+    [...lineup.fighters],
+  );
+  assert.deepEqual(
+    getJudges(session).map((judge) => judge.name),
+    [...lineup.judges],
+  );
+  assert.deepEqual(openingLineup(['Alex', 'Jordan', 'Sam']).judges, ['Sam']);
 });
 
 test('names need three unique people', () => {

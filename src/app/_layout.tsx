@@ -48,6 +48,7 @@ export default function RootLayout() {
         <Stack.Screen name="index" options={{ title: GAME_NAME }} />
         <Stack.Screen name="setup" options={{ title: `Table · ${GAME_NAME}` }} />
         <Stack.Screen name="decks" options={{ title: `Decks · ${GAME_NAME}` }} />
+        <Stack.Screen name="opening" options={{ title: `First fight · ${GAME_NAME}` }} />
         <Stack.Screen
           name="table"
           options={{ title: GAME_NAME, gestureEnabled: false }}

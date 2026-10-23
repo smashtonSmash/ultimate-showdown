@@ -288,6 +288,30 @@ function pairForRound(players: readonly Player[], roundNumber: number): [string,
   return [players[first].id, players[second].id];
 }
 
+/** Round 1 of a new table: the same pair `createSession` deals, and everyone else judging. */
+export function openingLineup(names: readonly string[]): {
+  fighters: readonly [string, string];
+  judges: readonly string[];
+} {
+  const players = names.map((name, index) => ({
+    id: `player-${index + 1}`,
+    name: name.trim(),
+    score: 0,
+  }));
+  const [leftId, rightId] = pairForRound(players, 1);
+  const left = players.find((player) => player.id === leftId);
+  const right = players.find((player) => player.id === rightId);
+  if (!left || !right) {
+    throw new Error('A showdown needs two fighters.');
+  }
+  return {
+    fighters: [left.name, right.name],
+    judges: players
+      .filter((player) => player.id !== leftId && player.id !== rightId)
+      .map((player) => player.name),
+  };
+}
+
 function selectFromHand(
   state: GameSession,
   phaseType: 'pick-character' | 'pick-attribute',

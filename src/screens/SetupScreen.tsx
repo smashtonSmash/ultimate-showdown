@@ -55,6 +55,17 @@ export function SetupScreen() {
       return;
     }
     setPendingNames(next);
+    router.push('/opening');
+  }
+
+  function openDecks() {
+    const pending = draft.trim();
+    const next = pending ? addName(pending) : players;
+    if (!next || next.length === 0) {
+      router.push('/decks');
+      return;
+    }
+    setPendingNames(next);
     router.push('/decks');
   }
 
@@ -62,7 +73,7 @@ export function SetupScreen() {
   const helper =
     remaining > 0
       ? `Add ${remaining} more ${remaining === 1 ? 'player' : 'players'}.`
-      : `First showdown: ${players[0]} vs ${players[1]}. Next, choose any expansions.`;
+      : `First showdown: ${players[0]} vs ${players[1]}.`;
 
   return (
     <KeyboardAvoidingView
@@ -73,7 +84,8 @@ export function SetupScreen() {
         footer={
           <>
             {error ? <Text style={styles.error}>{error}</Text> : null}
-            <Button label="Choose decks" onPress={start} disabled={players.length < MIN_PLAYERS && draft.trim().length === 0} />
+            <TextButton label="Choose decks" onPress={openDecks} />
+            <Button label="Next" onPress={start} disabled={players.length < MIN_PLAYERS && draft.trim().length === 0} />
           </>
         }
       >
