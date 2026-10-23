@@ -51,7 +51,7 @@ const powers = [
   ['forecast', 'Orbital forecast', 'Knows the weather on ground you have not reached.'],
   ['mute', 'Engine mute', 'Can hush a machine. People are on their own.'],
   ['confetti', 'Emergency confetti', 'Deploys in a crisis. Morale rises. Cleanup is later.'],
-  ['energy-sword', 'Has a laser sword', ''],
+  ['energy-sword', 'Has a laser sword', 'It hums, and the room decides to behave.'],
   ...scifiPowerAdditions,
 ] as const;
 

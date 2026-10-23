@@ -17,7 +17,7 @@ const STEPS = [
   {
     number: '02',
     title: 'Argue',
-    body: 'Two players make the case for why their combination would win.',
+    body: 'Argue the matchup. That can be one on one, a three-way free-for-all, or two teams of two.',
   },
   {
     number: '03',

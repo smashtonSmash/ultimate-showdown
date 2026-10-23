@@ -1,14 +1,16 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import { createSession, reduce } from '@/game/engine';
-import type { DeckId, GameAction, GameSession } from '@/game/types';
+import type { DeckId, GameAction, GameSession, MatchMode } from '@/game/types';
 
 type GameApi = {
   session: GameSession | null;
   pendingNames: string[] | null;
   deckIds: DeckId[];
+  matchMode: MatchMode;
   setPendingNames: (names: string[]) => void;
   toggleDeck: (id: DeckId) => void;
-  startTable: (names: string[], fighters: readonly [string, string]) => void;
+  setMatchMode: (mode: MatchMode) => void;
+  startTable: (names: string[], mode: MatchMode, fighters: readonly string[]) => void;
   dispatch: (action: GameAction) => void;
   reset: () => void;
 };
@@ -19,6 +21,7 @@ export function GameProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<GameSession | null>(null);
   const [pendingNames, setPendingNames] = useState<string[] | null>(null);
   const [deckIds, setDeckIds] = useState<DeckId[]>(['house']);
+  const [matchMode, setMatchMode] = useState<MatchMode>('1v1');
 
   const toggleDeck = useCallback((id: DeckId) => {
     if (id === 'house') return;
@@ -28,8 +31,9 @@ export function GameProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const startTable = useCallback(
-    (names: string[], fighters: readonly [string, string]) => {
-      setSession(createSession(names, Math.random, deckIds, fighters));
+    (names: string[], mode: MatchMode, fighters: readonly string[]) => {
+      setMatchMode(mode);
+      setSession(createSession(names, Math.random, deckIds, { mode, fighters }));
       setPendingNames(null);
     },
     [deckIds],
@@ -49,13 +53,15 @@ export function GameProvider({ children }: { children: ReactNode }) {
       session,
       pendingNames,
       deckIds,
+      matchMode,
       setPendingNames,
       toggleDeck,
+      setMatchMode,
       startTable,
       dispatch,
       reset,
     }),
-    [session, pendingNames, deckIds, toggleDeck, startTable, dispatch, reset],
+    [session, pendingNames, deckIds, matchMode, toggleDeck, startTable, dispatch, reset],
   );
 
   return <GameContext.Provider value={value}>{children}</GameContext.Provider>;

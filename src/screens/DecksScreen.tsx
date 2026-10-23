@@ -40,7 +40,7 @@ export function DecksScreen() {
           <Text style={styles.summary}>
             {`${deckSummary(deckIds)}. ${pool.characters.length} characters and ${pool.attributes.length} powers in the deal.`}
           </Text>
-          <Button label="Choose fighters" onPress={() => router.push('/opening')} />
+          <Button label="Choose the fight" onPress={() => router.push('/mode')} />
         </>
       }
     >

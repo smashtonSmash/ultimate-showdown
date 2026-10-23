@@ -80,7 +80,7 @@ export function SetupScreen() {
         <TextButton label="Back" onPress={() => router.back()} />
         <Eyebrow>The table</Eyebrow>
         <Title>Who is sitting down?</Title>
-        <Body>Add at least three people. Two fight each showdown. Everyone else judges.</Body>
+        <Body>Add at least three people. The kind of fight comes after the decks, and someone has to be free to judge.</Body>
 
         <View style={styles.entry}>
           <TextInput

@@ -2,11 +2,14 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 import { ATTRIBUTES, CHARACTERS } from '../data/cards';
 import { DECKS, poolForDecks } from '../data/decks';
+import { TIEBREAKERS } from '../data/tiebreakers';
 import {
   HAND_SIZE,
   createSession,
   decideWinner,
   openingLineup,
+  matchupLabel,
+  modeAvailable,
   getBuild,
   getHand,
   getJudges,
@@ -33,12 +36,15 @@ function ids(cards: { id: string }[]): string[] {
   return cards.map((card) => card.id);
 }
 
-function playShowdown(session: GameSession, votes: Array<0 | 1>, rng: Rng): GameSession {
+function lockFighters(session: GameSession, rng: Rng): GameSession {
   let state = session;
-  for (let fighterIndex = 0; fighterIndex < 2; fighterIndex += 1) {
+  const count = state.fighterIds.length;
+  for (let fighterIndex = 0; fighterIndex < count; fighterIndex += 1) {
     assert.equal(state.phase.type, 'pass');
     state = reduce(state, { type: 'acknowledge-pass' }, rng);
-    const hand = getHand(state, state.fighterIds[fighterIndex as 0 | 1]);
+    const fighterId = state.fighterIds[fighterIndex];
+    assert.ok(fighterId);
+    const hand = getHand(state, fighterId);
     state = reduce(state, { type: 'select-character', cardId: hand.characters[0].id }, rng);
     state = reduce(state, { type: 'confirm-character' }, rng);
     state = reduce(state, { type: 'select-attribute', cardId: hand.attributes[0].id }, rng);
@@ -46,14 +52,42 @@ function playShowdown(session: GameSession, votes: Array<0 | 1>, rng: Rng): Game
     state = reduce(state, { type: 'lock-build' }, rng);
   }
   assert.equal(state.phase.type, 'matchup');
-  state = reduce(state, { type: 'call-vote' }, rng);
+  return state;
+}
+
+function castBallot(session: GameSession, votes: number[], rng: Rng): GameSession {
+  let state = session;
   const judges = getJudges(state);
   assert.equal(votes.length, judges.length);
   for (const choice of votes) {
     assert.equal(state.phase.type, 'pass-judge');
     state = reduce(state, { type: 'acknowledge-judge' }, rng);
-    state = reduce(state, { type: 'cast-vote', choiceId: state.fighterIds[choice] }, rng);
+    const side = state.contenderIds.length
+      ? state.sides.filter((entry) => state.contenderIds.includes(entry.id))[choice]
+      : state.sides[choice];
+    assert.ok(side);
+    state = reduce(state, { type: 'cast-vote', choiceId: side.id }, rng);
   }
+  return state;
+}
+
+function playShowdown(
+  session: GameSession,
+  votes: number[],
+  rng: Rng,
+  tiebreaks: number[][] = [],
+): GameSession {
+  let state = lockFighters(session, rng);
+  state = reduce(state, { type: 'call-vote' }, rng);
+  state = castBallot(state, votes, rng);
+  const extra = tiebreaks.slice();
+  while (state.phase.type === 'tiebreaker') {
+    const ballot = extra.shift();
+    assert.ok(ballot, 'a split needs another ballot');
+    state = reduce(state, { type: 'start-tiebreak-vote' }, rng);
+    state = castBallot(state, ballot, rng);
+  }
+  assert.equal(extra.length, 0);
   assert.equal(state.phase.type, 'result');
   return state;
 }
@@ -87,6 +121,8 @@ test('the opening lineup is the first rotated pair, and everyone else judges', (
     [...lineup.judges],
   );
   assert.deepEqual(openingLineup(['Alex', 'Jordan', 'Sam']).judges, ['Sam']);
+  assert.equal(lineup.mode, '1v1');
+  assert.equal(lineup.label, 'Alex vs. Jordan');
 });
 
 test('a chosen opening pair is round 1, and later rounds rotate from that pair', () => {
@@ -175,7 +211,7 @@ test('illegal actions leave the session untouched', () => {
   assert.equal(reduce(peeked, { type: 'confirm-character' }), peeked);
 });
 
-test('judges record a winner, a split awards nothing, and the next pair rotates', () => {
+test('judges record a winner, a split is settled by a contest, and the next pair rotates', () => {
   const rng = mulberry32(12);
   let session = createSession(['Alex', 'Jordan', 'Sam', 'Riley'], rng);
   assert.deepEqual(session.fighterIds, ['player-1', 'player-2']);
@@ -196,12 +232,122 @@ test('judges record a winner, a split awards nothing, and the next pair rotates'
   assert.equal(session.history.length, 1);
   assert.equal(session.players[1]?.score, 1);
 
-  session = playShowdown(session, [0, 1], rng);
-  assert.equal(session.history[1]?.winnerId, null);
+  session = playShowdown(session, [0, 1], rng, [[0, 0]]);
+  const settled = session.history[1];
+  assert.equal(settled?.winnerId, 'player-2');
+  assert.equal(settled?.tiebreakers.length, 1);
+  assert.equal(settled?.tally['player-2'], 2);
   assert.deepEqual(
     session.players.map((player) => player.score),
-    [0, 1, 0, 0],
+    [0, 2, 0, 0],
   );
+});
+
+test('the tiebreaker deck has twenty unique contests', () => {
+  assert.equal(TIEBREAKERS.length, 20);
+  const titles = new Set(TIEBREAKERS.map((card) => card.title));
+  const details = new Set(TIEBREAKERS.map((card) => card.detail));
+  assert.equal(titles.size, 20);
+  assert.equal(details.size, 20);
+  for (const card of TIEBREAKERS) {
+    assert.ok(card.title.trim().length > 0);
+    assert.ok(card.detail.trim().length > 0);
+    assert.equal(card.detail, card.detail.trim());
+    assert.equal(card.id.startsWith('tiebreaker.'), true);
+  }
+});
+
+test('every character and power has its own one-line description', () => {
+  const details = new Map<string, string>();
+  for (const deck of DECKS) {
+    for (const card of [...deck.characters, ...deck.attributes]) {
+      assert.ok(card.detail.trim().length > 0, card.id);
+      assert.equal(card.detail, card.detail.trim(), card.id);
+      const previous = details.get(card.detail);
+      assert.equal(previous, undefined, `${card.id} repeats ${previous}`);
+      details.set(card.detail, card.id);
+    }
+  }
+  for (const card of TIEBREAKERS) {
+    assert.equal(details.has(card.detail), false, card.id);
+  }
+});
+
+test('a tied vote draws a contest, and another tie draws a different card', () => {
+  const rng = mulberry32(44);
+  let session = createSession(['Alex', 'Jordan', 'Sam', 'Riley'], rng);
+  const pile = session.tiebreakerPile.slice();
+  assert.equal(pile.length, 20);
+  assert.equal(new Set(pile).size, 20);
+
+  session = lockFighters(session, rng);
+  session = reduce(session, { type: 'call-vote' }, rng);
+  session = castBallot(session, [0, 1], rng);
+  assert.equal(session.phase.type, 'tiebreaker');
+  assert.equal(session.history.length, 0);
+  assert.equal(session.tiebreakers.length, 1);
+  assert.equal(session.tiebreakers[0]?.id, pile[0]);
+  assert.equal(session.tiebreakerPile[0], pile[1]);
+  assert.deepEqual(
+    session.players.map((player) => player.score),
+    [0, 0, 0, 0],
+  );
+  assert.equal(reduce(session, { type: 'call-vote' }, rng), session);
+
+  session = reduce(session, { type: 'start-tiebreak-vote' }, rng);
+  assert.equal(session.phase.type, 'pass-judge');
+  session = castBallot(session, [0, 1], rng);
+  assert.equal(session.phase.type, 'tiebreaker');
+  assert.equal(session.history.length, 0);
+  assert.equal(session.tiebreakers.length, 2);
+  assert.equal(session.tiebreakers[1]?.id, pile[1]);
+  assert.notEqual(session.tiebreakers[0]?.id, session.tiebreakers[1]?.id);
+
+  session = reduce(session, { type: 'start-tiebreak-vote' }, rng);
+  session = castBallot(session, [1, 1], rng);
+  assert.equal(session.phase.type, 'result');
+  const result = session.history[0];
+  assert.equal(result?.winnerId, 'player-2');
+  assert.equal(result?.tiebreakers.length, 2);
+  assert.equal(result?.tally['player-2'], 2);
+  assert.equal(session.players[1]?.score, 1);
+  assert.equal(session.players[0]?.score, 0);
+  assert.equal(session.tiebreakers.length, 0);
+  assert.deepEqual(session.tiebreakerPile, pile.slice(2));
+
+  const carried = session.tiebreakerPile.slice();
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.deepEqual(session.tiebreakerPile, carried);
+});
+
+test('a showdown can walk the whole tiebreaker deck and still deal another contest', () => {
+  const rng = mulberry32(70);
+  let session = createSession(['Alex', 'Jordan', 'Sam', 'Riley'], rng);
+  session = lockFighters(session, rng);
+  session = reduce(session, { type: 'call-vote' }, rng);
+  const seen = new Set<string>();
+  for (let draw = 0; draw < TIEBREAKERS.length; draw += 1) {
+    session = castBallot(session, [0, 1], rng);
+    assert.equal(session.phase.type, 'tiebreaker');
+    const card = session.tiebreakers[session.tiebreakers.length - 1];
+    assert.ok(card);
+    assert.equal(seen.has(card.id), false, card.id);
+    seen.add(card.id);
+    assert.equal(session.history.length, 0);
+    session = reduce(session, { type: 'start-tiebreak-vote' }, rng);
+  }
+  assert.equal(seen.size, 20);
+  assert.equal(session.tiebreakerPile.length, 0);
+  session = castBallot(session, [0, 1], rng);
+  assert.equal(session.phase.type, 'tiebreaker');
+  assert.equal(session.tiebreakers.length, 21);
+  assert.equal(seen.has(session.tiebreakers[20]?.id ?? ''), true);
+  assert.equal(session.players[0]?.score, 0);
+});
+
+test('start-tiebreak-vote is ignored until a contest is on the table', () => {
+  const session = createSession(['Alex', 'Jordan', 'Sam'], mulberry32(8));
+  assert.equal(reduce(session, { type: 'start-tiebreak-vote' }), session);
 });
 
 test('one judge is enough to award the point', () => {
@@ -425,5 +571,157 @@ test('dealing draws from the house deck plus the expansions that are on', () => 
   const finished = playShowdown(session, [0], rng);
   const next = reduce(finished, { type: 'next-round' }, rng);
   assert.deepEqual(next.deckIds, session.deckIds);
+  assert.equal(next.mode, '1v1');
   assert.throws(() => createSession(names, rng, ['nope' as 'fantasy']));
+});
+
+test('a fight mode is locked until someone outside it can judge', () => {
+  assert.equal(modeAvailable('1v1', 3), true);
+  assert.equal(modeAvailable('1v1v1', 3), false);
+  assert.equal(modeAvailable('1v1v1', 4), true);
+  assert.equal(modeAvailable('2v2', 4), false);
+  assert.equal(modeAvailable('2v2', 5), true);
+  const four = ['Alex', 'Jordan', 'Sam', 'Riley'] as const;
+  const rng = mulberry32(4);
+  assert.throws(() =>
+    createSession(four, rng, ['house'], { mode: '2v2', fighters: four }),
+  );
+  assert.throws(() =>
+    createSession(['Alex', 'Jordan', 'Sam'], rng, ['house'], {
+      mode: '1v1v1',
+      fighters: ['Alex', 'Jordan', 'Sam'],
+    }),
+  );
+});
+
+test('a free-for-all seats three fighters, rotates the window, and scores one winner', () => {
+  const names = ['Alex', 'Jordan', 'Sam', 'Riley', 'Casey'] as const;
+  const opening = { mode: '1v1v1' as const, fighters: ['Alex', 'Sam', 'Casey'] };
+  const lineup = openingLineup(names, opening);
+  assert.deepEqual(lineup.fighters, ['Alex', 'Sam', 'Casey']);
+  assert.deepEqual(lineup.judges, ['Jordan', 'Riley']);
+  assert.equal(lineup.label, 'Alex vs. Sam vs. Casey');
+  assert.equal(matchupLabel(lineup.fighters, '1v1v1'), lineup.label);
+
+  const rng = mulberry32(15);
+  let session = createSession(names, rng, ['house'], opening);
+  assert.equal(session.mode, '1v1v1');
+  assert.deepEqual(
+    session.players.map((player) => player.name),
+    ['Alex', 'Sam', 'Casey', 'Jordan', 'Riley'],
+  );
+  assert.equal(Object.keys(session.hands).length, 3);
+  const dealt = Object.values(session.hands).flatMap((hand) => [
+    ...hand.characters,
+    ...hand.attributes,
+  ]);
+  assert.equal(new Set(dealt.map((card) => card.id)).size, dealt.length);
+
+  session = playShowdown(session, [2, 2], rng);
+  assert.equal(session.history[0]?.winnerId, 'player-3');
+  assert.deepEqual(
+    session.players.map((player) => player.score),
+    [0, 0, 1, 0, 0],
+  );
+
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.equal(session.mode, '1v1v1');
+  assert.deepEqual(
+    session.fighterIds.map((id) => getPlayer(session, id).name),
+    ['Sam', 'Casey', 'Jordan'],
+  );
+  session = reduce(playShowdown(session, [0, 0], rng), { type: 'next-round' }, rng);
+  assert.deepEqual(
+    session.fighterIds.map((id) => getPlayer(session, id).name),
+    ['Casey', 'Jordan', 'Riley'],
+  );
+});
+
+test('a free-for-all tie keeps only the tied fighters in the next contest', () => {
+  const names = ['Alex', 'Jordan', 'Sam', 'Riley', 'Casey', 'Drew', 'Quinn'] as const;
+  const rng = mulberry32(18);
+  let session = createSession(names, rng, ['house'], {
+    mode: '1v1v1',
+    fighters: ['Alex', 'Jordan', 'Sam'],
+  });
+  session = lockFighters(session, rng);
+  session = reduce(session, { type: 'call-vote' }, rng);
+  session = castBallot(session, [0, 1, 0, 1], rng);
+  assert.equal(session.phase.type, 'tiebreaker');
+  assert.equal(session.history.length, 0);
+  assert.deepEqual(session.contenderIds, ['player-1', 'player-2']);
+  const dropped = session.sides[2]?.id;
+  assert.ok(dropped);
+  session = reduce(session, { type: 'start-tiebreak-vote' }, rng);
+  assert.equal(session.phase.type, 'pass-judge');
+  const opened = reduce(session, { type: 'acknowledge-judge' }, rng);
+  assert.equal(reduce(opened, { type: 'cast-vote', choiceId: dropped }, rng), opened);
+
+  session = castBallot(session, [0, 0, 0, 0], rng);
+  assert.equal(session.phase.type, 'result');
+  assert.equal(session.history[0]?.winnerId, 'player-1');
+  assert.equal(session.players[0]?.score, 1);
+  assert.equal(session.players[1]?.score, 0);
+  assert.equal(session.players[2]?.score, 0);
+});
+
+test('a 2v2 awards a point to each winning teammate and rotates both pairs', () => {
+  const names = ['Alex', 'Jordan', 'Sam', 'Riley', 'Casey', 'Drew'] as const;
+  const opening = {
+    mode: '2v2' as const,
+    fighters: ['Riley', 'Casey', 'Alex', 'Drew'],
+  };
+  const lineup = openingLineup(names, opening);
+  assert.deepEqual(lineup.fighters, ['Riley', 'Casey', 'Alex', 'Drew']);
+  assert.deepEqual(lineup.judges, ['Jordan', 'Sam']);
+  assert.equal(lineup.label, 'Riley & Casey vs. Alex & Drew');
+
+  const rng = mulberry32(27);
+  let session = createSession(names, rng, ['house'], opening);
+  assert.equal(session.sides.length, 2);
+  assert.deepEqual(session.sides[0]?.playerIds, ['player-1', 'player-2']);
+  assert.deepEqual(session.sides[1]?.playerIds, ['player-3', 'player-4']);
+  const teamA = session.sides[0]?.id;
+  const teamB = session.sides[1]?.id;
+  assert.ok(teamA && teamB);
+
+  session = playShowdown(session, [0, 0], rng);
+  assert.equal(session.history[0]?.winnerId, teamA);
+  assert.deepEqual(
+    session.players.map((player) => player.score),
+    [1, 1, 0, 0, 0, 0],
+  );
+
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.equal(session.mode, '2v2');
+  assert.deepEqual(
+    session.fighterIds.map((id) => getPlayer(session, id).name),
+    ['Casey', 'Alex', 'Drew', 'Jordan'],
+  );
+  assert.deepEqual(session.sides[0]?.playerIds.map((id) => getPlayer(session, id).name), [
+    'Casey',
+    'Alex',
+  ]);
+  assert.deepEqual(session.sides[1]?.playerIds.map((id) => getPlayer(session, id).name), [
+    'Drew',
+    'Jordan',
+  ]);
+
+  const tied = lockFighters(session, rng);
+  let voting = reduce(tied, { type: 'call-vote' }, rng);
+  voting = castBallot(voting, [0, 1], rng);
+  assert.equal(voting.phase.type, 'tiebreaker');
+  assert.deepEqual(
+    voting.players.map((player) => player.score),
+    [1, 1, 0, 0, 0, 0],
+  );
+  assert.deepEqual(voting.contenderIds, voting.sides.map((side) => side.id));
+  voting = reduce(voting, { type: 'start-tiebreak-vote' }, rng);
+  voting = castBallot(voting, [1, 1], rng);
+  assert.equal(voting.history[1]?.winnerId, voting.sides[1]?.id);
+  assert.equal(voting.history[1]?.tiebreakers.length, 1);
+  assert.deepEqual(
+    voting.players.map((player) => player.score),
+    [1, 1, 0, 1, 1, 0],
+  );
 });

@@ -1,6 +1,6 @@
 import { useRouter } from 'expo-router';
 import { useState, type ReactNode } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { GAME_NAME } from '@/brand';
 import { Button, TextButton } from '@/components/Button';
 import { deckSummary } from '@/data/decks';
@@ -9,17 +9,18 @@ import { PlayingCard } from '@/components/PlayingCard';
 import { ScoreStrip } from '@/components/ScoreStrip';
 import { Body, Eyebrow, ScreenFrame, Title } from '@/components/ui';
 import {
-  getBuild,
+  ballotSides,
   getHand,
   getJudges,
   getPlayer,
   latestResult,
+  matchupLabel,
   peekNextFighters,
   playerForPhase,
 } from '@/game/engine';
-import type { GameAction, GameSession } from '@/game/types';
+import type { Build, GameAction, GameSession, Side } from '@/game/types';
 import { useGame } from '@/state/GameProvider';
-import { colors, type } from '@/theme';
+import { colors, type, webPressable } from '@/theme';
 
 export function TableScreen() {
   const { session, dispatch, reset } = useGame();
@@ -99,6 +100,8 @@ export function TableScreen() {
       );
     case 'matchup':
       return <Matchup session={session} dispatch={dispatch} onEnd={onEnd} />;
+    case 'tiebreaker':
+      return <Tiebreaker session={session} dispatch={dispatch} onEnd={onEnd} />;
     case 'pass-judge':
       return (
         <JudgePass
@@ -142,8 +145,10 @@ function TableChrome({
   children: ReactNode;
 }) {
   const active = playerForPhase(session);
-  const left = getPlayer(session, session.fighterIds[0]);
-  const right = getPlayer(session, session.fighterIds[1]);
+  const roundLabel = matchupLabel(
+    session.fighterIds.map((id) => getPlayer(session, id).name),
+    session.mode,
+  );
   return (
     <ScreenFrame
       header={
@@ -155,7 +160,7 @@ function TableChrome({
             <TextButton label="End" onPress={onEnd} />
           </View>
           <Text style={styles.round}>
-            Round {session.roundNumber} · {left.name} vs {right.name}
+            Round {session.roundNumber} · {roundLabel}
           </Text>
           <Text style={styles.decks} numberOfLines={2}>
             {deckSummary(session.deckIds)}
@@ -181,7 +186,7 @@ function FighterPass({
   onEnd,
 }: {
   session: GameSession;
-  fighterIndex: 0 | 1;
+  fighterIndex: number;
   onContinue: () => void;
   onEnd: () => void;
 }) {
@@ -192,7 +197,7 @@ function FighterPass({
       onEnd={onEnd}
       footer={<Button label={`I'm ${fighter.name}`} onPress={onContinue} />}
     >
-      <Eyebrow>Fighter {fighterIndex + 1} of 2</Eyebrow>
+      <Eyebrow>{spotLabel(session, fighterIndex)}</Eyebrow>
       <Title>{`Hand the phone to ${fighter.name}.`}</Title>
       <Body>
         {fighter.name} will pick a character and a power. Everyone else looks away. The cards stay hidden until the showdown is revealed.
@@ -208,7 +213,7 @@ function CharacterPick({
   onEnd,
 }: {
   session: GameSession;
-  fighterIndex: 0 | 1;
+  fighterIndex: number;
   dispatch: (action: GameAction) => void;
   onEnd: () => void;
 }) {
@@ -230,7 +235,11 @@ function CharacterPick({
     >
       <Eyebrow>Step 1 of 2 · Character</Eyebrow>
       <Title>{`${fighter.name}, who is fighting?`}</Title>
-      <Body>Keep the character you can defend. A power comes next.</Body>
+      <Body>
+        {session.mode === '2v2'
+          ? 'Keep the character you can defend. Your teammate builds their own fighter.'
+          : 'Keep the character you can defend. A power comes next.'}
+      </Body>
       {hand.characters.map((card) => (
         <PlayingCard
           key={card.id}
@@ -250,7 +259,7 @@ function AttributePick({
   onEnd,
 }: {
   session: GameSession;
-  fighterIndex: 0 | 1;
+  fighterIndex: number;
   dispatch: (action: GameAction) => void;
   onEnd: () => void;
 }) {
@@ -292,7 +301,7 @@ function ConfirmBuild({
   onEnd,
 }: {
   session: GameSession;
-  fighterIndex: 0 | 1;
+  fighterIndex: number;
   dispatch: (action: GameAction) => void;
   onEnd: () => void;
 }) {
@@ -330,7 +339,7 @@ function ConfirmBuild({
       <Title>This is the case you will make.</Title>
       <FighterPlate
         name={fighter.name}
-        side={fighterIndex === 0 ? 'left' : 'right'}
+        side={fighterIndex % 2 === 0 ? 'left' : 'right'}
         build={{ playerId: fighterId, character, attribute }}
       />
       <Body>After you lock it in, hand the phone on. The other side will not see this yet.</Body>
@@ -348,7 +357,6 @@ function Matchup({
   onEnd: () => void;
 }) {
   const judges = getJudges(session);
-  const [leftId, rightId] = session.fighterIds;
   return (
     <TableChrome
       session={session}
@@ -360,21 +368,62 @@ function Matchup({
       <Body>
         {`Judges: ${joinNames(judges.map((judge) => judge.name))}. When the table has heard enough, call the vote.`}
       </Body>
-      <FighterPlate
-        name={getPlayer(session, leftId).name}
-        side="left"
-        build={getBuild(session, leftId)}
-      />
-      <View style={styles.vsRow}>
-        <View style={styles.vsLine} />
-        <Text style={styles.vs}>VS</Text>
-        <View style={styles.vsLine} />
+      <SideList session={session} sides={session.sides} />
+    </TableChrome>
+  );
+}
+
+function Tiebreaker({
+  session,
+  dispatch,
+  onEnd,
+}: {
+  session: GameSession;
+  dispatch: (action: GameAction) => void;
+  onEnd: () => void;
+}) {
+  const card = session.tiebreakers[session.tiebreakers.length - 1];
+  const sides = ballotSides(session);
+  const narrowed = sides.length < session.sides.length;
+  if (!card) {
+    return (
+      <TableChrome session={session} onEnd={onEnd}>
+        <Title>The contest card is missing.</Title>
+      </TableChrome>
+    );
+  }
+  return (
+    <TableChrome
+      session={session}
+      onEnd={onEnd}
+      footer={
+        <Button
+          label="Judges, vote again"
+          onPress={() => dispatch({ type: 'start-tiebreak-vote' })}
+        />
+      }
+    >
+      <Eyebrow>
+        {session.tiebreakers.length > 1
+          ? `Still tied · contest ${session.tiebreakers.length}`
+          : 'The judges split'}
+      </Eyebrow>
+      <Text accessibilityRole="header" style={styles.tiebreakBanner}>
+        TIEBREAKER!
+      </Text>
+      <View style={styles.contest}>
+        <Text style={styles.contestLabel}>The contest</Text>
+        <Text style={styles.contestTitle}>{card.title}</Text>
+        <Text style={styles.contestDetail}>{card.detail}</Text>
       </View>
-      <FighterPlate
-        name={getPlayer(session, rightId).name}
-        side="right"
-        build={getBuild(session, rightId)}
-      />
+      <Body>
+        {narrowed
+          ? `Only the tied sides are still in it: ${joinNames(sides.map((side) => sideTitle(session, side)))}. No fighting.`
+          : session.mode === '2v2'
+            ? 'Same teams. No fighting. The judges pick a team, and each winner on that team gets a point.'
+            : 'Same characters. No fighting. The judges pick who wins this, and that fighter takes the point.'}
+      </Body>
+      <SideList session={session} sides={sides} />
     </TableChrome>
   );
 }
@@ -392,6 +441,7 @@ function JudgePass({
 }) {
   const judges = getJudges(session);
   const judge = judges[judgeIndex];
+  const contest = session.tiebreakers[session.tiebreakers.length - 1];
   if (!judge) {
     return (
       <TableChrome session={session} onEnd={onEnd}>
@@ -407,7 +457,11 @@ function JudgePass({
     >
       <Eyebrow>{`Judge ${judgeIndex + 1} of ${judges.length}`}</Eyebrow>
       <Title>{`Hand the phone to ${judge.name}.`}</Title>
-      <Body>Votes stay secret until every judge has gone. Then the sheet records the result.</Body>
+      <Body>
+        {contest
+          ? `Vote the contest: ${contest.title}. It stays secret until every judge has gone.`
+          : 'Votes stay secret until every judge has gone. Then the sheet records the result.'}
+      </Body>
     </TableChrome>
   );
 }
@@ -426,10 +480,10 @@ function Vote({
   const judges = getJudges(session);
   const judge = judges[judgeIndex];
   const [choiceId, setChoiceId] = useState<string | null>(null);
-  const [leftId, rightId] = session.fighterIds;
-  const left = getPlayer(session, leftId);
-  const right = getPlayer(session, rightId);
-  const choiceName = choiceId === leftId ? left.name : choiceId === rightId ? right.name : null;
+  const sides = ballotSides(session);
+  const chosen = sides.find((side) => side.id === choiceId) ?? null;
+  const contest = session.tiebreakers[session.tiebreakers.length - 1];
+  const waiting = session.mode === '2v2' ? 'Choose a team' : 'Choose a fighter';
 
   if (!judge) {
     return (
@@ -445,8 +499,8 @@ function Vote({
       onEnd={onEnd}
       footer={
         <Button
-          label={choiceName ? `Vote for ${choiceName}` : 'Choose a fighter'}
-          disabled={!choiceId}
+          label={chosen ? `Vote for ${sideTitle(session, chosen)}` : waiting}
+          disabled={!chosen}
           onPress={() => {
             if (choiceId) dispatch({ type: 'cast-vote', choiceId });
           }}
@@ -454,21 +508,30 @@ function Vote({
       }
     >
       <Eyebrow>{`Judge ${judgeIndex + 1} of ${judges.length}`}</Eyebrow>
-      <Title>{`${judge.name}, who takes it?`}</Title>
-      <Body>Tap the fighter you think wins. The rest of the table will see the tally after every judge has voted.</Body>
-      <FighterPlate
-        name={left.name}
-        side="left"
-        selected={choiceId === leftId}
-        build={getBuild(session, leftId)}
-        onPress={() => setChoiceId(leftId)}
-      />
-      <FighterPlate
-        name={right.name}
-        side="right"
-        selected={choiceId === rightId}
-        build={getBuild(session, rightId)}
-        onPress={() => setChoiceId(rightId)}
+      <Title>
+        {contest
+          ? `${judge.name}, who wins the contest?`
+          : session.mode === '2v2'
+            ? `${judge.name}, which team takes it?`
+            : `${judge.name}, who takes it?`}
+      </Title>
+      {contest ? (
+        <>
+          <Body>{contest.title}</Body>
+          <Body>{contest.detail}</Body>
+        </>
+      ) : (
+        <Body>
+          {session.mode === '2v2'
+            ? 'Tap the team you think wins. The rest of the table will see the tally after every judge has voted.'
+            : 'Tap the fighter you think wins. The rest of the table will see the tally after every judge has voted.'}
+        </Body>
+      )}
+      <SideList
+        session={session}
+        sides={sides}
+        selectedId={choiceId}
+        onSelect={setChoiceId}
       />
     </TableChrome>
   );
@@ -486,7 +549,7 @@ function Result({
   onReset: () => void;
 }) {
   const result = latestResult(session);
-  const [nextLeft, nextRight] = peekNextFighters(session);
+  const next = peekNextFighters(session);
   if (!result) {
     return (
       <TableChrome session={session} onEnd={onEnd}>
@@ -495,15 +558,19 @@ function Result({
     );
   }
 
-  const left = getPlayer(session, result.fighterIds[0]);
-  const right = getPlayer(session, result.fighterIds[1]);
-  const leftVotes = result.tally[left.id] ?? 0;
-  const rightVotes = result.tally[right.id] ?? 0;
-  const winner = result.winnerId ? getPlayer(session, result.winnerId) : null;
-  const headline = winner ? `${winner.name} takes the showdown` : 'Split decision';
-  const summary = winner
-    ? `${Math.max(leftVotes, rightVotes)} to ${Math.min(leftVotes, rightVotes)}. A point goes on the sheet.`
-    : `${leftVotes} to ${rightVotes}. Nobody scores.`;
+  const winningSide = result.sides.find((side) => side.id === result.winnerId) ?? null;
+  const winnerNames = winningSide ? namesOf(session, winningSide.playerIds) : [];
+  const contest = result.tiebreakers[result.tiebreakers.length - 1];
+  const tallied = result.sides.filter((side) => result.tally[side.id] !== undefined);
+  const headline =
+    winnerNames.length > 1
+      ? `${joinNames(winnerNames)} take the showdown`
+      : winnerNames.length === 1
+        ? `${winnerNames[0]} takes the showdown`
+        : 'Split decision';
+  const summary = winningSide
+    ? pointCopy(winningSide.playerIds.length, Boolean(contest))
+    : 'Nobody scores.';
 
   return (
     <TableChrome
@@ -519,26 +586,18 @@ function Result({
       <Eyebrow>{`Round ${result.roundNumber} recorded`}</Eyebrow>
       <Title>{headline}</Title>
       <Body>{summary}</Body>
+      {contest ? <Text style={styles.contestTitle}>{contest.title}</Text> : null}
       <Text style={styles.tally}>
-        {left.name} {leftVotes} · {right.name} {rightVotes}
+        {tallied
+          .map((side) => `${sideTitle(session, side)} ${result.tally[side.id] ?? 0}`)
+          .join(' · ')}
       </Text>
-      <FighterPlate
-        name={left.name}
-        side="left"
-        badge={badgeFor(left.id, result.winnerId)}
-        build={result.builds[0]}
-      />
-      <FighterPlate
-        name={right.name}
-        side="right"
-        badge={badgeFor(right.id, result.winnerId)}
-        build={result.builds[1]}
-      />
+      <SideList session={session} sides={result.sides} builds={result.builds} winnerId={result.winnerId} />
       <View style={styles.record}>
         <Text style={styles.recordLabel}>Votes</Text>
         {result.votes.map((vote) => (
           <Text key={vote.judgeId} style={styles.recordLine}>
-            {getPlayer(session, vote.judgeId).name} voted for {getPlayer(session, vote.choiceId).name}
+            {getPlayer(session, vote.judgeId).name} voted for {choiceTitle(session, result.sides, vote.choiceId)}
           </Text>
         ))}
       </View>
@@ -550,29 +609,159 @@ function Result({
           </Text>
         ))}
       </View>
-      <Body>{`Next showdown: ${nextLeft.name} vs ${nextRight.name}.`}</Body>
+      <Body>{`Next showdown: ${matchupLabel(next.map((player) => player.name), session.mode)}.`}</Body>
     </TableChrome>
   );
 }
 
-function badgeFor(playerId: string, winnerId: string | null): string {
-  if (!winnerId) return 'Split';
-  return playerId === winnerId ? 'Winner' : 'Runner-up';
+function SideList({
+  session,
+  sides,
+  selectedId,
+  onSelect,
+  builds,
+  winnerId,
+}: {
+  session: GameSession;
+  sides: readonly Side[];
+  selectedId?: string | null;
+  onSelect?: (sideId: string) => void;
+  builds?: Build[];
+  winnerId?: string | null;
+}) {
+  return (
+    <>
+      {sides.map((side, index) => (
+        <View key={side.id} style={styles.sideBlock}>
+          {index > 0 ? <Versus /> : null}
+          <SideChoice
+            session={session}
+            side={side}
+            accent={index % 2 === 0 ? 'left' : 'right'}
+            selected={selectedId === side.id}
+            onPress={onSelect ? () => onSelect(side.id) : undefined}
+            builds={builds}
+            winnerId={winnerId}
+          />
+        </View>
+      ))}
+    </>
+  );
+}
+
+function SideChoice({
+  session,
+  side,
+  accent,
+  selected,
+  onPress,
+  builds,
+  winnerId,
+}: {
+  session: GameSession;
+  side: Side;
+  accent: 'left' | 'right';
+  selected?: boolean;
+  onPress?: () => void;
+  builds?: Build[];
+  winnerId?: string | null;
+}) {
+  const title = sideTitle(session, side);
+  const plates = side.playerIds.map((id) => {
+    const build = builds
+      ? builds.find((entry) => entry.playerId === id)
+      : session.builds[id];
+    if (!build) return null;
+    const badge =
+      winnerId === undefined ? undefined : side.id === winnerId ? 'Winner' : winnerId ? 'Runner-up' : 'Split';
+    return (
+      <FighterPlate
+        key={id}
+        name={getPlayer(session, id).name}
+        side={accent}
+        badge={badge}
+        build={build}
+      />
+    );
+  });
+  const body = (
+    <>
+      {side.playerIds.length > 1 ? <Text style={styles.sideLabel}>{title}</Text> : null}
+      {plates}
+    </>
+  );
+  if (!onPress) {
+    return <View style={styles.sideChoice}>{body}</View>;
+  }
+  return (
+    <Pressable
+      accessibilityRole="button"
+      accessibilityState={{ selected }}
+      accessibilityLabel={title}
+      onPress={onPress}
+      style={[styles.sideChoice, webPressable, selected && styles.sideChoiceOn]}
+    >
+      {body}
+    </Pressable>
+  );
+}
+
+function Versus() {
+  return (
+    <View style={styles.vsRow}>
+      <View style={styles.vsLine} />
+      <Text style={styles.vs}>VS</Text>
+      <View style={styles.vsLine} />
+    </View>
+  );
+}
+
+function spotLabel(session: GameSession, fighterIndex: number): string {
+  if (session.mode === '2v2') {
+    const team = fighterIndex < 2 ? 'A' : 'B';
+    return `Team ${team} · ${(fighterIndex % 2) + 1} of 2`;
+  }
+  return `Fighter ${fighterIndex + 1} of ${session.fighterIds.length}`;
+}
+
+function namesOf(session: GameSession, ids: readonly string[]): string[] {
+  return ids.map((id) => getPlayer(session, id).name);
+}
+
+function sideTitle(session: GameSession, side: Side): string {
+  return namesOf(session, side.playerIds).join(' & ');
+}
+
+function choiceTitle(session: GameSession, sides: readonly Side[], choiceId: string): string {
+  const side = sides.find((entry) => entry.id === choiceId);
+  return side ? sideTitle(session, side) : 'a side';
+}
+
+function pointCopy(winners: number, settled: boolean): string {
+  if (winners > 1) {
+    return settled
+      ? 'Settled by the contest. A point goes to each of them.'
+      : 'A point goes to each of them.';
+  }
+  return settled
+    ? 'Settled by the contest. A point goes on the sheet.'
+    : 'A point goes on the sheet.';
 }
 
 function recordLine(session: GameSession, result: GameSession['history'][number]): string {
-  const left = getPlayer(session, result.fighterIds[0]);
-  const right = getPlayer(session, result.fighterIds[1]);
-  const leftVotes = result.tally[left.id] ?? 0;
-  const rightVotes = result.tally[right.id] ?? 0;
-  if (!result.winnerId) {
-    return `Round ${result.roundNumber} · ${left.name} and ${right.name} split ${leftVotes}–${rightVotes}`;
+  const contest =
+    result.tiebreakers.length > 0
+      ? ` · after ${result.tiebreakers.length === 1 ? 'a tiebreaker' : `${result.tiebreakers.length} tiebreakers`}`
+      : '';
+  const score = result.sides
+    .filter((side) => result.tally[side.id] !== undefined)
+    .map((side) => `${sideTitle(session, side)} ${result.tally[side.id] ?? 0}`)
+    .join(', ');
+  const winner = result.sides.find((side) => side.id === result.winnerId);
+  if (!winner) {
+    return `Round ${result.roundNumber} · split ${score}`;
   }
-  const winner = getPlayer(session, result.winnerId);
-  const loser = winner.id === left.id ? right : left;
-  const winnerVotes = result.tally[winner.id] ?? 0;
-  const loserVotes = result.tally[loser.id] ?? 0;
-  return `Round ${result.roundNumber} · ${winner.name} beat ${loser.name}, ${winnerVotes}–${loserVotes}`;
+  return `Round ${result.roundNumber} · ${sideTitle(session, winner)} won · ${score}${contest}`;
 }
 
 function joinNames(names: string[]): string {
@@ -621,6 +810,62 @@ const styles = StyleSheet.create({
     ...type.display,
     fontSize: 18,
     color: colors.gold,
+  },
+  sideBlock: {
+    gap: 12,
+  },
+  sideChoice: {
+    gap: 8,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: 'transparent',
+    padding: 4,
+  },
+  sideChoiceOn: {
+    borderColor: colors.ink,
+    backgroundColor: colors.goldWash,
+  },
+  sideLabel: {
+    ...type.bodyBold,
+    fontSize: 12,
+    letterSpacing: 1.1,
+    textTransform: 'uppercase',
+    color: colors.inkSoft,
+    paddingHorizontal: 6,
+  },
+  tiebreakBanner: {
+    ...type.display,
+    fontSize: 44,
+    lineHeight: 46,
+    color: colors.gold,
+    letterSpacing: 0.5,
+  },
+  contest: {
+    backgroundColor: colors.goldWash,
+    borderRadius: 18,
+    borderWidth: 2,
+    borderColor: colors.gold,
+    paddingHorizontal: 16,
+    paddingVertical: 16,
+    gap: 8,
+  },
+  contestLabel: {
+    ...type.bodyBold,
+    fontSize: 12,
+    letterSpacing: 1.1,
+    textTransform: 'uppercase',
+    color: colors.gold,
+  },
+  contestTitle: {
+    ...type.displaySoft,
+    fontSize: 24,
+    lineHeight: 30,
+  },
+  contestDetail: {
+    ...type.body,
+    fontSize: 16,
+    lineHeight: 22,
+    color: colors.inkSoft,
   },
   tally: {
     ...type.displaySoft,

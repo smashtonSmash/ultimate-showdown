@@ -1,19 +1,26 @@
-import { useRouter } from 'expo-router';
+import { useLocalSearchParams, useRouter } from 'expo-router';
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Button, TextButton } from '@/components/Button';
 import { Body, Eyebrow, ScreenFrame, Title } from '@/components/ui';
-import { MIN_PLAYERS, openingLineup } from '@/game/engine';
+import { fighterCount, isMatchMode, matchupLabel, openingLineup } from '@/game/engine';
+import type { MatchMode } from '@/game/types';
 import { useGame } from '@/state/GameProvider';
 import { colors, type, webPressable } from '@/theme';
 
+type Team = 'A' | 'B';
+
 export function OpeningScreen() {
   const router = useRouter();
-  const { pendingNames, startTable } = useGame();
+  const params = useLocalSearchParams<{ mode?: string }>();
+  const { pendingNames, matchMode, startTable } = useGame();
+  const mode: MatchMode = isMatchMode(params.mode) ? params.mode : matchMode;
+  const slots = fighterCount(mode);
   const [picked, setPicked] = useState<string[] | null>(null);
+  const [teams, setTeams] = useState<Partial<Record<string, Team>> | null>(null);
   const [showJudges, setShowJudges] = useState(false);
 
-  if (!pendingNames || pendingNames.length < MIN_PLAYERS) {
+  if (!pendingNames) {
     return (
       <ScreenFrame footer={<Button label="Choose players" onPress={() => router.replace('/setup')} />}>
         <Eyebrow>First showdown</Eyebrow>
@@ -23,17 +30,49 @@ export function OpeningScreen() {
     );
   }
 
-  const selected = picked ?? pendingNames.slice(0, 2);
-  const ready = selected.length === 2;
-  const matchup = ready ? `${selected[0]} vs. ${selected[1]}` : 'Pick two fighters';
-  const lineup = ready ? openingLineup(pendingNames, [selected[0], selected[1]]) : null;
+  if (pendingNames.length < slots + 1) {
+    return (
+      <ScreenFrame footer={<Button label="Choose the fight" onPress={() => router.replace('/mode')} />}>
+        <Eyebrow>First showdown</Eyebrow>
+        <Title>This fight needs more players.</Title>
+        <Body>{`A ${mode} needs ${slots + 1} people, so someone outside it can judge.`}</Body>
+      </ScreenFrame>
+    );
+  }
 
-  function toggle(name: string) {
+  const assignment = teams ?? defaultTeams(pendingNames);
+  const grouped = groupTeams(pendingNames, assignment);
+  const selected = picked ?? pendingNames.slice(0, slots);
+  const fighters = mode === '2v2' ? [...grouped.a, ...grouped.b] : selected;
+  const ready = mode === '2v2' ? grouped.a.length === 2 && grouped.b.length === 2 : selected.length === slots;
+  const matchup = ready ? matchupLabel(fighters, mode) : waitingLabel(mode);
+  const lineup = ready ? openingLineup(pendingNames, { mode, fighters }) : null;
+
+  function toggleFighter(name: string) {
     setPicked((current) => {
-      const seats = current ?? pendingNames!.slice(0, 2);
+      const seats = current ?? pendingNames!.slice(0, slots);
       if (seats.includes(name)) return seats.filter((seat) => seat !== name);
-      if (seats.length >= 2) return seats;
+      if (seats.length >= slots) return seats;
       return [...seats, name];
+    });
+    setShowJudges(false);
+  }
+
+  function toggleTeam(name: string) {
+    setTeams((current) => {
+      const next = { ...(current ?? defaultTeams(pendingNames!)) };
+      const team = next[name];
+      const counts = groupTeams(pendingNames!, next);
+      if (!team) {
+        if (counts.a.length < 2) next[name] = 'A';
+        else if (counts.b.length < 2) next[name] = 'B';
+      } else if (team === 'A') {
+        if (counts.b.length < 2) next[name] = 'B';
+        else delete next[name];
+      } else {
+        delete next[name];
+      }
+      return next;
     });
     setShowJudges(false);
   }
@@ -45,7 +84,7 @@ export function OpeningScreen() {
           <Button
             label="Continue"
             onPress={() => {
-              startTable(pendingNames, lineup.fighters);
+              startTable(pendingNames, mode, lineup.fighters);
               router.replace('/table');
             }}
           />
@@ -54,7 +93,7 @@ export function OpeningScreen() {
         <TextButton label="Back" onPress={() => setShowJudges(false)} />
         <Eyebrow>Judges</Eyebrow>
         <Title>The remaining players are the judges.</Title>
-        <Body>They vote after both fighters lock in a character and a power.</Body>
+        <Body>{judgeCopy(mode)}</Body>
         <View style={styles.list}>
           {lineup.judges.map((name) => (
             <View key={name} style={styles.row}>
@@ -82,16 +121,41 @@ export function OpeningScreen() {
             pressed && ready && styles.matchPressed,
           ]}
         >
-          <Text style={[styles.matchText, !ready && styles.matchTextWaiting]}>{matchup}</Text>
+          <Text
+            style={[
+              styles.matchText,
+              matchup.length > 28 && styles.matchTextLong,
+              !ready && styles.matchTextWaiting,
+            ]}
+          >
+            {matchup}
+          </Text>
         </Pressable>
       }
     >
       <TextButton label="Back" onPress={() => router.back()} />
       <Eyebrow>First showdown</Eyebrow>
       <Title>Who's fighting first.</Title>
-      <Body>Tap two names. The first two seats start selected. Deselect someone to change the pair.</Body>
+      <Body>{helpCopy(mode)}</Body>
       <View style={styles.list}>
         {pendingNames.map((name) => {
+          if (mode === '2v2') {
+            const team = assignment[name];
+            return (
+              <Pressable
+                key={name}
+                accessibilityRole="button"
+                accessibilityLabel={team ? `${name}, Team ${team}` : name}
+                onPress={() => toggleTeam(name)}
+                style={[styles.choice, webPressable, team && styles.choiceOn]}
+              >
+                <Text style={styles.choiceName}>{name}</Text>
+                <View style={[styles.badge, team && styles.badgeOn]}>
+                  <Text style={[styles.badgeText, team && styles.badgeTextOn]}>{team ?? ''}</Text>
+                </View>
+              </Pressable>
+            );
+          }
           const order = selected.indexOf(name);
           const on = order >= 0;
           return (
@@ -100,7 +164,7 @@ export function OpeningScreen() {
               accessibilityRole="checkbox"
               accessibilityState={{ checked: on }}
               accessibilityLabel={on ? `${name}, fighter ${order + 1}` : name}
-              onPress={() => toggle(name)}
+              onPress={() => toggleFighter(name)}
               style={[styles.choice, webPressable, on && styles.choiceOn]}
             >
               <Text style={styles.choiceName}>{name}</Text>
@@ -113,6 +177,56 @@ export function OpeningScreen() {
       </View>
     </ScreenFrame>
   );
+}
+
+function defaultTeams(names: readonly string[]): Partial<Record<string, Team>> {
+  const next: Partial<Record<string, Team>> = {};
+  names.slice(0, 2).forEach((name) => {
+    next[name] = 'A';
+  });
+  names.slice(2, 4).forEach((name) => {
+    next[name] = 'B';
+  });
+  return next;
+}
+
+function groupTeams(
+  names: readonly string[],
+  assignment: Partial<Record<string, Team>>,
+): { a: string[]; b: string[] } {
+  const a: string[] = [];
+  const b: string[] = [];
+  for (const name of names) {
+    if (assignment[name] === 'A') a.push(name);
+    if (assignment[name] === 'B') b.push(name);
+  }
+  return { a, b };
+}
+
+function waitingLabel(mode: MatchMode): string {
+  if (mode === '2v2') return 'Fill both teams';
+  if (mode === '1v1v1') return 'Pick three fighters';
+  return 'Pick two fighters';
+}
+
+function helpCopy(mode: MatchMode): string {
+  if (mode === '2v2') {
+    return 'Tap a name to assign Team A, then Team B. Each team needs two. The first four seats start assigned. Tap someone on a full team to bench them.';
+  }
+  if (mode === '1v1v1') {
+    return 'Tap three names. The first three seats start selected. Deselect someone to change the fight.';
+  }
+  return 'Tap two names. The first two seats start selected. Deselect someone to change the pair.';
+}
+
+function judgeCopy(mode: MatchMode): string {
+  if (mode === '2v2') {
+    return 'They vote for one team after every fighter locks in a character and a power. Each winner on that team gets a point.';
+  }
+  if (mode === '1v1v1') {
+    return 'They vote for one fighter after all three lock in a character and a power.';
+  }
+  return 'They vote after both fighters lock in a character and a power.';
 }
 
 const styles = StyleSheet.create({
@@ -186,6 +300,10 @@ const styles = StyleSheet.create({
     fontSize: 28,
     lineHeight: 34,
     textAlign: 'center',
+  },
+  matchTextLong: {
+    fontSize: 22,
+    lineHeight: 28,
   },
   matchTextWaiting: {
     ...type.bodyBold,

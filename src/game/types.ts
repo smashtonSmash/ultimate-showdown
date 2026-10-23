@@ -12,6 +12,15 @@ export type DeckId =
   | 'everyday'
   | 'absurd';
 
+/** 1v1 is two fighters. 1v1v1 is a free-for-all. 2v2 is two teams of two. */
+export type MatchMode = '1v1' | '1v1v1' | '2v2';
+
+/** A vote target. Solo modes use the player id. A team shares one id. */
+export type Side = {
+  id: string;
+  playerIds: string[];
+};
+
 export type GameCard = {
   id: string;
   kind: CardKind;
@@ -46,22 +55,34 @@ export type Vote = {
   choiceId: string;
 };
 
+/** A non-fighting contest drawn when a judge vote splits. */
+export type TiebreakerCard = {
+  id: string;
+  title: string;
+  detail: string;
+};
+
 export type RoundResult = {
   roundNumber: number;
-  fighterIds: [string, string];
-  builds: [Build, Build];
+  mode: MatchMode;
+  fighterIds: string[];
+  sides: Side[];
+  builds: Build[];
   votes: Vote[];
-  /** Null when the judges split and nobody scores. */
+  /** The deciding ballot's winning side. A split draws another contest instead of ending here. */
   winnerId: string | null;
   tally: Record<string, number>;
+  /** Contests drawn after a split, in the order they were played. */
+  tiebreakers: TiebreakerCard[];
 };
 
 export type Phase =
-  | { type: 'pass'; fighterIndex: 0 | 1 }
-  | { type: 'pick-character'; fighterIndex: 0 | 1 }
-  | { type: 'pick-attribute'; fighterIndex: 0 | 1 }
-  | { type: 'confirm-build'; fighterIndex: 0 | 1 }
+  | { type: 'pass'; fighterIndex: number }
+  | { type: 'pick-character'; fighterIndex: number }
+  | { type: 'pick-attribute'; fighterIndex: number }
+  | { type: 'confirm-build'; fighterIndex: number }
   | { type: 'matchup' }
+  | { type: 'tiebreaker' }
   | { type: 'pass-judge'; judgeIndex: number }
   | { type: 'vote'; judgeIndex: number }
   | { type: 'result' };
@@ -74,7 +95,15 @@ export type Phase =
 export type GameSession = {
   players: Player[];
   roundNumber: number;
-  fighterIds: [string, string];
+  mode: MatchMode;
+  /** Fighters in rotation order. In 2v2 the first pair is Team A and the second is Team B. */
+  fighterIds: string[];
+  sides: Side[];
+  /**
+   * Side ids still on a tiebreak ballot. Empty means every side is eligible,
+   * which is also the state of the opening vote.
+   */
+  contenderIds: string[];
   hands: Record<string, Hand>;
   drafts: Record<string, Draft>;
   builds: Partial<Record<string, Build>>;
@@ -83,6 +112,10 @@ export type GameSession = {
   phase: Phase;
   /** House deck plus any expansions switched on before the game. */
   deckIds: DeckId[];
+  /** Remaining tiebreaker card ids, in draw order. */
+  tiebreakerPile: string[];
+  /** Contests drawn during the current showdown. The last one is on the table. */
+  tiebreakers: TiebreakerCard[];
 };
 
 /** What one player is allowed to know. Safe to send over the network later. */
@@ -90,7 +123,10 @@ export type PlayerView = {
   youId: string;
   players: Player[];
   roundNumber: number;
-  fighterIds: [string, string];
+  mode: MatchMode;
+  fighterIds: string[];
+  sides: Side[];
+  contenderIds: string[];
   phase: Phase;
   yourHand: Hand | null;
   yourDraft: Draft | null;
@@ -98,6 +134,7 @@ export type PlayerView = {
   revealedVotes: Vote[] | null;
   tally: Record<string, number> | null;
   history: RoundResult[];
+  tiebreakers: TiebreakerCard[];
 };
 
 export type GameAction =
@@ -111,4 +148,5 @@ export type GameAction =
   | { type: 'call-vote' }
   | { type: 'acknowledge-judge' }
   | { type: 'cast-vote'; choiceId: string }
+  | { type: 'start-tiebreak-vote' }
   | { type: 'next-round' };
