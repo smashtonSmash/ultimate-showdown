@@ -2,23 +2,26 @@ import { useRouter } from 'expo-router';
 import { useState, type ReactNode } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { GAME_NAME } from '@/brand';
+import { BracketBoard } from '@/components/BracketBoard';
 import { Button, TextButton } from '@/components/Button';
 import { deckSummary } from '@/data/decks';
 import { FighterPlate } from '@/components/FighterPlate';
 import { PlayingCard } from '@/components/PlayingCard';
 import { ScoreStrip } from '@/components/ScoreStrip';
+import { WinnerSplash } from '@/components/WinnerSplash';
 import { Body, Eyebrow, ScreenFrame, Title } from '@/components/ui';
 import {
   ballotSides,
+  fighterCount,
   getHand,
   getJudges,
   getPlayer,
   latestResult,
   matchupLabel,
-  peekNextFighters,
   playerForPhase,
+  stageName,
 } from '@/game/engine';
-import type { Build, GameAction, GameSession, Side } from '@/game/types';
+import type { BracketMatch, Build, GameAction, GameSession, MatchMode, Side } from '@/game/types';
 import { useGame } from '@/state/GameProvider';
 import { colors, type, webPressable } from '@/theme';
 
@@ -126,6 +129,27 @@ export function TableScreen() {
         reset();
         router.replace('/');
       }} />;
+    case 'lineup':
+      return (
+        <Lineup
+          key={session.roundNumber}
+          session={session}
+          dispatch={dispatch}
+          onEnd={onEnd}
+        />
+      );
+    case 'announce':
+      return <Announce session={session} dispatch={dispatch} onEnd={onEnd} />;
+    case 'champion':
+      return (
+        <Champion
+          session={session}
+          onReset={() => {
+            reset();
+            router.replace('/');
+          }}
+        />
+      );
     default: {
       const unreachable: never = session.phase;
       return unreachable;
@@ -169,6 +193,8 @@ function TableChrome({
             players={session.players}
             fighterIds={session.fighterIds}
             activeId={active?.id ?? null}
+            kingId={session.kingId}
+            kingStreak={session.kingStreak}
           />
         </View>
       }
@@ -549,7 +575,6 @@ function Result({
   onReset: () => void;
 }) {
   const result = latestResult(session);
-  const next = peekNextFighters(session);
   if (!result) {
     return (
       <TableChrome session={session} onEnd={onEnd}>
@@ -562,15 +587,16 @@ function Result({
   const winnerNames = winningSide ? namesOf(session, winningSide.playerIds) : [];
   const contest = result.tiebreakers[result.tiebreakers.length - 1];
   const tallied = result.sides.filter((side) => result.tally[side.id] !== undefined);
-  const headline =
-    winnerNames.length > 1
-      ? `${joinNames(winnerNames)} take the showdown`
-      : winnerNames.length === 1
-        ? `${winnerNames[0]} takes the showdown`
-        : 'Split decision';
-  const summary = winningSide
-    ? pointCopy(winningSide.playerIds.length, Boolean(contest))
-    : 'Nobody scores.';
+  const crowned =
+    session.playStyle === 'king' &&
+    session.kingId !== null &&
+    (winningSide?.playerIds.includes(session.kingId) ?? false);
+  const nextLabel =
+    session.playStyle === 'king'
+      ? 'Choose the challenger'
+      : session.playStyle === 'tournament'
+        ? 'Update the bracket'
+        : 'Choose the next fight';
 
   return (
     <TableChrome
@@ -578,21 +604,29 @@ function Result({
       onEnd={onEnd}
       footer={
         <>
-          <Button label="Next showdown" onPress={() => dispatch({ type: 'next-round' })} />
+          <Button label={nextLabel} onPress={() => dispatch({ type: 'next-round' })} />
           <Button label="New table" tone="ghost" onPress={onReset} />
         </>
       }
     >
-      <Eyebrow>{`Round ${result.roundNumber} recorded`}</Eyebrow>
-      <Title>{headline}</Title>
-      <Body>{summary}</Body>
+      <View style={styles.splashBleed}>
+        <WinnerSplash
+          kicker="WINNER!"
+          names={winnerNames.length > 0 ? joinNames(winnerNames) : 'Split decision'}
+          builds={winningSide ? splashBuilds(session, result.builds, winningSide) : []}
+          crowned={crowned}
+          streak={crowned ? session.kingStreak : 0}
+        />
+      </View>
+      <Body>
+        {winningSide ? pointCopy(winningSide.playerIds.length, Boolean(contest)) : 'Nobody scores.'}
+      </Body>
       {contest ? <Text style={styles.contestTitle}>{contest.title}</Text> : null}
       <Text style={styles.tally}>
         {tallied
           .map((side) => `${sideTitle(session, side)} ${result.tally[side.id] ?? 0}`)
           .join(' · ')}
       </Text>
-      <SideList session={session} sides={result.sides} builds={result.builds} winnerId={result.winnerId} />
       <View style={styles.record}>
         <Text style={styles.recordLabel}>Votes</Text>
         {result.votes.map((vote) => (
@@ -609,9 +643,373 @@ function Result({
           </Text>
         ))}
       </View>
-      <Body>{`Next showdown: ${matchupLabel(next.map((player) => player.name), session.mode)}.`}</Body>
     </TableChrome>
   );
+}
+
+function Lineup({
+  session,
+  dispatch,
+  onEnd,
+}: {
+  session: GameSession;
+  dispatch: (action: GameAction) => void;
+  onEnd: () => void;
+}) {
+  if (session.playStyle === 'king' && session.kingId) {
+    return <KingLineup session={session} dispatch={dispatch} onEnd={onEnd} kingId={session.kingId} />;
+  }
+  return <FreeLineup session={session} dispatch={dispatch} onEnd={onEnd} />;
+}
+
+function FreeLineup({
+  session,
+  dispatch,
+  onEnd,
+}: {
+  session: GameSession;
+  dispatch: (action: GameAction) => void;
+  onEnd: () => void;
+}) {
+  const slots = fighterCount(session.mode);
+  const suggested = session.suggestedFighterIds;
+  const [picked, setPicked] = useState<string[]>(
+    suggested.length === slots ? suggested.slice() : session.players.slice(0, slots).map((player) => player.id),
+  );
+  const [teams, setTeams] = useState<Partial<Record<string, Team>> | null>(null);
+  const assignment = teams ?? defaultTeams(suggested);
+  const grouped = groupTeams(session, assignment);
+  const fighters = session.mode === '2v2' ? [...grouped.a, ...grouped.b] : picked;
+  const ready =
+    session.mode === '2v2' ? grouped.a.length === 2 && grouped.b.length === 2 : picked.length === slots;
+  const label = ready ? matchupLabel(fighters.map((id) => getPlayer(session, id).name), session.mode) : waitingLabel(session.mode);
+
+  function toggleFighter(id: string) {
+    setPicked((current) => {
+      if (current.includes(id)) return current.filter((seat) => seat !== id);
+      if (current.length >= slots) return current;
+      return [...current, id];
+    });
+  }
+
+  function toggleTeam(id: string) {
+    setTeams((current) => {
+      const next = { ...(current ?? defaultTeams(suggested)) };
+      const team = next[id];
+      const counts = groupTeams(session, next);
+      if (!team) {
+        if (counts.a.length < 2) next[id] = 'A';
+        else if (counts.b.length < 2) next[id] = 'B';
+      } else if (team === 'A') {
+        if (counts.b.length < 2) next[id] = 'B';
+        else delete next[id];
+      } else {
+        delete next[id];
+      }
+      return next;
+    });
+  }
+
+  return (
+    <QuietFrame
+      session={session}
+      onEnd={onEnd}
+      footer={
+        <Button
+          label={label}
+          disabled={!ready}
+          onPress={() => dispatch({ type: 'confirm-lineup', fighterIds: fighters })}
+        />
+      }
+    >
+      <Eyebrow>{`Round ${session.roundNumber + 1}`}</Eyebrow>
+      <Title>Who's fighting?</Title>
+      <Body>{lineupHelp(session.mode)}</Body>
+      <View style={styles.list}>
+        {session.players.map((player) => {
+          if (session.mode === '2v2') {
+            const team = assignment[player.id];
+            return (
+              <Pressable
+                key={player.id}
+                accessibilityRole="button"
+                accessibilityLabel={team ? `${player.name}, Team ${team}` : player.name}
+                onPress={() => toggleTeam(player.id)}
+                style={[styles.choice, webPressable, team && styles.choiceOn]}
+              >
+                <Text style={styles.choiceName}>{player.name}</Text>
+                <View style={[styles.badge, team && styles.badgeOn]}>
+                  <Text style={[styles.badgeText, team && styles.badgeTextOn]}>{team ?? ''}</Text>
+                </View>
+              </Pressable>
+            );
+          }
+          const order = picked.indexOf(player.id);
+          const on = order >= 0;
+          return (
+            <Pressable
+              key={player.id}
+              accessibilityRole="checkbox"
+              accessibilityState={{ checked: on }}
+              accessibilityLabel={on ? `${player.name}, fighter ${order + 1}` : player.name}
+              onPress={() => toggleFighter(player.id)}
+              style={[styles.choice, webPressable, on && styles.choiceOn]}
+            >
+              <Text style={styles.choiceName}>{player.name}</Text>
+              <View style={[styles.badge, on && styles.badgeOn]}>
+                <Text style={[styles.badgeText, on && styles.badgeTextOn]}>{on ? order + 1 : ''}</Text>
+              </View>
+            </Pressable>
+          );
+        })}
+      </View>
+    </QuietFrame>
+  );
+}
+
+function KingLineup({
+  session,
+  dispatch,
+  onEnd,
+  kingId,
+}: {
+  session: GameSession;
+  dispatch: (action: GameAction) => void;
+  onEnd: () => void;
+  kingId: string;
+}) {
+  const suggested = session.suggestedFighterIds.find((id) => id !== kingId) ?? null;
+  const [challengerId, setChallengerId] = useState<string | null>(suggested);
+  const king = getPlayer(session, kingId);
+  const challenger = challengerId ? getPlayer(session, challengerId) : null;
+  const label = challenger ? `${challenger.name} challenges ${king.name}` : 'Choose a challenger';
+
+  return (
+    <QuietFrame
+      session={session}
+      onEnd={onEnd}
+      footer={
+        <Button
+          label={label}
+          disabled={!challengerId}
+          onPress={() => {
+            if (challengerId) dispatch({ type: 'confirm-lineup', fighterIds: [kingId, challengerId] });
+          }}
+        />
+      }
+    >
+      <Eyebrow>{`Round ${session.roundNumber + 1}`}</Eyebrow>
+      <Title>Who challenges the King?</Title>
+      <Body>The King stays. Tap who challenges them. The next seat starts selected.</Body>
+      <View style={styles.list}>
+        {session.players.map((player) => {
+          if (player.id === kingId) {
+            return (
+              <View
+                key={player.id}
+                accessibilityRole="text"
+                accessibilityLabel={`${player.name}, the King`}
+                style={[styles.choice, styles.choiceOn]}
+              >
+                <View style={styles.choiceCopy}>
+                  <Text style={styles.choiceName}>{`♛ ${player.name}`}</Text>
+                  <Text style={styles.streak}>{`${session.kingStreak} in a row`}</Text>
+                </View>
+                <View style={[styles.badge, styles.badgeOn]}>
+                  <Text style={[styles.badgeText, styles.badgeTextOn]}>♛</Text>
+                </View>
+              </View>
+            );
+          }
+          const on = player.id === challengerId;
+          return (
+            <Pressable
+              key={player.id}
+              accessibilityRole="radio"
+              accessibilityState={{ selected: on }}
+              accessibilityLabel={on ? `${player.name}, challenger` : player.name}
+              onPress={() => setChallengerId(on ? null : player.id)}
+              style={[styles.choice, webPressable, on && styles.choiceOn]}
+            >
+              <Text style={styles.choiceName}>{player.name}</Text>
+              <View style={[styles.badge, on && styles.badgeOn]}>
+                <Text style={[styles.badgeText, on && styles.badgeTextOn]}>{on ? 'In' : ''}</Text>
+              </View>
+            </Pressable>
+          );
+        })}
+      </View>
+    </QuietFrame>
+  );
+}
+
+function Announce({
+  session,
+  dispatch,
+  onEnd,
+}: {
+  session: GameSession;
+  dispatch: (action: GameAction) => void;
+  onEnd: () => void;
+}) {
+  const match = currentMatch(session);
+  const roundCount = session.bracket
+    ? new Set(session.bracket.matches.map((entry) => entry.round)).size
+    : 1;
+  const stage = match ? stageName(match.round, roundCount) : 'Match';
+  const names = session.fighterIds.map((id) => getPlayer(session, id).name);
+  const headline =
+    names.length >= 2 ? `Round ${session.roundNumber}: ${names[0]} vs. ${names[1]}` : 'The bracket is set';
+  const judges = getJudges(session);
+
+  return (
+    <QuietFrame
+      session={session}
+      onEnd={onEnd}
+      footer={<Button label="Start the fight" onPress={() => dispatch({ type: 'begin-match' })} />}
+    >
+      <Eyebrow>{stage}</Eyebrow>
+      <Text accessibilityRole="header" style={styles.announce}>
+        {headline}
+      </Text>
+      <Body>
+        {judges.length > 0
+          ? `${joinNames(judges.map((judge) => judge.name))} ${judges.length === 1 ? 'judges' : 'judge'}. Everyone outside the match stays off the cards.`
+          : 'Everyone outside the match judges.'}
+      </Body>
+      <BracketBoard session={session} />
+    </QuietFrame>
+  );
+}
+
+function Champion({ session, onReset }: { session: GameSession; onReset: () => void }) {
+  const result = latestResult(session);
+  const winningSide = result?.sides.find((side) => side.id === result.winnerId) ?? null;
+  const winnerNames = winningSide ? namesOf(session, winningSide.playerIds) : championFallback(session);
+
+  return (
+    <ScreenFrame footer={<Button label="New table" onPress={onReset} />}>
+      <View style={styles.splashBleed}>
+        <WinnerSplash
+          kicker="CHAMPION!"
+          names={winnerNames.length > 0 ? joinNames(winnerNames) : 'Champion'}
+          builds={winningSide && result ? splashBuilds(session, result.builds, winningSide) : []}
+          intense
+        />
+      </View>
+      <BracketBoard session={session} />
+    </ScreenFrame>
+  );
+}
+
+function QuietFrame({
+  session,
+  onEnd,
+  footer,
+  children,
+}: {
+  session: GameSession;
+  onEnd: () => void;
+  footer?: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <ScreenFrame
+      header={
+        <View style={styles.headerStack}>
+          <View style={styles.headerRow}>
+            <Text style={styles.brand} numberOfLines={1}>
+              {GAME_NAME}
+            </Text>
+            <TextButton label="End" onPress={onEnd} />
+          </View>
+          <ScoreStrip
+            players={session.players}
+            fighterIds={session.fighterIds}
+            activeId={null}
+            kingId={session.kingId}
+            kingStreak={session.kingStreak}
+          />
+        </View>
+      }
+      footer={footer}
+    >
+      {children}
+    </ScreenFrame>
+  );
+}
+
+function currentMatch(session: GameSession): BracketMatch | null {
+  const id = session.bracket?.currentMatchId;
+  if (!id || !session.bracket) return null;
+  return session.bracket.matches.find((match) => match.id === id) ?? null;
+}
+
+function splashBuilds(
+  session: GameSession,
+  builds: readonly Build[],
+  side: Side,
+): { character: string; power: string }[] {
+  return side.playerIds.flatMap((id) => {
+    const build = builds.find((entry) => entry.playerId === id);
+    if (!build) return [];
+    const character =
+      side.playerIds.length > 1
+        ? `${getPlayer(session, id).name} · ${build.character.title}`
+        : build.character.title;
+    return [{ character, power: build.attribute.title }];
+  });
+}
+
+function championFallback(session: GameSession): string[] {
+  const finalMatch = session.bracket?.matches.reduce<BracketMatch | null>(
+    (best, match) => (!best || match.round > best.round ? match : best),
+    null,
+  );
+  if (!finalMatch?.winnerId) return [];
+  return [getPlayer(session, finalMatch.winnerId).name];
+}
+
+type Team = 'A' | 'B';
+
+function defaultTeams(suggested: readonly string[]): Partial<Record<string, Team>> {
+  const next: Partial<Record<string, Team>> = {};
+  suggested.slice(0, 2).forEach((id) => {
+    next[id] = 'A';
+  });
+  suggested.slice(2, 4).forEach((id) => {
+    next[id] = 'B';
+  });
+  return next;
+}
+
+function groupTeams(
+  session: GameSession,
+  assignment: Partial<Record<string, Team>>,
+): { a: string[]; b: string[] } {
+  const a: string[] = [];
+  const b: string[] = [];
+  for (const player of session.players) {
+    if (assignment[player.id] === 'A') a.push(player.id);
+    if (assignment[player.id] === 'B') b.push(player.id);
+  }
+  return { a, b };
+}
+
+function waitingLabel(mode: MatchMode): string {
+  if (mode === '2v2') return 'Fill both teams';
+  if (mode === '1v1v1') return 'Pick three fighters';
+  return 'Pick two fighters';
+}
+
+function lineupHelp(mode: MatchMode): string {
+  if (mode === '2v2') {
+    return 'The next rotation starts selected. Tap a name to assign Team A, then Team B. Tap someone on a full team to bench them.';
+  }
+  if (mode === '1v1v1') {
+    return 'The next rotation starts selected. Tap to send someone else in. Three fighters.';
+  }
+  return 'The next rotation starts selected. Tap to send someone else in.';
 }
 
 function SideList({
@@ -886,5 +1284,69 @@ const styles = StyleSheet.create({
     ...type.body,
     fontSize: 15,
     lineHeight: 21,
+  },
+  splashBleed: {
+    marginHorizontal: -20,
+  },
+  announce: {
+    ...type.display,
+    fontSize: 36,
+    lineHeight: 40,
+  },
+  list: {
+    gap: 8,
+  },
+  choice: {
+    minHeight: 56,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    backgroundColor: colors.card,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: colors.line,
+    paddingHorizontal: 14,
+    paddingVertical: 12,
+  },
+  choiceOn: {
+    backgroundColor: colors.goldWash,
+    borderColor: colors.ink,
+  },
+  choiceCopy: {
+    flex: 1,
+    gap: 2,
+  },
+  choiceName: {
+    ...type.bodyMedium,
+    flex: 1,
+    fontSize: 18,
+  },
+  streak: {
+    ...type.bodyBold,
+    color: colors.gold,
+    fontSize: 12,
+    letterSpacing: 1,
+    textTransform: 'uppercase',
+  },
+  badge: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    borderWidth: 1.5,
+    borderColor: colors.line,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  badgeOn: {
+    backgroundColor: colors.ink,
+    borderColor: colors.ink,
+  },
+  badgeText: {
+    ...type.bodyBold,
+    fontSize: 14,
+    color: 'transparent',
+  },
+  badgeTextOn: {
+    color: colors.paper,
   },
 });

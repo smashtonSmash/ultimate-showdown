@@ -17,7 +17,7 @@ const STEPS = [
   {
     number: '02',
     title: 'Argue',
-    body: 'Argue the matchup. That can be one on one, a three-way free-for-all, or two teams of two.',
+    body: 'Argue the matchup. Free play, a bracket, or king of the hill. One on one, a three-way, or two teams.',
   },
   {
     number: '03',

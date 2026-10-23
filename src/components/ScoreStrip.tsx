@@ -6,10 +6,14 @@ export function ScoreStrip({
   players,
   fighterIds,
   activeId,
+  kingId = null,
+  kingStreak = 0,
 }: {
   players: Player[];
   fighterIds: readonly string[];
   activeId: string | null;
+  kingId?: string | null;
+  kingStreak?: number;
 }) {
   return (
     <ScrollView
@@ -21,6 +25,7 @@ export function ScoreStrip({
       {players.map((player) => {
         const fighting = fighterIds.includes(player.id);
         const active = player.id === activeId;
+        const king = player.id === kingId;
         return (
           <View
             key={player.id}
@@ -28,8 +33,11 @@ export function ScoreStrip({
           >
             <Text style={[styles.score, active && styles.activeText]}>{player.score}</Text>
             <Text style={[styles.name, active && styles.activeText]} numberOfLines={1}>
-              {player.name}
+              {king ? `♛ ${player.name}` : player.name}
             </Text>
+            {king && kingStreak > 0 ? (
+              <Text style={[styles.streak, active && styles.activeText]}>{`${kingStreak} in a row`}</Text>
+            ) : null}
           </View>
         );
       })}
@@ -72,5 +80,11 @@ const styles = StyleSheet.create({
   },
   activeText: {
     color: colors.paper,
+  },
+  streak: {
+    ...type.bodyBold,
+    fontSize: 10,
+    letterSpacing: 0.4,
+    color: colors.gold,
   },
 });

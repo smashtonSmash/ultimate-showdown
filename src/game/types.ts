@@ -15,6 +15,27 @@ export type DeckId =
 /** 1v1 is two fighters. 1v1v1 is a free-for-all. 2v2 is two teams of two. */
 export type MatchMode = '1v1' | '1v1v1' | '2v2';
 
+/**
+ * Free play picks the fighters every round. Tournament is a seeded 1v1 bracket.
+ * King of the hill keeps the winner up and chooses only the next challenger.
+ */
+export type PlayStyle = 'free' | 'tournament' | 'king';
+
+export type BracketMatch = {
+  id: string;
+  round: number;
+  index: number;
+  playerIds: [string | null, string | null];
+  winnerId: string | null;
+  /** One side was empty, so the other player advanced without a fight. */
+  bye: boolean;
+};
+
+export type Bracket = {
+  matches: BracketMatch[];
+  currentMatchId: string | null;
+};
+
 /** A vote target. Solo modes use the player id. A team shares one id. */
 export type Side = {
   id: string;
@@ -85,7 +106,10 @@ export type Phase =
   | { type: 'tiebreaker' }
   | { type: 'pass-judge'; judgeIndex: number }
   | { type: 'vote'; judgeIndex: number }
-  | { type: 'result' };
+  | { type: 'result' }
+  | { type: 'lineup' }
+  | { type: 'announce' }
+  | { type: 'champion' };
 
 /**
  * Everything the phone knows about the table.
@@ -96,6 +120,15 @@ export type GameSession = {
   players: Player[];
   roundNumber: number;
   mode: MatchMode;
+  playStyle: PlayStyle;
+  /** Set once someone has won a king-of-the-hill fight. */
+  kingId: string | null;
+  kingStreak: number;
+  /** Seat index to start from when suggesting the next challenger. */
+  hillCursor: number;
+  /** Default fighters for a lineup screen. Empty outside that phase. */
+  suggestedFighterIds: string[];
+  bracket: Bracket | null;
   /** Fighters in rotation order. In 2v2 the first pair is Team A and the second is Team B. */
   fighterIds: string[];
   sides: Side[];
@@ -124,6 +157,11 @@ export type PlayerView = {
   players: Player[];
   roundNumber: number;
   mode: MatchMode;
+  playStyle: PlayStyle;
+  kingId: string | null;
+  kingStreak: number;
+  suggestedFighterIds: string[];
+  bracket: Bracket | null;
   fighterIds: string[];
   sides: Side[];
   contenderIds: string[];
@@ -149,4 +187,6 @@ export type GameAction =
   | { type: 'acknowledge-judge' }
   | { type: 'cast-vote'; choiceId: string }
   | { type: 'start-tiebreak-vote' }
-  | { type: 'next-round' };
+  | { type: 'next-round' }
+  | { type: 'confirm-lineup'; fighterIds: string[] }
+  | { type: 'begin-match' };

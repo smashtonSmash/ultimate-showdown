@@ -16,10 +16,13 @@ import type {
   Draft,
   GameAction,
   GameCard,
+  Bracket,
+  BracketMatch,
   GameSession,
   Hand,
   MatchMode,
   Phase,
+  PlayStyle,
   Player,
   PlayerView,
   RoundResult,
@@ -58,6 +61,7 @@ export function validateNames(names: readonly string[]): string | null {
 export type OpeningPick = {
   mode: MatchMode;
   fighters: readonly string[];
+  playStyle?: PlayStyle;
 };
 
 /** A 1v1 name pair, or a mode plus the fighters in team order. */
@@ -82,6 +86,10 @@ export function isMatchMode(value: string | undefined): value is MatchMode {
   return value === '1v1' || value === '1v1v1' || value === '2v2';
 }
 
+export function isPlayStyle(value: string | undefined): value is PlayStyle {
+  return value === 'free' || value === 'tournament' || value === 'king';
+}
+
 export function matchupLabel(names: readonly string[], mode: MatchMode): string {
   if (mode === '2v2') {
     return `${names[0]} & ${names[1]} vs. ${names[2]} & ${names[3]}`;
@@ -104,14 +112,38 @@ export function createSession(
     throw new Error(problem);
   }
   const resolved = resolveOpening(cleaned, opening);
-  const seated = seatOpening(cleaned, resolved.fighters);
-  const players = seated.map((name, index) => ({
+  if (resolved.playStyle === 'tournament') {
+    const players = cleaned.map((name, index) => ({
+      id: `player-${index + 1}`,
+      name,
+      score: 0,
+    }));
+    return announceMatch(
+      blankTable({
+        players,
+        history: [],
+        deckIds: normalizeDeckIds(deckIds),
+        mode: '1v1',
+        playStyle: 'tournament',
+        bracket: buildBracket(shuffle(players.map((player) => player.id), rng)),
+      }),
+      1,
+      rng,
+    );
+  }
+  const seated = seatOpening(cleaned, resolved.fighters).map((name, index) => ({
     id: `player-${index + 1}`,
     name,
     score: 0,
   }));
   return openRound(
-    { players, history: [], deckIds: normalizeDeckIds(deckIds), mode: resolved.mode },
+    blankTable({
+      players: seated,
+      history: [],
+      deckIds: normalizeDeckIds(deckIds),
+      mode: resolved.mode,
+      playStyle: resolved.playStyle,
+    }),
     0,
     rng,
   );
@@ -172,17 +204,12 @@ export function reduce(
       return { ...state, votes: [], phase: { type: 'pass-judge', judgeIndex: 0 } };
     case 'next-round':
       if (state.phase.type !== 'result') return state;
-      return openRound(
-        {
-          players: state.players,
-          history: state.history,
-          deckIds: state.deckIds,
-          tiebreakerPile: state.tiebreakerPile,
-          mode: state.mode,
-        },
-        state.roundNumber,
-        rng,
-      );
+      if (state.playStyle === 'tournament') return advanceBracket(state);
+      return enterLineup(state);
+    case 'confirm-lineup':
+      return confirmLineup(state, action.fighterIds, rng);
+    case 'begin-match':
+      return beginMatch(state, rng);
     default: {
       const unreachable: never = action;
       return unreachable;
@@ -232,6 +259,9 @@ export function playerForPhase(state: GameSession): Player | null {
     case 'matchup':
     case 'tiebreaker':
     case 'result':
+    case 'lineup':
+    case 'announce':
+    case 'champion':
       return null;
     default: {
       const unreachable: never = phase;
@@ -293,13 +323,19 @@ export function projectForPlayer(state: GameSession, viewerId: string): PlayerVi
     revealedBuilds[viewerId] = state.builds[viewerId];
   }
 
-  const result = state.phase.type === 'result' ? latestResult(state) : null;
+  const result =
+    state.phase.type === 'result' || state.phase.type === 'champion' ? latestResult(state) : null;
 
   return {
     youId: viewerId,
     players: state.players.map((player) => ({ ...player })),
     roundNumber: state.roundNumber,
     mode: state.mode,
+    playStyle: state.playStyle,
+    kingId: state.kingId,
+    kingStreak: state.kingStreak,
+    suggestedFighterIds: state.suggestedFighterIds.slice(),
+    bracket: state.bracket ? cloneBracket(state.bracket) : null,
     fighterIds: state.fighterIds.slice(),
     sides: cloneSides(state.sides),
     contenderIds: state.contenderIds.slice(),
@@ -319,26 +355,47 @@ export function projectForPlayer(state: GameSession, viewerId: string): PlayerVi
   };
 }
 
-function openRound(
-  table: {
-    players: Player[];
-    history: RoundResult[];
-    deckIds: readonly DeckId[];
-    mode: MatchMode;
-    tiebreakerPile?: readonly string[];
-  },
-  completedRounds: number,
+type TableCarry = {
+  players: Player[];
+  history: RoundResult[];
+  deckIds: readonly DeckId[];
+  mode: MatchMode;
+  playStyle: PlayStyle;
+  kingId?: string | null;
+  kingStreak?: number;
+  hillCursor?: number;
+  bracket?: Bracket | null;
+  tiebreakerPile?: readonly string[];
+  fighterIds?: readonly string[];
+};
+
+function blankTable(table: TableCarry): TableCarry {
+  return table;
+}
+
+function openRound(table: TableCarry, completedRounds: number, rng: Rng): GameSession {
+  const roundNumber = completedRounds + 1;
+  const fighterIds = table.fighterIds
+    ? table.fighterIds.slice()
+    : fightersForRound(table.players, roundNumber, table.mode);
+  return {
+    ...dealSession(table, roundNumber, fighterIds, rng),
+    phase: { type: 'pass', fighterIndex: 0 },
+  };
+}
+
+function dealSession(
+  table: TableCarry,
+  roundNumber: number,
+  fighterIds: string[],
   rng: Rng,
 ): GameSession {
-  const roundNumber = completedRounds + 1;
   const deckIds = normalizeDeckIds(table.deckIds);
   const pool = poolForDecks(deckIds);
-  const slots = fighterCount(table.mode);
-  const needed = HAND_SIZE * slots;
+  const needed = HAND_SIZE * fighterIds.length;
   if (pool.characters.length < needed || pool.attributes.length < needed) {
     throw new Error('The deal needs more cards than the decks you switched on.');
   }
-  const fighterIds = fightersForRound(table.players, roundNumber, table.mode);
   const characters = shuffle(pool.characters, rng);
   const attributes = shuffle(pool.attributes, rng);
   const hands: Record<string, Hand> = {};
@@ -355,6 +412,12 @@ function openRound(
     players: table.players,
     roundNumber,
     mode: table.mode,
+    playStyle: table.playStyle,
+    kingId: table.kingId ?? null,
+    kingStreak: table.kingStreak ?? 0,
+    hillCursor: table.hillCursor ?? 0,
+    suggestedFighterIds: [],
+    bracket: table.bracket ? cloneBracket(table.bracket) : null,
     fighterIds,
     sides: sidesFor(table.mode, fighterIds),
     contenderIds: [],
@@ -398,12 +461,22 @@ function sidesFor(mode: MatchMode, fighterIds: readonly string[]): Side[] {
 function resolveOpening(
   names: readonly string[],
   opening?: OpeningRequest,
-): { mode: MatchMode; fighters: string[] } {
+): { mode: MatchMode; fighters: string[]; playStyle: PlayStyle } {
   const resolved = !opening
-    ? { mode: '1v1' as const, fighters: names.slice(0, 2) }
+    ? { mode: '1v1' as const, fighters: names.slice(0, 2), playStyle: 'free' as const }
     : 'mode' in opening
-      ? { mode: opening.mode, fighters: opening.fighters.map((name) => name.trim()) }
-      : { mode: '1v1' as const, fighters: opening.map((name) => name.trim()) };
+      ? {
+          mode: opening.mode,
+          fighters: opening.fighters.map((name) => name.trim()),
+          playStyle: opening.playStyle ?? ('free' as const),
+        }
+      : { mode: '1v1' as const, fighters: opening.map((name) => name.trim()), playStyle: 'free' as const };
+  if (resolved.playStyle !== 'free' && resolved.mode !== '1v1') {
+    throw new Error('That play style is one on one.');
+  }
+  if (resolved.playStyle === 'tournament') {
+    return { mode: '1v1', fighters: [], playStyle: 'tournament' };
+  }
   if (
     !modeAvailable(resolved.mode, names.length) ||
     resolved.fighters.length !== fighterCount(resolved.mode)
@@ -547,6 +620,7 @@ function finishRound(state: GameSession, rng: Rng): GameSession {
     tally,
     tiebreakers: state.tiebreakers.map((card) => ({ ...card })),
   };
+  const crowned = crownKing(state, winnerId);
   return {
     ...state,
     players: state.players.map((player) =>
@@ -555,7 +629,26 @@ function finishRound(state: GameSession, rng: Rng): GameSession {
     history: [...state.history, result],
     contenderIds: [],
     tiebreakers: [],
+    kingId: crowned.kingId,
+    kingStreak: crowned.kingStreak,
+    hillCursor: crowned.hillCursor,
     phase: { type: 'result' },
+  };
+}
+
+function crownKing(
+  state: GameSession,
+  winnerId: string,
+): { kingId: string | null; kingStreak: number; hillCursor: number } {
+  if (state.playStyle !== 'king' || state.mode !== '1v1') {
+    return { kingId: state.kingId, kingStreak: state.kingStreak, hillCursor: state.hillCursor };
+  }
+  const opponent = state.fighterIds.find((id) => id !== winnerId);
+  const opponentIndex = state.players.findIndex((player) => player.id === opponent);
+  return {
+    kingId: winnerId,
+    kingStreak: state.kingId === winnerId ? state.kingStreak + 1 : 1,
+    hillCursor: opponentIndex >= 0 ? (opponentIndex + 1) % state.players.length : state.hillCursor,
   };
 }
 
@@ -599,7 +692,8 @@ function buildsArePublic(phase: Phase): boolean {
     phase.type === 'tiebreaker' ||
     phase.type === 'pass-judge' ||
     phase.type === 'vote' ||
-    phase.type === 'result'
+    phase.type === 'result' ||
+    phase.type === 'champion'
   );
 }
 
@@ -621,6 +715,216 @@ function cloneCard(card: GameCard): GameCard {
 
 function cloneSides(sides: readonly Side[]): Side[] {
   return sides.map((side) => ({ id: side.id, playerIds: side.playerIds.slice() }));
+}
+
+function cloneBracket(bracket: Bracket): Bracket {
+  return {
+    currentMatchId: bracket.currentMatchId,
+    matches: bracket.matches.map((match) => ({
+      ...match,
+      playerIds: [match.playerIds[0], match.playerIds[1]],
+    })),
+  };
+}
+
+export function bracketSize(playerCount: number): number {
+  let size = 1;
+  while (size < playerCount) size *= 2;
+  return size;
+}
+
+/** Pair a seeded list. Byes sit opposite a player, never opposite another bye. */
+export function buildBracket(playerIds: readonly string[]): Bracket {
+  const size = bracketSize(playerIds.length);
+  const slots: (string | null)[] = Array.from({ length: size }, () => null);
+  const order = [
+    ...Array.from({ length: size }, (_, index) => index).filter((index) => index % 2 === 0),
+    ...Array.from({ length: size }, (_, index) => index).filter((index) => index % 2 === 1),
+  ];
+  playerIds.forEach((id, index) => {
+    const slot = order[index];
+    if (slot !== undefined) slots[slot] = id;
+  });
+  const rounds = Math.round(Math.log2(size));
+  let matches: BracketMatch[] = [];
+  for (let round = 0; round < rounds; round += 1) {
+    const count = size / 2 ** (round + 1);
+    for (let index = 0; index < count; index += 1) {
+      const pair: [string | null, string | null] =
+        round === 0 ? [slots[index * 2] ?? null, slots[index * 2 + 1] ?? null] : [null, null];
+      const bye = (pair[0] === null) !== (pair[1] === null);
+      matches.push({
+        id: `bracket-${round}-${index}`,
+        round,
+        index,
+        playerIds: pair,
+        winnerId: bye ? pair[0] ?? pair[1] : null,
+        bye,
+      });
+    }
+  }
+  for (const match of matches) {
+    if (match.winnerId) matches = placeWinner(matches, match);
+  }
+  return { matches, currentMatchId: playableMatch(matches)?.id ?? null };
+}
+
+export function stageName(round: number, roundCount: number): string {
+  const fromFinal = roundCount - 1 - round;
+  if (fromFinal === 0) return 'Final';
+  if (fromFinal === 1) return 'Semifinal';
+  if (fromFinal === 2) return 'Quarterfinal';
+  return `Round of ${2 ** (fromFinal + 1)}`;
+}
+
+function playableMatch(matches: readonly BracketMatch[]): BracketMatch | null {
+  return (
+    matches.find(
+      (match) =>
+        !match.bye &&
+        !match.winnerId &&
+        match.playerIds[0] !== null &&
+        match.playerIds[1] !== null,
+    ) ?? null
+  );
+}
+
+function placeWinner(matches: readonly BracketMatch[], match: BracketMatch): BracketMatch[] {
+  if (!match.winnerId) return matches.slice();
+  const parent = matches.find(
+    (entry) => entry.round === match.round + 1 && entry.index === Math.floor(match.index / 2),
+  );
+  return matches.map((entry) => {
+    if (entry.id === match.id) return { ...entry, winnerId: match.winnerId, playerIds: [...match.playerIds] as [string | null, string | null] };
+    if (!parent || entry.id !== parent.id) return { ...entry, playerIds: [...entry.playerIds] as [string | null, string | null] };
+    const playerIds: [string | null, string | null] = [entry.playerIds[0], entry.playerIds[1]];
+    playerIds[match.index % 2] = match.winnerId;
+    return { ...entry, playerIds };
+  });
+}
+
+function carry(state: GameSession): TableCarry {
+  return {
+    players: state.players,
+    history: state.history,
+    deckIds: state.deckIds,
+    mode: state.mode,
+    playStyle: state.playStyle,
+    kingId: state.kingId,
+    kingStreak: state.kingStreak,
+    hillCursor: state.hillCursor,
+    bracket: state.bracket,
+    tiebreakerPile: state.tiebreakerPile,
+  };
+}
+
+function enterLineup(state: GameSession): GameSession {
+  const suggested =
+    state.playStyle === 'king' && state.kingId
+      ? [state.kingId, nextChallenger(state)]
+      : fightersForRound(state.players, state.roundNumber + 1, state.mode);
+  return {
+    ...state,
+    suggestedFighterIds: suggested.filter((id): id is string => Boolean(id)),
+    votes: [],
+    contenderIds: [],
+    tiebreakers: [],
+    phase: { type: 'lineup' },
+  };
+}
+
+function nextChallenger(state: GameSession): string {
+  const count = state.players.length;
+  for (let offset = 0; offset < count; offset += 1) {
+    const player = state.players[(state.hillCursor + offset) % count];
+    if (player && player.id !== state.kingId) return player.id;
+  }
+  return state.players.find((player) => player.id !== state.kingId)?.id ?? state.players[0].id;
+}
+
+function confirmLineup(state: GameSession, fighterIds: readonly string[], rng: Rng): GameSession {
+  if (state.phase.type !== 'lineup') return state;
+  const unique = new Set(fighterIds);
+  if (unique.size !== fighterIds.length) return state;
+  if (fighterIds.some((id) => !state.players.some((player) => player.id === id))) return state;
+  if (state.playStyle === 'king') {
+    if (!state.kingId || fighterIds.length !== 2 || !fighterIds.includes(state.kingId)) return state;
+    const challenger = fighterIds.find((id) => id !== state.kingId);
+    if (!challenger) return state;
+    const challengerIndex = state.players.findIndex((player) => player.id === challenger);
+    const ordered = [state.kingId, challenger];
+    return openRound(
+      {
+        ...carry(state),
+        fighterIds: ordered,
+        hillCursor: challengerIndex >= 0 ? (challengerIndex + 1) % state.players.length : state.hillCursor,
+      },
+      state.roundNumber,
+      rng,
+    );
+  }
+  if (fighterIds.length !== fighterCount(state.mode)) return state;
+  return openRound({ ...carry(state), fighterIds: fighterIds.slice() }, state.roundNumber, rng);
+}
+
+function announceMatch(table: TableCarry, roundNumber: number, rng: Rng): GameSession {
+  const match = table.bracket ? playableMatch(table.bracket.matches) : null;
+  const fighterIds = match?.playerIds.filter((id): id is string => id !== null) ?? [];
+  const session = dealSession(table, roundNumber, fighterIds.length === 2 ? [] : fighterIds, rng);
+  if (fighterIds.length !== 2) {
+    return { ...session, fighterIds, hands: {}, drafts: {}, phase: { type: 'champion' } };
+  }
+  return {
+    ...session,
+    fighterIds,
+    sides: sidesFor('1v1', fighterIds),
+    hands: {},
+    drafts: {},
+    builds: {},
+    phase: { type: 'announce' },
+    tiebreakerPile: session.tiebreakerPile,
+  };
+}
+
+function beginMatch(state: GameSession, rng: Rng): GameSession {
+  if (state.phase.type !== 'announce' || state.fighterIds.length < 2) return state;
+  const dealt = dealSession(carry(state), state.roundNumber, state.fighterIds, rng);
+  return { ...dealt, phase: { type: 'pass', fighterIndex: 0 } };
+}
+
+function advanceBracket(state: GameSession): GameSession {
+  const result = latestResult(state);
+  const bracket = state.bracket ? cloneBracket(state.bracket) : null;
+  if (!result?.winnerId || !bracket) return state;
+  const current = bracket.matches.find((match) => match.id === bracket.currentMatchId);
+  if (!current || !current.playerIds.includes(result.winnerId)) return state;
+  const matches = placeWinner(bracket.matches, { ...current, winnerId: result.winnerId });
+  const finalMatch = matches.reduce((best, match) => (match.round > best.round ? match : best));
+  const nextBracket: Bracket = {
+    matches,
+    currentMatchId: finalMatch.winnerId ? null : playableMatch(matches)?.id ?? null,
+  };
+  if (finalMatch.winnerId) {
+    return {
+      ...state,
+      bracket: nextBracket,
+      votes: [],
+      contenderIds: [],
+      tiebreakers: [],
+      phase: { type: 'champion' },
+    };
+  }
+  const announced = announceMatch(
+    { ...carry(state), bracket: nextBracket },
+    state.roundNumber + 1,
+    () => 0,
+  );
+  return {
+    ...announced,
+    history: state.history,
+    players: state.players,
+    tiebreakerPile: state.tiebreakerPile,
+  };
 }
 
 function shuffle<T>(items: readonly T[], rng: Rng): T[] {

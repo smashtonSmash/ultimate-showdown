@@ -8,11 +8,11 @@ The house deck and the themed expansions are original. They are not taken from a
 
 1. Seat 3 to 8 players.
 2. Tap Next, then choose decks. The house deck is always in the deal. Fantasy, Sci-Fi, Horror, Anime, Everyday Chaos, and Absurd / Silly can be switched on to mix in.
-3. Choose the fight. 1v1 is two fighters. 1v1v1 is a three-person free-for-all and needs 4 players, so someone is left to judge. 2v2 is two teams of two and needs 5 players for the same reason. Then pick who fights. The first seats start selected. In 2v2, tap to fill Team A and Team B. The button reads Name vs. Name, Name vs. Name vs. Name, or Name & Name vs. Name & Name. Everyone else judges.
+3. Choose how the night runs, then the shape of each fight. Free play asks who fights every round, and the next rotation starts selected. Tournament bracket seeds the whole table at random into a 1v1 bracket, covers an odd count with byes, and assigns every match. King of the hill keeps the winner up as the King; later rounds pick only the challenger, and a crown tracks the win streak. Tournament and king of the hill are 1v1. Under free play, 1v1 is two fighters, 1v1v1 is a three-person free-for-all and needs 4 players so someone can judge, and 2v2 is two teams of two and needs 5. The first seats start selected. In 2v2, tap to fill Team A and Team B. The button reads Name vs. Name, Name vs. Name vs. Name, or Name & Name vs. Name & Name. Everyone else judges.
 4. Each fighter privately keeps one character and one power. In a 2v2, teammates each build their own fighter and argue together. Pass the phone so the other side cannot see the hand. Cards in a showdown do not overlap.
 5. The fighters are revealed. They argue the matchup.
 6. Each judge votes in secret, for one fighter or for one team. A solo winner gets one point. In a 2v2, each winning teammate gets a point. A tie draws a contest from the tiebreaker deck (basketball, a cooking contest, karaoke, and the rest) between the tied fighters or teams. The judges vote that contest. Another tie draws a new card. The winner of the deciding vote gets the point, and the sheet records it.
-7. The next showdown slides one seat forward around the table: the next two, the next three, or the next four split into two pairs. Later rounds keep the same decks and the same kind of fight.
+7. The winner takes over the screen: a huge WINNER!, their name, and the character and power they won with. Free play then asks who fights next, with that rotation preselected. King of the hill asks only for the next challenger. A tournament updates the bracket until one player is left, and that champion gets an even bigger screen. Later rounds keep the same decks and the same kind of fight.
 
 This build keeps the whole table on one device. Nothing is saved if you close the app.
 
@@ -58,7 +58,7 @@ Package name and Expo slug: `ultimate-showdown`. The home-screen name is **The U
 
 Suggested next steps, in order:
 
-1. **House rules.** Redraw a hand, write your own cards, or challenge a specific seat instead of using the rotation.
+1. **House rules.** Redraw a hand, or write your own cards.
 2. **Saved tables.** Persist the session on the device so a locked phone does not wipe the sheet.
 3. **Online rooms.** Host-authoritative `reduce`, one client per player, `projectForPlayer` on the wire, reconnect with a room code.
 4. **Custom decks.** The house deck and expansions ship in `src/data`. Later, write cards at the table and trade a deck code.

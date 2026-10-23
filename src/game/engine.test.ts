@@ -8,8 +8,10 @@ import {
   createSession,
   decideWinner,
   openingLineup,
+  buildBracket,
   matchupLabel,
   modeAvailable,
+  stageName,
   getBuild,
   getHand,
   getJudges,
@@ -67,6 +69,17 @@ function castBallot(session: GameSession, votes: number[], rng: Rng): GameSessio
       : state.sides[choice];
     assert.ok(side);
     state = reduce(state, { type: 'cast-vote', choiceId: side.id }, rng);
+  }
+  return state;
+}
+
+function nextShowdown(session: GameSession, rng: Rng): GameSession {
+  let state = reduce(session, { type: 'next-round' }, rng);
+  if (state.phase.type === 'lineup') {
+    state = reduce(state, { type: 'confirm-lineup', fighterIds: state.suggestedFighterIds }, rng);
+  }
+  if (state.phase.type === 'announce') {
+    state = reduce(state, { type: 'begin-match' }, rng);
   }
   return state;
 }
@@ -143,21 +156,21 @@ test('a chosen opening pair is round 1, and later rounds rotate from that pair',
   );
 
   session = playShowdown(session, [0, 0], rng);
-  session = reduce(session, { type: 'next-round' }, rng);
+  session = nextShowdown(session, rng);
   assert.deepEqual(
     session.fighterIds.map((id) => getPlayer(session, id).name),
     ['Alex', 'Jordan'],
   );
 
   session = playShowdown(session, [0, 0], rng);
-  session = reduce(session, { type: 'next-round' }, rng);
+  session = nextShowdown(session, rng);
   assert.deepEqual(
     session.fighterIds.map((id) => getPlayer(session, id).name),
     ['Jordan', 'Riley'],
   );
 
   session = playShowdown(session, [0, 0], rng);
-  session = reduce(session, { type: 'next-round' }, rng);
+  session = nextShowdown(session, rng);
   assert.deepEqual(
     session.fighterIds.map((id) => getPlayer(session, id).name),
     ['Riley', 'Sam'],
@@ -226,7 +239,7 @@ test('judges record a winner, a split is settled by a contest, and the next pair
   assert.equal(session.players[0]?.score, 0);
   assert.equal(getBuild(session, 'player-2').character.id, decided.builds[1].character.id);
 
-  session = reduce(session, { type: 'next-round' }, rng);
+  session = nextShowdown(session, rng);
   assert.equal(session.roundNumber, 2);
   assert.deepEqual(session.fighterIds, ['player-2', 'player-3']);
   assert.equal(session.history.length, 1);
@@ -569,7 +582,7 @@ test('dealing draws from the house deck plus the expansions that are on', () => 
   }
 
   const finished = playShowdown(session, [0], rng);
-  const next = reduce(finished, { type: 'next-round' }, rng);
+  const next = nextShowdown(finished, rng);
   assert.deepEqual(next.deckIds, session.deckIds);
   assert.equal(next.mode, '1v1');
   assert.throws(() => createSession(names, rng, ['nope' as 'fantasy']));
@@ -624,13 +637,13 @@ test('a free-for-all seats three fighters, rotates the window, and scores one wi
     [0, 0, 1, 0, 0],
   );
 
-  session = reduce(session, { type: 'next-round' }, rng);
+  session = nextShowdown(session, rng);
   assert.equal(session.mode, '1v1v1');
   assert.deepEqual(
     session.fighterIds.map((id) => getPlayer(session, id).name),
     ['Sam', 'Casey', 'Jordan'],
   );
-  session = reduce(playShowdown(session, [0, 0], rng), { type: 'next-round' }, rng);
+  session = nextShowdown(playShowdown(session, [0, 0], rng), rng);
   assert.deepEqual(
     session.fighterIds.map((id) => getPlayer(session, id).name),
     ['Casey', 'Jordan', 'Riley'],
@@ -692,7 +705,7 @@ test('a 2v2 awards a point to each winning teammate and rotates both pairs', () 
     [1, 1, 0, 0, 0, 0],
   );
 
-  session = reduce(session, { type: 'next-round' }, rng);
+  session = nextShowdown(session, rng);
   assert.equal(session.mode, '2v2');
   assert.deepEqual(
     session.fighterIds.map((id) => getPlayer(session, id).name),
@@ -724,4 +737,116 @@ test('a 2v2 awards a point to each winning teammate and rotates both pairs', () 
     voting.players.map((player) => player.score),
     [1, 1, 0, 1, 1, 0],
   );
+});
+
+test('free play asks for the next lineup and still suggests the rotation', () => {
+  const rng = mulberry32(12);
+  let session = createSession(['Alex', 'Jordan', 'Sam', 'Riley'], rng);
+  session = playShowdown(session, [0, 0], rng);
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.equal(session.phase.type, 'lineup');
+  assert.deepEqual(
+    session.suggestedFighterIds.map((id) => getPlayer(session, id).name),
+    ['Jordan', 'Sam'],
+  );
+  assert.equal(reduce(session, { type: 'confirm-lineup', fighterIds: ['player-1'] }, rng), session);
+
+  session = reduce(session, { type: 'confirm-lineup', fighterIds: ['player-3', 'player-4'] }, rng);
+  assert.equal(session.phase.type, 'pass');
+  assert.deepEqual(
+    session.fighterIds.map((id) => getPlayer(session, id).name),
+    ['Sam', 'Riley'],
+  );
+  session = playShowdown(session, [0, 0], rng);
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.deepEqual(
+    session.suggestedFighterIds.map((id) => getPlayer(session, id).name),
+    ['Sam', 'Riley'],
+  );
+});
+
+test('the king stays up, the table picks the challenger, and the streak moves', () => {
+  const names = ['Alex', 'Jordan', 'Sam', 'Riley'] as const;
+  const rng = mulberry32(9);
+  let session = createSession(names, rng, ['house'], {
+    mode: '1v1',
+    playStyle: 'king',
+    fighters: ['Alex', 'Jordan'],
+  });
+  assert.equal(session.kingId, null);
+  session = playShowdown(session, [0, 0], rng);
+  assert.equal(session.kingId, 'player-1');
+  assert.equal(session.kingStreak, 1);
+
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.equal(session.phase.type, 'lineup');
+  assert.deepEqual(session.suggestedFighterIds, ['player-1', 'player-3']);
+  assert.equal(
+    reduce(session, { type: 'confirm-lineup', fighterIds: ['player-2', 'player-3'] }, rng),
+    session,
+  );
+
+  session = reduce(session, { type: 'confirm-lineup', fighterIds: ['player-4', 'player-1'] }, rng);
+  assert.deepEqual(session.fighterIds, ['player-1', 'player-4']);
+  session = playShowdown(session, [0, 0], rng);
+  assert.equal(session.kingId, 'player-1');
+  assert.equal(session.kingStreak, 2);
+
+  session = reduce(session, { type: 'next-round' }, rng);
+  session = reduce(session, { type: 'confirm-lineup', fighterIds: session.suggestedFighterIds }, rng);
+  session = playShowdown(session, [1, 1], rng);
+  assert.equal(session.kingId, session.fighterIds[1]);
+  assert.equal(session.kingStreak, 1);
+  assert.throws(() =>
+    createSession(names, rng, ['house'], { mode: '2v2', playStyle: 'king', fighters: names }),
+  );
+});
+
+test('a tournament seeds a bracket, gives byes, and crowns the last winner', () => {
+  const three = buildBracket(['a', 'b', 'c']);
+  assert.equal(three.matches.filter((match) => match.bye).length, 1);
+  const bye = three.matches.find((match) => match.bye);
+  assert.ok(bye?.winnerId);
+  assert.equal(stageName(1, 2), 'Final');
+  assert.equal(stageName(0, 2), 'Semifinal');
+  const real = three.matches.find((match) => match.id === three.currentMatchId);
+  assert.ok(real);
+  assert.equal(real?.bye, false);
+  assert.deepEqual(
+    [real?.playerIds[0], real?.playerIds[1]].sort(),
+    ['a', 'b', 'c'].filter((id) => id !== bye?.winnerId).sort(),
+  );
+
+  const four = buildBracket(['a', 'b', 'c', 'd']);
+  assert.equal(four.matches.filter((match) => match.bye).length, 0);
+  assert.equal(four.matches.length, 3);
+  assert.equal(new Set(four.matches.filter((match) => match.round === 0).flatMap((match) => match.playerIds)).size, 4);
+
+  const rng = mulberry32(4);
+  const names = ['Alex', 'Jordan', 'Sam'] as const;
+  let session = createSession(names, rng, ['house'], { mode: '1v1', playStyle: 'tournament', fighters: [] });
+  assert.equal(session.phase.type, 'announce');
+  assert.equal(session.fighterIds.length, 2);
+  assert.equal(getJudges(session).length, 1);
+  assert.equal(session.bracket?.matches.filter((match) => match.bye).length, 1);
+  const byePlayer = session.players.find((player) => !session.fighterIds.includes(player.id));
+  assert.ok(byePlayer);
+
+  session = reduce(session, { type: 'begin-match' }, rng);
+  session = playShowdown(session, [0], rng);
+  assert.equal(session.players.find((player) => player.id === session.history[0]?.winnerId)?.score, 1);
+  assert.equal(byePlayer && session.players.find((player) => player.id === byePlayer.id)?.score, 0);
+
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.equal(session.phase.type, 'announce');
+  assert.equal(session.roundNumber, 2);
+  assert.equal(session.fighterIds.includes(session.history[0]?.winnerId ?? ''), true);
+  assert.equal(session.fighterIds.includes(byePlayer?.id ?? ''), true);
+  session = reduce(session, { type: 'begin-match' }, rng);
+  session = playShowdown(session, [0], rng);
+  session = reduce(session, { type: 'next-round' }, rng);
+  assert.equal(session.phase.type, 'champion');
+  const champion = session.bracket?.matches.find((match) => match.round === 1)?.winnerId;
+  assert.equal(champion, session.history[1]?.winnerId);
+  assert.equal(reduce(session, { type: 'begin-match' }, rng), session);
 });

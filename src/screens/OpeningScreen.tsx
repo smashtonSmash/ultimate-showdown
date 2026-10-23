@@ -3,8 +3,8 @@ import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
 import { Button, TextButton } from '@/components/Button';
 import { Body, Eyebrow, ScreenFrame, Title } from '@/components/ui';
-import { fighterCount, isMatchMode, matchupLabel, openingLineup } from '@/game/engine';
-import type { MatchMode } from '@/game/types';
+import { fighterCount, isMatchMode, isPlayStyle, matchupLabel, openingLineup } from '@/game/engine';
+import type { MatchMode, PlayStyle } from '@/game/types';
 import { useGame } from '@/state/GameProvider';
 import { colors, type, webPressable } from '@/theme';
 
@@ -12,9 +12,10 @@ type Team = 'A' | 'B';
 
 export function OpeningScreen() {
   const router = useRouter();
-  const params = useLocalSearchParams<{ mode?: string }>();
-  const { pendingNames, matchMode, startTable } = useGame();
+  const params = useLocalSearchParams<{ mode?: string; style?: string }>();
+  const { pendingNames, matchMode, playStyle: storedStyle, startTable } = useGame();
   const mode: MatchMode = isMatchMode(params.mode) ? params.mode : matchMode;
+  const playStyle: PlayStyle = isPlayStyle(params.style) ? params.style : storedStyle;
   const slots = fighterCount(mode);
   const [picked, setPicked] = useState<string[] | null>(null);
   const [teams, setTeams] = useState<Partial<Record<string, Team>> | null>(null);
@@ -84,7 +85,7 @@ export function OpeningScreen() {
           <Button
             label="Continue"
             onPress={() => {
-              startTable(pendingNames, mode, lineup.fighters);
+              startTable(pendingNames, mode, lineup.fighters, playStyle);
               router.replace('/table');
             }}
           />
@@ -136,7 +137,7 @@ export function OpeningScreen() {
       <TextButton label="Back" onPress={() => router.back()} />
       <Eyebrow>First showdown</Eyebrow>
       <Title>Who's fighting first.</Title>
-      <Body>{helpCopy(mode)}</Body>
+      <Body>{playStyle === 'king' ? `${helpCopy(mode)} The winner wears the crown.` : helpCopy(mode)}</Body>
       <View style={styles.list}>
         {pendingNames.map((name) => {
           if (mode === '2v2') {
