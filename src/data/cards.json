@@ -1,0 +1,2751 @@
+{
+ "decks": [
+  {
+   "id": "house",
+   "title": "House deck",
+   "optional": false,
+   "characters": [
+    {
+     "id": "house.character.lighthouse",
+     "title": "Retired lighthouse keeper",
+     "detail": "Left the lamp lit, just in case."
+    },
+    {
+     "id": "house.character.raccoon",
+     "title": "Night-market raccoon",
+     "detail": "Opens the stalls after the humans go home."
+    },
+    {
+     "id": "house.character.cellist",
+     "title": "Traffic-cone cellist",
+     "detail": "On tour. The venue is wherever the cone fits."
+    },
+    {
+     "id": "house.character.mayor",
+     "title": "Thursday mayor",
+     "detail": "Their town exists one day a week, and they never miss it."
+    },
+    {
+     "id": "house.character.intern",
+     "title": "Sleep-clinic intern",
+     "detail": "Hour nineteen. The clinic has not clocked the irony."
+    },
+    {
+     "id": "house.character.pianist",
+     "title": "Elevator pianist",
+     "detail": "Perfect pitch. The building has opinions."
+    },
+    {
+     "id": "house.character.librarian",
+     "title": "Floating librarian",
+     "detail": "Last clerk on a library that refuses to dock."
+    },
+    {
+     "id": "house.character.retriever",
+     "title": "Witness-protection retriever",
+     "detail": "New name. Same urge to greet every stranger."
+    },
+    {
+     "id": "house.character.chaser",
+     "title": "Puddle-shy storm chaser",
+     "detail": "Drives toward thunder, as long as it stays off the pavement."
+    },
+    {
+     "id": "house.character.understudy",
+     "title": "Dragon understudy",
+     "detail": "Knows the role. Waiting for the real dragon to call out sick."
+    },
+    {
+     "id": "house.character.pastry",
+     "title": "Buttercream negotiator",
+     "detail": "Settles every dispute in frosting."
+    },
+    {
+     "id": "house.character.janitor",
+     "title": "Space-museum janitor",
+     "detail": "Night shift, mopping around the meteorites."
+    },
+    {
+     "id": "house.character.napper",
+     "title": "Coached competitive napper",
+     "detail": "Trains for sleep the way other people train for races."
+    },
+    {
+     "id": "house.character.ghost",
+     "title": "Ghost of a missed train",
+     "detail": "Still running for the 6:12."
+    },
+    {
+     "id": "house.character.crossword",
+     "title": "Crossword diplomat",
+     "detail": "Talks in clues and expects the room to answer."
+    },
+    {
+     "id": "house.character.beekeeper",
+     "title": "Beekeeper of named bees",
+     "detail": "Keeps a roll call. The bees keep one too."
+    },
+    {
+     "id": "house.character.captain",
+     "title": "Accidental captain",
+     "detail": "Hired as an intern. The ship had other plans."
+    },
+    {
+     "id": "house.character.mime",
+     "title": "Filing-cabinet mime",
+     "detail": "Silent, except for the paperwork."
+    },
+    {
+     "id": "house.character.cook",
+     "title": "Practice-pool cook",
+     "detail": "Feeds a submarine crew that has never left the training tank."
+    },
+    {
+     "id": "house.character.referee",
+     "title": "Playground referee",
+     "detail": "Unofficial, unpaid, and somehow always in charge."
+    },
+    {
+     "id": "house.character.stuntman",
+     "title": "A kung fu movie stuntman",
+     "detail": "Does the fall, then asks for another take."
+    },
+    {
+     "id": "house.character.roundhouse",
+     "title": "A roundhouse-kicking action legend",
+     "detail": "The kick arrives before the introduction."
+    },
+    {
+     "id": "house.character.jumpsuit",
+     "title": "A martial arts master in a yellow jumpsuit",
+     "detail": "The suit is the whole plan."
+    },
+    {
+     "id": "house.character.wrestler",
+     "title": "A wrestler-turned-movie-star",
+     "detail": "Enters every room like the lights just hit."
+    },
+    {
+     "id": "house.character.pencil",
+     "title": "A famously nice action hero with a pencil",
+     "detail": "Says please. The pencil does the rest."
+    },
+    {
+     "id": "house.character.bat",
+     "title": "A billionaire bat vigilante",
+     "detail": "Funds the night shift personally."
+    },
+    {
+     "id": "house.character.crawler",
+     "title": "A wall-crawling teen hero",
+     "detail": "Late for class, early to the ledge."
+    },
+    {
+     "id": "house.character.ninja",
+     "title": "Ninja",
+     "detail": "Already in the room. Has been."
+    },
+    {
+     "id": "house.character.pirate",
+     "title": "Pirate",
+     "detail": "Keeps a map, a grudge, and decent manners aboard."
+    },
+    {
+     "id": "house.character.cowboy",
+     "title": "Cowboy",
+     "detail": "Tips the hat, then settles it."
+    },
+    {
+     "id": "house.character.abraham-lincoln",
+     "title": "Abraham Lincoln",
+     "detail": "The hat is tall. The speech is taller."
+    },
+    {
+     "id": "house.character.pick-comic",
+     "title": "Pick a Comic Book Character",
+     "detail": "You name the hero. The cape is already implied."
+    },
+    {
+     "id": "house.character.velociraptor",
+     "title": "Velociraptor",
+     "detail": "Opens the door, then holds a grudge about it."
+    },
+    {
+     "id": "house.character.t-rex",
+     "title": "T-Rex",
+     "detail": "Tiny arms. Enormous opinions."
+    },
+    {
+     "id": "house.character.pterodactyl",
+     "title": "Pterodactyl",
+     "detail": "Screams from overhead, then asks for a snack."
+    },
+    {
+     "id": "house.character.saber-tooth",
+     "title": "Saber-Toothed Tiger",
+     "detail": "The smile arrives before the rest of them."
+    },
+    {
+     "id": "house.character.mammoth",
+     "title": "Woolly Mammoth",
+     "detail": "Remembers every winter, and brings it up."
+    },
+    {
+     "id": "house.character.spartan",
+     "title": "Spartan",
+     "detail": "A shield, a speech, and very little else."
+    },
+    {
+     "id": "house.character.octopus",
+     "title": "Octopus",
+     "detail": "A plan for each arm, plus one spare."
+    },
+    {
+     "id": "house.character.the-dude",
+     "title": "The Dude",
+     "detail": "The robe is a lifestyle. The agenda is blank."
+    },
+    {
+     "id": "house.character.chemistry-teacher",
+     "title": "Chemistry Teacher Gone Bad",
+     "detail": "The apron is clean. The plan is not."
+    },
+    {
+     "id": "house.character.snake",
+     "title": "Snake",
+     "detail": "No legs, no hurry, and no mercy."
+    },
+    {
+     "id": "house.character.bull",
+     "title": "Bull",
+     "detail": "Sees red. Treats everything else as optional."
+    },
+    {
+     "id": "house.character.sherlock",
+     "title": "Sherlock Holmes",
+     "detail": "Already noticed the thing you are hiding."
+    },
+    {
+     "id": "house.character.heavyweight",
+     "title": "Ear-Biting Heavyweight Champ",
+     "detail": "Leads with the ears. Leaves with the belt."
+    },
+    {
+     "id": "house.character.bodybuilder",
+     "title": "Bodybuilder",
+     "detail": "Flexes as a form of punctuation."
+    },
+    {
+     "id": "house.character.pope",
+     "title": "The Pope",
+     "detail": "Blesses the room, then asks who is keeping score."
+    },
+    {
+     "id": "house.character.playboy",
+     "title": "Billionaire Playboy",
+     "detail": "Arrives late, in a better car than the point."
+    },
+    {
+     "id": "house.character.diva",
+     "title": "Domestic Diva",
+     "detail": "The centerpiece is perfect. You are in the way."
+    },
+    {
+     "id": "house.character.shark",
+     "title": "Shark",
+     "detail": "Smiles with too many teeth and no appointment."
+    },
+    {
+     "id": "house.character.heartthrob",
+     "title": "Teen Pop Heartthrob",
+     "detail": "The scream shows up a second before the song."
+    },
+    {
+     "id": "house.character.supermodel",
+     "title": "Supermodel",
+     "detail": "Walks like the floor applied for the job."
+    },
+    {
+     "id": "house.character.secret-agent",
+     "title": "Secret Agent",
+     "detail": "The name is whatever you just forgot."
+    },
+    {
+     "id": "house.character.gymnast",
+     "title": "Olympic Gymnast",
+     "detail": "Sticks the landing. The landing files a complaint."
+    },
+    {
+     "id": "house.character.k-pop",
+     "title": "K-Pop Star",
+     "detail": "The chorus has choreography. So does the threat."
+    },
+    {
+     "id": "house.character.cheetah",
+     "title": "Cheetah",
+     "detail": "Fast enough to regret the destination."
+    },
+    {
+     "id": "house.character.eagle",
+     "title": "Eagle",
+     "detail": "Eyesight like a grudge that never blinks."
+    },
+    {
+     "id": "house.character.whale",
+     "title": "Whale",
+     "detail": "Sings one note and rearranges the furniture."
+    },
+    {
+     "id": "house.character.polar-bear",
+     "title": "Polar Bear",
+     "detail": "White, hungry, and unimpressed by your coat."
+    },
+    {
+     "id": "house.character.chocolates",
+     "title": "Box-of-Chocolates Runner",
+     "detail": "Runs because someone called life a sampler."
+    },
+    {
+     "id": "house.character.eel",
+     "title": "Electric Eel",
+     "detail": "The handshake is a mistake you make once."
+    },
+    {
+     "id": "house.character.penguin",
+     "title": "Emperor Penguin",
+     "detail": "Formalwear, and zero interest in flying."
+    },
+    {
+     "id": "house.character.squid",
+     "title": "Giant Squid",
+     "detail": "More arms than the argument has points."
+    },
+    {
+     "id": "house.character.gladiator",
+     "title": "Gladiator",
+     "detail": "The crowd is imaginary. The pose is not."
+    },
+    {
+     "id": "house.character.duct-tape",
+     "title": "Duct Tape Genius",
+     "detail": "Fixes the chair, the plan, and the alibi."
+    },
+    {
+     "id": "house.character.french-bulldog",
+     "title": "French Bulldog",
+     "detail": "Breathes like a tiny engine with opinions."
+    },
+    {
+     "id": "house.character.chimpanzee",
+     "title": "Chimpanzee",
+     "detail": "Throws the first thought that comes to hand."
+    },
+    {
+     "id": "house.character.moose",
+     "title": "Moose",
+     "detail": "Antlers wide enough to edit the hallway."
+    },
+    {
+     "id": "house.character.sharpshooter",
+     "title": "Sharpshooter",
+     "detail": "Hits the target. The target had a speech ready."
+    },
+    {
+     "id": "house.character.sloth",
+     "title": "Sloth",
+     "detail": "Will get there. The fight may already be over."
+    },
+    {
+     "id": "house.character.giraffe",
+     "title": "Giraffe",
+     "detail": "Sees the plan from a floor you do not have."
+    },
+    {
+     "id": "house.character.counterterror",
+     "title": "24-Hour Counterterror Agent",
+     "detail": "The clock is loud. The whisper is louder."
+    },
+    {
+     "id": "house.character.me",
+     "title": "Me",
+     "detail": "You, but with a soundtrack and worse judgment."
+    },
+    {
+     "id": "house.character.hippo",
+     "title": "Hippo",
+     "detail": "Mostly mouth. The rest is commitment."
+    },
+    {
+     "id": "house.character.candy-tycoon",
+     "title": "Eccentric Candy Tycoon",
+     "detail": "The tour is golden. The exit is a riddle."
+    },
+    {
+     "id": "house.character.gandhi",
+     "title": "Gandhi",
+     "detail": "Wins by refusing to swing, which is infuriating."
+    },
+    {
+     "id": "house.character.physicist",
+     "title": "Genius Physicist",
+     "detail": "Explains the universe, then asks for the ramp."
+    },
+    {
+     "id": "house.character.rock-opera",
+     "title": "Rock Opera Legend",
+     "detail": "Every entrance gets its own key change."
+    },
+    {
+     "id": "house.character.croc-wrangler",
+     "title": "Croc Wrangler",
+     "detail": "Talks to the jaws. The jaws talk back."
+    },
+    {
+     "id": "house.character.pop-star",
+     "title": "Wrecking Ball Pop Star",
+     "detail": "Swings in, wrecks the chorus, swings out."
+    },
+    {
+     "id": "house.character.one-man-army",
+     "title": "One-Man Army",
+     "detail": "The headband is the whole chain of command."
+    },
+    {
+     "id": "house.character.genghis",
+     "title": "Genghis Khan",
+     "detail": "The horde is running late. He is not."
+    },
+    {
+     "id": "house.character.former-president",
+     "title": "Former President",
+     "detail": "Still practices the speech in the mirror."
+    },
+    {
+     "id": "house.character.owl",
+     "title": "Owl",
+     "detail": "Turns its head all the way around the excuse."
+    },
+    {
+     "id": "house.character.king-of-pop",
+     "title": "King of Pop",
+     "detail": "One glove on. The other hand is the plot."
+    },
+    {
+     "id": "house.character.lucha",
+     "title": "Lucha Libre Wrestler",
+     "detail": "The mask stays on. Dignity is optional."
+    },
+    {
+     "id": "house.character.rhino",
+     "title": "Rhinoceros",
+     "detail": "Charges first. Asks what the room was later."
+    },
+    {
+     "id": "house.character.cool-president",
+     "title": "Cool Former President",
+     "detail": "The jacket is off. The point is not."
+    },
+    {
+     "id": "house.character.cat",
+     "title": "Cat",
+     "detail": "Knocks the plan off the table, then sits in it."
+    },
+    {
+     "id": "house.character.rebel-archer",
+     "title": "Teen Rebel Archer",
+     "detail": "Raises a hand. The arena takes notes."
+    },
+    {
+     "id": "house.character.ufc",
+     "title": "Ultimate Fighting Champion",
+     "detail": "The cage is a suggestion with a referee."
+    },
+    {
+     "id": "house.character.gorilla",
+     "title": "Gorilla",
+     "detail": "Beats the chest. The chest files a complaint."
+    },
+    {
+     "id": "house.character.cartoon-dad",
+     "title": "Donut-Loving Cartoon Dad",
+     "detail": "The donut is a lifestyle. The yell is grammar."
+    },
+    {
+     "id": "house.character.pick-action",
+     "title": "Pick an Action Movie Star",
+     "detail": "You name the star. The explosion is complimentary."
+    },
+    {
+     "id": "house.character.spider",
+     "title": "Spider",
+     "detail": "Eight legs, one web, and no patience for flies."
+    },
+    {
+     "id": "house.character.billionaire-president",
+     "title": "Billionaire President",
+     "detail": "The tie is long. The grudge is longer."
+    },
+    {
+     "id": "house.character.pick-tv",
+     "title": "Pick a TV Character",
+     "detail": "You name the show. The laugh track gets nervous."
+    },
+    {
+     "id": "house.character.turtle",
+     "title": "Turtle",
+     "detail": "Wins by still being there when you get tired."
+    },
+    {
+     "id": "house.character.plumbers",
+     "title": "Plumber Brothers",
+     "detail": "Two brothers, one overalls budget, many pipes."
+    },
+    {
+     "id": "house.character.pick-celebrity",
+     "title": "Pick a Celebrity",
+     "detail": "You name them. They were already on the way."
+    },
+    {
+     "id": "house.character.assassin",
+     "title": "Assassin",
+     "detail": "The contract is short. The silence is shorter."
+    },
+    {
+     "id": "house.character.candidate",
+     "title": "Presidential Candidate",
+     "detail": "Shakes every hand, including the one that objects."
+    },
+    {
+     "id": "house.character.apache",
+     "title": "Apache Warrior",
+     "detail": "Reads the ground the way other people read rooms."
+    },
+    {
+     "id": "house.character.dolphin",
+     "title": "Dolphin",
+     "detail": "Smiles, clicks, and is clearly up to something."
+    },
+    {
+     "id": "house.character.hockey",
+     "title": "Hockey Player",
+     "detail": "The teeth are optional. The check is not."
+    },
+    {
+     "id": "house.character.femme-fatale",
+     "title": "Femme Fatale",
+     "detail": "The lighter talks. You do the regretting."
+    },
+    {
+     "id": "house.character.rage-monster",
+     "title": "Big Green Rage Monster",
+     "detail": "Big, green, and finished with the sentence."
+    },
+    {
+     "id": "house.character.mafia-don",
+     "title": "Mafia Don",
+     "detail": "The offer arrives in a very calm voice."
+    },
+    {
+     "id": "house.character.player-left",
+     "title": "The Player to Your Left",
+     "detail": "They did not volunteer. They are in it anyway."
+    },
+    {
+     "id": "house.character.sumo",
+     "title": "Sumo Wrestler",
+     "detail": "The ring is small. The presence is not."
+    },
+    {
+     "id": "house.character.pick-movie",
+     "title": "Pick a Movie Character",
+     "detail": "You name the picture. The credits look nervous."
+    },
+    {
+     "id": "house.character.helen-keller",
+     "title": "Helen Keller",
+     "detail": "Misses nothing that matters, including your tell."
+    },
+    {
+     "id": "house.character.psychic",
+     "title": "Psychic",
+     "detail": "Already spoiled the ending. You are living it."
+    }
+   ],
+   "powers": [
+    {
+     "id": "house.attribute.borrow",
+     "title": "Borrowed skill",
+     "detail": "May borrow one talent from the person they are arguing with."
+    },
+    {
+     "id": "house.attribute.pigeons",
+     "title": "Pigeon escort",
+     "detail": "A loyal flock of city pigeons takes their side."
+    },
+    {
+     "id": "house.attribute.doubt",
+     "title": "Doubt engine",
+     "detail": "Grows stronger every time someone says they cannot."
+    },
+    {
+     "id": "house.attribute.shoelace",
+     "title": "Shoelace pause",
+     "detail": "Can stop a moment long enough to retie their shoes."
+    },
+    {
+     "id": "house.attribute.vending",
+     "title": "Vending handshake",
+     "detail": "Knows the secret handshake of every snack machine."
+    },
+    {
+     "id": "house.attribute.compliment",
+     "title": "Compliment mend",
+     "detail": "Recovers when praised, and stalls when ignored."
+    },
+    {
+     "id": "house.attribute.dance",
+     "title": "Sudden ballroom",
+     "detail": "Can turn any floor into a surprisingly good dance floor."
+    },
+    {
+     "id": "house.attribute.spoon",
+     "title": "Correct spoon",
+     "detail": "Carries a toolbox that always contains the right spoon."
+    },
+    {
+     "id": "house.attribute.invisible",
+     "title": "Polite invisibility",
+     "detail": "Invisible until they introduce themselves."
+    },
+    {
+     "id": "house.attribute.weather",
+     "title": "Weather fluent",
+     "detail": "Speaks fluent weather, and the weather answers."
+    },
+    {
+     "id": "house.attribute.recruit",
+     "title": "Good-day recruit",
+     "detail": "Can enlist one bystander who is having a great day."
+    },
+    {
+     "id": "house.attribute.stare",
+     "title": "Statue stare",
+     "detail": "Never loses a staring contest, including with statues."
+    },
+    {
+     "id": "house.attribute.mail",
+     "title": "Mail-route strength",
+     "detail": "Arms built by finishing the whole route."
+    },
+    {
+     "id": "house.attribute.rewind",
+     "title": "Sentence rewind",
+     "detail": "Can rewind the last sentence anyone said."
+    },
+    {
+     "id": "house.attribute.bread",
+     "title": "Fresh-bread aura",
+     "detail": "Smells like bread just out of the oven. It is very distracting."
+    },
+    {
+     "id": "house.attribute.ferry",
+     "title": "Ferry whistle",
+     "detail": "A whistle that summons a very punctual ferry."
+    },
+    {
+     "id": "house.attribute.pockets",
+     "title": "Pocket swap",
+     "detail": "Can trade pockets with someone across the room."
+    },
+    {
+     "id": "house.attribute.monday",
+     "title": "Monday immunity",
+     "detail": "Contractually unharmed by Mondays."
+    },
+    {
+     "id": "house.attribute.glitter",
+     "title": "Selective glitter",
+     "detail": "Leaves glitter that only the other fighter can see."
+    },
+    {
+     "id": "house.attribute.question",
+     "title": "Honest question",
+     "detail": "May ask the room one question that must be answered honestly."
+    },
+    {
+     "id": "house.attribute.fly",
+     "title": "Can fly",
+     "detail": "Leaves the ground when the argument needs air."
+    },
+    {
+     "id": "house.attribute.strength",
+     "title": "Super strength",
+     "detail": "Lifts the heavy part, including the mood."
+    },
+    {
+     "id": "house.attribute.lasers",
+     "title": "Shoots lasers from their eyes",
+     "detail": "Looks at the problem until it glows."
+    },
+    {
+     "id": "house.attribute.bazooka",
+     "title": "Has a bazooka",
+     "detail": "Brought the loud option."
+    },
+    {
+     "id": "house.attribute.flamethrower",
+     "title": "Armed with a flamethrower",
+     "detail": "The conversation gets warmer, immediately."
+    },
+    {
+     "id": "house.attribute.sniper",
+     "title": "Armed with a sniper rifle",
+     "detail": "Makes the point from a very polite distance."
+    },
+    {
+     "id": "house.attribute.winds",
+     "title": "Can blow 200-mph winds",
+     "detail": "The room rearranges itself around the sentence."
+    },
+    {
+     "id": "house.attribute.underwater",
+     "title": "Can breathe underwater",
+     "detail": "Argues fine. Everyone else is bubbling."
+    },
+    {
+     "id": "house.attribute.any-animal",
+     "title": "Can become any animal",
+     "detail": "Becomes whichever creature has the better poster."
+    },
+    {
+     "id": "house.attribute.teleports",
+     "title": "Teleports",
+     "detail": "Leaves mid-excuse and arrives mid-victory."
+    },
+    {
+     "id": "house.attribute.magnetism",
+     "title": "Controls magnetism",
+     "detail": "Every loose nail, and every loose plan, comes over."
+    },
+    {
+     "id": "house.attribute.xray",
+     "title": "X-ray vision",
+     "detail": "Sees the bluff, and the skeleton telling it."
+    },
+    {
+     "id": "house.attribute.sonic",
+     "title": "Sonic scream",
+     "detail": "The scream has a note. The note has a crater."
+    },
+    {
+     "id": "house.attribute.impact",
+     "title": "Unaffected by impact",
+     "detail": "Gets hit, checks a watch, and continues."
+    }
+   ],
+   "blurb": "The table's own cards. Always shuffled in."
+  },
+  {
+   "id": "fantasy",
+   "title": "Fantasy",
+   "optional": true,
+   "characters": [
+    {
+     "id": "fantasy.character.troll",
+     "title": "Toll-bridge troll",
+     "detail": "Charges a riddle, a story, or exact change."
+    },
+    {
+     "id": "fantasy.character.knight",
+     "title": "Candle-cart knight",
+     "detail": "Armor polished for parades, and nervous about mud."
+    },
+    {
+     "id": "fantasy.character.apprentice",
+     "title": "Apprentice of one spell",
+     "detail": "The spell is \"alphabetize,\" and it works on enemies."
+    },
+    {
+     "id": "fantasy.character.jester",
+     "title": "Tenured court jester",
+     "detail": "Mocked the crown once and was promoted for it."
+    },
+    {
+     "id": "fantasy.character.cartographer",
+     "title": "Swamp cartographer",
+     "detail": "Maps places that move when anyone blinks."
+    },
+    {
+     "id": "fantasy.character.bookkeeper",
+     "title": "Dragon's bookkeeper",
+     "detail": "Keeps the hoard in labeled jars and a strict ledger."
+    },
+    {
+     "id": "fantasy.character.questgiver",
+     "title": "Retired quest-giver",
+     "detail": "Still pins notices at the tavern, out of habit."
+    },
+    {
+     "id": "fantasy.character.hedgewitch",
+     "title": "Hedge-witch of leftovers",
+     "detail": "Brews from whatever the pantry forgot."
+    },
+    {
+     "id": "fantasy.character.squire",
+     "title": "Snack-bearing squire",
+     "detail": "Carries the banner, and also the morale."
+    },
+    {
+     "id": "fantasy.character.librarian",
+     "title": "Mirror-maze librarian",
+     "detail": "The shelves rearrange for people who whisper."
+    },
+    {
+     "id": "fantasy.character.pilot",
+     "title": "Griffin ferry pilot",
+     "detail": "The scenic route is whatever the wind prefers."
+    },
+    {
+     "id": "fantasy.character.intern",
+     "title": "Cursed-crown intern",
+     "detail": "Wears it on Tuesdays. The curse is mostly paperwork."
+    },
+    {
+     "id": "fantasy.character.echo",
+     "title": "Blacksmith's echo",
+     "detail": "The hammering continues in the next room, even outdoors."
+    },
+    {
+     "id": "fantasy.character.bard",
+     "title": "Bard of the bridge only",
+     "detail": "Starts every song in the middle and commits."
+    },
+    {
+     "id": "fantasy.character.warden",
+     "title": "Warden of lost gloves",
+     "detail": "Returns them, eventually, to the correct hand."
+    },
+    {
+     "id": "fantasy.character.lifeguard",
+     "title": "Moat lifeguard",
+     "detail": "Certified. The moat has not read the certification."
+    },
+    {
+     "id": "fantasy.character.regular",
+     "title": "Potion-shop regular",
+     "detail": "Knows every clerk by the smell of the latest batch."
+    },
+    {
+     "id": "fantasy.character.alarm",
+     "title": "Sleeping giant's alarm",
+     "detail": "A small person with a very large bell."
+    },
+    {
+     "id": "fantasy.character.tax",
+     "title": "Fairy-ring tax collector",
+     "detail": "The invoices are mushrooms, and they are itemized."
+    },
+    {
+     "id": "fantasy.character.shield",
+     "title": "Negotiating shield-bearer",
+     "detail": "The shield is mostly a place to rest the clipboard."
+    },
+    {
+     "id": "fantasy.character.greybeard",
+     "title": "A grey-bearded wizard",
+     "detail": "The beard has seen more quests than the map."
+    },
+    {
+     "id": "fantasy.character.dragon",
+     "title": "Dragon",
+     "detail": "Hoards quietly, and counts."
+    },
+    {
+     "id": "fantasy.character.wizard",
+     "title": "Wizard",
+     "detail": "Pointed hat. Unfinished spell. Full confidence."
+    },
+    {
+     "id": "fantasy.character.sworn-knight",
+     "title": "Knight",
+     "detail": "Shiny enough to be seen coming."
+    },
+    {
+     "id": "fantasy.character.leprechaun",
+     "title": "Leprechaun",
+     "detail": "The gold is a rumor with excellent shoes."
+    },
+    {
+     "id": "fantasy.character.musketeer",
+     "title": "Musketeer",
+     "detail": "All for one, and that one is keeping score."
+    },
+    {
+     "id": "fantasy.character.mermaid",
+     "title": "Mermaid",
+     "detail": "The song is pretty. The tide is the point."
+    },
+    {
+     "id": "fantasy.character.unicorn",
+     "title": "Unicorn",
+     "detail": "Rare, glittering, and judging your shoes."
+    },
+    {
+     "id": "fantasy.character.samurai",
+     "title": "Samurai",
+     "detail": "The bow takes longer than the cut."
+    },
+    {
+     "id": "fantasy.character.barbarian",
+     "title": "Barbarian Warrior",
+     "detail": "The loincloth is the entire strategic plan."
+    },
+    {
+     "id": "fantasy.character.witch",
+     "title": "Witch",
+     "detail": "The cauldron knows your name, and it is cackling."
+    },
+    {
+     "id": "fantasy.character.robin-hood",
+     "title": "Robin Hood",
+     "detail": "Rob the rich. Leave a very neat receipt."
+    },
+    {
+     "id": "fantasy.character.wizard-student",
+     "title": "Know-It-All Wizard Student",
+     "detail": "Hand is up. So is the spell. Dangerously."
+    },
+    {
+     "id": "fantasy.character.angel",
+     "title": "Angel",
+     "detail": "The halo is slightly crooked, on purpose."
+    },
+    {
+     "id": "fantasy.character.viking",
+     "title": "Viking",
+     "detail": "The boat is a mood. The axe is a period."
+    },
+    {
+     "id": "fantasy.character.queen",
+     "title": "Queen",
+     "detail": "Off with the argument. She has a schedule."
+    }
+   ],
+   "powers": [
+    {
+     "id": "fantasy.attribute.riddle",
+     "title": "Riddle toll",
+     "detail": "May pause the fight to demand a riddle. A bad answer costs dignity."
+    },
+    {
+     "id": "fantasy.attribute.tower",
+     "title": "Pocket castle",
+     "detail": "Can produce one small tower, enough for a dramatic entrance."
+    },
+    {
+     "id": "fantasy.attribute.name",
+     "title": "True-name sticky note",
+     "detail": "Knows what to call a thing once it has introduced itself."
+    },
+    {
+     "id": "fantasy.attribute.lunchbox",
+     "title": "Enchanted lunchbox",
+     "detail": "Anything inside stays warm and slightly heroic."
+    },
+    {
+     "id": "fantasy.attribute.moon",
+     "title": "Borrowed moonlight",
+     "detail": "Can see clearly, but only in silver."
+    },
+    {
+     "id": "fantasy.attribute.geas",
+     "title": "Polite geas",
+     "detail": "May assign one small chore before the argument continues."
+    },
+    {
+     "id": "fantasy.attribute.map",
+     "title": "Apologetic map",
+     "detail": "Shows the way, then admits it was guessing."
+    },
+    {
+     "id": "fantasy.attribute.sword",
+     "title": "Second-hand sword",
+     "detail": "The blade remembers winning, even when the owner does not."
+    },
+    {
+     "id": "fantasy.attribute.familiar",
+     "title": "Union familiar",
+     "detail": "A raven, a cat, or a toad, and it expects breaks."
+    },
+    {
+     "id": "fantasy.attribute.crown",
+     "title": "Crown of good posture",
+     "detail": "While it is worn, nobody can slouch through a speech."
+    },
+    {
+     "id": "fantasy.attribute.plank",
+     "title": "One-plank bridge",
+     "detail": "Can cross any gap that is mostly pride."
+    },
+    {
+     "id": "fantasy.attribute.tea",
+     "title": "Healing tea",
+     "detail": "Mends bruises and hurt feelings at the same speed."
+    },
+    {
+     "id": "fantasy.attribute.horn",
+     "title": "Echoing horn",
+     "detail": "A shout comes back with better wording."
+    },
+    {
+     "id": "fantasy.attribute.cloak",
+     "title": "Cloak of the extras",
+     "detail": "Looks like part of the crowd until someone takes attendance."
+    },
+    {
+     "id": "fantasy.attribute.coin",
+     "title": "Bag of exact change",
+     "detail": "Holds the right coin for any toll, and nothing else."
+    },
+    {
+     "id": "fantasy.attribute.oath",
+     "title": "Small-print oath",
+     "detail": "Promises stick, including the ones that were muttered."
+    },
+    {
+     "id": "fantasy.attribute.lantern",
+     "title": "Loyal lantern",
+     "detail": "The flame leans toward whoever is telling the truth."
+    },
+    {
+     "id": "fantasy.attribute.manners",
+     "title": "Polite interrupt",
+     "detail": "Can cut in, but only after saying excuse me."
+    },
+    {
+     "id": "fantasy.attribute.picnic",
+     "title": "Summoned picnic",
+     "detail": "Calls a blanket, three apples, and a ceasefire long enough to eat."
+    },
+    {
+     "id": "fantasy.attribute.loan",
+     "title": "Borrowed flame",
+     "detail": "May take a puff of dragonfire. It has to come back unsinged."
+    },
+    {
+     "id": "fantasy.attribute.holy-grenades",
+     "title": "Armed with holy hand grenades",
+     "detail": "Count to three. The chapel insists."
+    },
+    {
+     "id": "fantasy.attribute.breathes-fire",
+     "title": "Breathes fire",
+     "detail": "The punchline arrives already preheated."
+    },
+    {
+     "id": "fantasy.attribute.berserker",
+     "title": "Berserker rage",
+     "detail": "The plan leaves. Something louder stays."
+    },
+    {
+     "id": "fantasy.attribute.centaur",
+     "title": "Riding a depressed centaur",
+     "detail": "Half horse, fully over it, still on the clock."
+    }
+   ],
+   "blurb": "Courts, curses, and creatures who still keep receipts."
+  },
+  {
+   "id": "sci-fi",
+   "title": "Sci-Fi",
+   "optional": true,
+   "characters": [
+    {
+     "id": "sci-fi.character.barista",
+     "title": "Asteroid-belt barista",
+     "detail": "Pulls shots in low gravity. The crema still matters."
+    },
+    {
+     "id": "sci-fi.character.diplomat",
+     "title": "Warranty diplomat",
+     "detail": "Negotiates peace in the language of return policies."
+    },
+    {
+     "id": "sci-fi.character.janitor",
+     "title": "Generation-ship janitor",
+     "detail": "Has the keys to decks the captain forgot."
+    },
+    {
+     "id": "sci-fi.character.navigator",
+     "title": "Trainee navigator",
+     "detail": "Trusts the stars, then double-checks with a pencil."
+    },
+    {
+     "id": "sci-fi.character.comedian",
+     "title": "Station comedian",
+     "detail": "Five minutes at every shift change. Attendance is mandatory."
+    },
+    {
+     "id": "sci-fi.character.clone",
+     "title": "Clone who kept the nickname",
+     "detail": "The others gave it up. This one did not."
+    },
+    {
+     "id": "sci-fi.character.gardener",
+     "title": "Terraforming gardener",
+     "detail": "Plants what should not grow, then apologizes to the soil."
+    },
+    {
+     "id": "sci-fi.character.priest",
+     "title": "Robot priest of small rituals",
+     "detail": "Blesses doorways, kettles, and launch buttons."
+    },
+    {
+     "id": "sci-fi.character.smuggler",
+     "title": "Smuggler of quiet",
+     "detail": "Moves silence past noisy checkpoints."
+    },
+    {
+     "id": "sci-fi.character.archivist",
+     "title": "Archivist of deleted planets",
+     "detail": "Keeps a card catalog for places the map dropped."
+    },
+    {
+     "id": "sci-fi.character.plumber",
+     "title": "Gravity plumber",
+     "detail": "Fixes leaks where down is only a suggestion."
+    },
+    {
+     "id": "sci-fi.character.translator",
+     "title": "First-contact translator",
+     "detail": "Fluent in hello, sorry, and where is the washroom."
+    },
+    {
+     "id": "sci-fi.character.sleeper",
+     "title": "Late cryo-sleeper",
+     "detail": "Woke up one century after the potluck."
+    },
+    {
+     "id": "sci-fi.character.shepherd",
+     "title": "Drone shepherd",
+     "detail": "Walks a flock of cameras out to pasture."
+    },
+    {
+     "id": "sci-fi.character.guard",
+     "title": "Lunar crossing guard",
+     "detail": "Holds the sign. The traffic is mostly dust and egos."
+    },
+    {
+     "id": "sci-fi.character.morale",
+     "title": "Starship morale officer",
+     "detail": "Issues stickers when the week has been a lot."
+    },
+    {
+     "id": "sci-fi.character.interviewer",
+     "title": "Black-box interviewer",
+     "detail": "Asks wreckage what it remembers, and takes neat notes."
+    },
+    {
+     "id": "sci-fi.character.cook",
+     "title": "Orbital line cook",
+     "detail": "The special is whatever survived re-entry."
+    },
+    {
+     "id": "sci-fi.character.courier",
+     "title": "Time-zone courier",
+     "detail": "Delivers yesterday's mail on purpose."
+    },
+    {
+     "id": "sci-fi.character.cadet",
+     "title": "Cadet who named the ship",
+     "detail": "The name stuck. Command is still processing the form."
+    },
+    {
+     "id": "sci-fi.character.lizard",
+     "title": "A giant atomic sea lizard",
+     "detail": "The tide comes in wearing scales."
+    },
+    {
+     "id": "sci-fi.character.ape",
+     "title": "A skyscraper-climbing giant ape",
+     "detail": "The skyline is a jungle gym."
+    },
+    {
+     "id": "sci-fi.character.knight",
+     "title": "A heavy-breathing space knight",
+     "detail": "The helmet does the talking, slowly."
+    },
+    {
+     "id": "sci-fi.character.robot",
+     "title": "Robot",
+     "detail": "Beeps when the plan is bad."
+    },
+    {
+     "id": "sci-fi.character.alien",
+     "title": "Alien",
+     "detail": "From somewhere else, and in no hurry to explain."
+    },
+    {
+     "id": "sci-fi.character.mad-scientist",
+     "title": "Mad Scientist",
+     "detail": "The laugh is practiced. The switch is not."
+    },
+    {
+     "id": "sci-fi.character.cyborg",
+     "title": "Time-Traveling Cyborg",
+     "detail": "Came from later, with a shorter temper."
+    },
+    {
+     "id": "sci-fi.character.alien-doctor",
+     "title": "Time-Traveling Alien Doctor",
+     "detail": "The ship is a box with opinions about time."
+    },
+    {
+     "id": "sci-fi.character.lost-alien",
+     "title": "Lost Little Alien",
+     "detail": "Wants to call home. The finger does the dialing."
+    },
+    {
+     "id": "sci-fi.character.alien-hunters",
+     "title": "Alien-Hunting Agents",
+     "detail": "Suits, shades, and one very bright flashlight."
+    },
+    {
+     "id": "sci-fi.character.armored-genius",
+     "title": "Armored Billionaire Genius",
+     "detail": "The suit does the flying. The mouth does the rest."
+    }
+   ],
+   "powers": [
+    {
+     "id": "sci-fi.attribute.breath",
+     "title": "Spare atmosphere",
+     "detail": "Carries one extra breath for someone who spent theirs talking."
+    },
+    {
+     "id": "sci-fi.attribute.beam",
+     "title": "Polite tractor beam",
+     "detail": "Can tug an object closer if it is asked nicely."
+    },
+    {
+     "id": "sci-fi.attribute.hud",
+     "title": "Editorial HUD",
+     "detail": "Prints helpful arrows, and the occasional opinion."
+    },
+    {
+     "id": "sci-fi.attribute.antenna",
+     "title": "Patch antenna",
+     "detail": "Can hear any radio that is already complaining."
+    },
+    {
+     "id": "sci-fi.attribute.boots",
+     "title": "Boots of commitment",
+     "detail": "Once planted, they do not slide off the point."
+    },
+    {
+     "id": "sci-fi.attribute.sticker",
+     "title": "Cloaking sticker",
+     "detail": "Invisible until someone tries to take attendance."
+    },
+    {
+     "id": "sci-fi.attribute.adapter",
+     "title": "Universal adapter",
+     "detail": "Fits any port, emotional or electrical."
+    },
+    {
+     "id": "sci-fi.attribute.gravity",
+     "title": "Courtesy gravity",
+     "detail": "May lighten one person long enough to make a point."
+    },
+    {
+     "id": "sci-fi.attribute.cookie",
+     "title": "Distress cookie",
+     "detail": "A beacon shaped like a snack. Help arrives sincere and confused."
+    },
+    {
+     "id": "sci-fi.attribute.ai",
+     "title": "Ceiling AI",
+     "detail": "A voice overhead that has read the manual twice."
+    },
+    {
+     "id": "sci-fi.attribute.beep",
+     "title": "Rewound beep",
+     "detail": "Can replay one alarm with better context."
+    },
+    {
+     "id": "sci-fi.attribute.airlock",
+     "title": "Pocket airlock",
+     "detail": "A door into a hallway that owes you a favor."
+    },
+    {
+     "id": "sci-fi.attribute.chart",
+     "title": "Margin-note star chart",
+     "detail": "Navigation by doodles. Surprisingly often right."
+    },
+    {
+     "id": "sci-fi.attribute.laser",
+     "title": "Laser pointer of authority",
+     "detail": "Everyone looks where it points, including the argument."
+    },
+    {
+     "id": "sci-fi.attribute.battery",
+     "title": "Backup heart battery",
+     "detail": "Starts again once, and only if someone says please."
+    },
+    {
+     "id": "sci-fi.attribute.net",
+     "title": "Generous cargo net",
+     "detail": "Fits one more improbable object than it should."
+    },
+    {
+     "id": "sci-fi.attribute.protocol",
+     "title": "Handshake protocol",
+     "detail": "A greeting that counts as a truce for ten seconds."
+    },
+    {
+     "id": "sci-fi.attribute.forecast",
+     "title": "Orbital forecast",
+     "detail": "Knows the weather on ground you have not reached."
+    },
+    {
+     "id": "sci-fi.attribute.mute",
+     "title": "Engine mute",
+     "detail": "Can hush a machine. People are on their own."
+    },
+    {
+     "id": "sci-fi.attribute.confetti",
+     "title": "Emergency confetti",
+     "detail": "Deploys in a crisis. Morale rises. Cleanup is later."
+    },
+    {
+     "id": "sci-fi.attribute.energy-sword",
+     "title": "Has a laser sword",
+     "detail": "It hums, and the room decides to behave."
+    },
+    {
+     "id": "sci-fi.attribute.shrink-ray",
+     "title": "Armed with a shrink ray",
+     "detail": "Makes the problem smaller. The ego stays full size."
+    },
+    {
+     "id": "sci-fi.attribute.jet-pack",
+     "title": "Wearing a jet-pack",
+     "detail": "Up is a personality now."
+    }
+   ],
+   "blurb": "Ships, stations, and futures that run on hold music."
+  },
+  {
+   "id": "horror",
+   "title": "Horror",
+   "optional": true,
+   "characters": [
+    {
+     "id": "horror.character.counselor",
+     "title": "Believing camp counselor",
+     "detail": "Writes the strange noises down, and does not laugh."
+    },
+    {
+     "id": "horror.character.librarian",
+     "title": "Night librarian of secrets",
+     "detail": "They are overdue. They get stamped anyway."
+    },
+    {
+     "id": "horror.character.substitute",
+     "title": "West-wing substitute",
+     "detail": "The regular teacher is out. The wing already knows."
+    },
+    {
+     "id": "horror.character.cryptid",
+     "title": "Neighborly cryptid",
+     "detail": "Tries to wave. The wave has too many joints, politely."
+    },
+    {
+     "id": "horror.character.clerk",
+     "title": "Thirteenth-floor clerk",
+     "detail": "There is no button for it. Guests arrive anyway."
+    },
+    {
+     "id": "horror.character.bearer",
+     "title": "Steady flashlight bearer",
+     "detail": "The beam is calm. The hand is a little less so."
+    },
+    {
+     "id": "horror.character.guide",
+     "title": "Off-clock ghost-tour guide",
+     "detail": "Still narrating, including in the grocery line."
+    },
+    {
+     "id": "horror.character.sitter",
+     "title": "Antique-shop night sitter",
+     "detail": "The dolls are fine. The music box is negotiating."
+    },
+    {
+     "id": "horror.character.host",
+     "title": "Storm-cellar host",
+     "detail": "Offers blankets before the thunder asks twice."
+    },
+    {
+     "id": "horror.character.sitterportrait",
+     "title": "Portrait sitter",
+     "detail": "Paints people who blink when the room is rude."
+    },
+    {
+     "id": "horror.character.researcher",
+     "title": "Lullaby researcher",
+     "detail": "Studies songs that keep something on the far side of sleep."
+    },
+    {
+     "id": "horror.character.groundskeeper",
+     "title": "Flower-route groundskeeper",
+     "detail": "Knows every name, and who still visits."
+    },
+    {
+     "id": "horror.character.usher",
+     "title": "Midnight-showing usher",
+     "detail": "Tears tickets for an audience that arrived a century early."
+    },
+    {
+     "id": "horror.character.kid",
+     "title": "Raincoat kid with a map",
+     "detail": "The map is of the house you are already standing in."
+    },
+    {
+     "id": "horror.character.hostnight",
+     "title": "After-midnight radio host",
+     "detail": "Takes calls from numbers that are not in service."
+    },
+    {
+     "id": "horror.character.attendant",
+     "title": "Hedge-maze attendant",
+     "detail": "Has counted the exits. The number changes after lunch."
+    },
+    {
+     "id": "horror.character.candles",
+     "title": "Candle maker for bad nights",
+     "detail": "Each candle is labeled with the fear it is for."
+    },
+    {
+     "id": "horror.character.archivist",
+     "title": "Attic archivist",
+     "detail": "Labels boxes \"do not open,\" and means the tape."
+    },
+    {
+     "id": "horror.character.teller",
+     "title": "Boardwalk fortune teller",
+     "detail": "On break. The cards keep dealing themselves, badly."
+    },
+    {
+     "id": "horror.character.understudy",
+     "title": "Final-scene understudy",
+     "detail": "Knows the beats, and hopes the cue never comes."
+    },
+    {
+     "id": "horror.character.vampire",
+     "title": "Vampire",
+     "detail": "Asks to be invited, then stays for the argument."
+    },
+    {
+     "id": "horror.character.werewolf",
+     "title": "Werewolf",
+     "detail": "The calendar is a combat schedule."
+    },
+    {
+     "id": "horror.character.mummy",
+     "title": "Mummy",
+     "detail": "Wrapped tight. Still on time."
+    },
+    {
+     "id": "horror.character.zombie",
+     "title": "Zombie",
+     "detail": "Slow, sincere, and not done walking."
+    },
+    {
+     "id": "horror.character.ghost",
+     "title": "Ghost",
+     "detail": "Present, mostly. The chair stays cold."
+    },
+    {
+     "id": "horror.character.monster",
+     "title": "Frankenstein's Monster",
+     "detail": "Stitched together and looking for a fair fight."
+    },
+    {
+     "id": "horror.character.serial-killer",
+     "title": "Friendly Neighborhood Serial Killer",
+     "detail": "Nice neighbor. The plastic sheeting is a hobby."
+    },
+    {
+     "id": "horror.character.blob",
+     "title": "Blob",
+     "detail": "It does not walk. It arrives anyway."
+    },
+    {
+     "id": "horror.character.skeleton",
+     "title": "Skeleton",
+     "detail": "All bone, no chill, and somehow still cold."
+    },
+    {
+     "id": "horror.character.evil-doll",
+     "title": "Evil Doll",
+     "detail": "The smile does not blink. You will."
+    },
+    {
+     "id": "horror.character.slayer",
+     "title": "Vampire Slayer",
+     "detail": "The stake is in the purse, next to the gum."
+    },
+    {
+     "id": "horror.character.cannibal",
+     "title": "Cannibal Psychiatrist",
+     "detail": "Dinner is served. You should ask who."
+    },
+    {
+     "id": "horror.character.sasquatch",
+     "title": "Sasquatch",
+     "detail": "Blurry on purpose. The footprints are not."
+    },
+    {
+     "id": "horror.character.possessed-car",
+     "title": "Demon-Possessed Car",
+     "detail": "The engine revs when you say its name."
+    },
+    {
+     "id": "horror.character.killer-bees",
+     "title": "Swarm of Killer Bees",
+     "detail": "A committee with stingers and one agenda."
+    },
+    {
+     "id": "horror.character.smoke",
+     "title": "Smoke Monster",
+     "detail": "Whispers in a voice you used to trust."
+    },
+    {
+     "id": "horror.character.devil",
+     "title": "The Devil",
+     "detail": "The deal looks fair. The fine print is you."
+    },
+    {
+     "id": "horror.character.reaper",
+     "title": "Grim Reaper",
+     "detail": "Always on time. The hood is nonnegotiable."
+    },
+    {
+     "id": "horror.character.dream-slasher",
+     "title": "Dream Slasher",
+     "detail": "The glove is the entire personality."
+    },
+    {
+     "id": "horror.character.hunchback",
+     "title": "Hunchback",
+     "detail": "The bell rings. He was already listening."
+    },
+    {
+     "id": "horror.character.hockey-mask",
+     "title": "Hockey-Mask Slasher",
+     "detail": "Does not hurry. Is somehow already there."
+    },
+    {
+     "id": "horror.character.demon",
+     "title": "Demon",
+     "detail": "The invitation was implied. It accepted."
+    }
+   ],
+   "powers": [
+    {
+     "id": "horror.attribute.flicker",
+     "title": "Flickering truth",
+     "detail": "The lights stutter when someone leaves a fact out."
+    },
+    {
+     "id": "horror.attribute.salt",
+     "title": "Pocket salt circle",
+     "detail": "A small boundary that rude things have to notice."
+    },
+    {
+     "id": "horror.attribute.courage",
+     "title": "Borrowed steadiness",
+     "detail": "May take one calm breath from the calmest person nearby."
+    },
+    {
+     "id": "horror.attribute.twice",
+     "title": "Name written twice",
+     "detail": "Writing it down keeps the owner from being forgotten mid-scene."
+    },
+    {
+     "id": "horror.attribute.door",
+     "title": "Sticky stranger door",
+     "detail": "Familiar hands open it. Hurried ones do not."
+    },
+    {
+     "id": "horror.attribute.whisper",
+     "title": "Whisper net",
+     "detail": "Can hear the sentence someone decided not to say."
+    },
+    {
+     "id": "horror.attribute.lantern",
+     "title": "Grudge lantern",
+     "detail": "Burns brighter toward whatever is following."
+    },
+    {
+     "id": "horror.attribute.fort",
+     "title": "Blanket-fort clause",
+     "detail": "Inside the fort, outside rules have to knock."
+    },
+    {
+     "id": "horror.attribute.lullaby",
+     "title": "Backward lullaby",
+     "detail": "Sends a nightmare to wait in the hall."
+    },
+    {
+     "id": "horror.attribute.compact",
+     "title": "Minute-ago compact",
+     "detail": "Shows the room as it was sixty seconds earlier."
+    },
+    {
+     "id": "horror.attribute.shadow",
+     "title": "Errand shadow",
+     "detail": "A second silhouette that runs the errand and reports back."
+    },
+    {
+     "id": "horror.attribute.receipt",
+     "title": "Polite sending-off",
+     "detail": "Asks the intruder to leave, and writes a receipt."
+    },
+    {
+     "id": "horror.attribute.floor",
+     "title": "Floorboard telegraph",
+     "detail": "The house taps once for yes."
+    },
+    {
+     "id": "horror.attribute.draft",
+     "title": "Cold-spot compass",
+     "detail": "Walks you toward the draft with opinions."
+    },
+    {
+     "id": "horror.attribute.stare",
+     "title": "Unblinking friend",
+     "detail": "A look that outlasts the thing doing the staring."
+    },
+    {
+     "id": "horror.attribute.candy",
+     "title": "Crossing candy",
+     "detail": "An old bargain: sweetness in exchange for safe passage."
+    },
+    {
+     "id": "horror.attribute.static",
+     "title": "Static lull",
+     "detail": "Radios hush when the important part is coming."
+    },
+    {
+     "id": "horror.attribute.key",
+     "title": "Key to the wrong door",
+     "detail": "Opens a closet deeper than the building allows."
+    },
+    {
+     "id": "horror.attribute.margin",
+     "title": "Margin ghost",
+     "detail": "Pencil notes appear. Usually helpful. Sometimes fussy."
+    },
+    {
+     "id": "horror.attribute.battery",
+     "title": "Story flashlight",
+     "detail": "The battery lasts exactly as long as the scene needs."
+    },
+    {
+     "id": "horror.attribute.mist",
+     "title": "Can become mist while holding breath",
+     "detail": "Gone while the breath lasts. Back with notes."
+    }
+   ],
+   "blurb": "Creeping dread, with the lights left on."
+  },
+  {
+   "id": "anime",
+   "title": "Anime",
+   "optional": true,
+   "characters": [
+    {
+     "id": "anime.character.transfer",
+     "title": "Transfer student with a soundtrack",
+     "detail": "The speakers are unplugged. The melody arrives anyway."
+    },
+    {
+     "id": "anime.character.president",
+     "title": "Club president of one",
+     "detail": "The roster is a promise and a snack budget."
+    },
+    {
+     "id": "anime.character.rival",
+     "title": "Lunch-break rival",
+     "detail": "Trains between bites. The score is personal and kind."
+    },
+    {
+     "id": "anime.character.intern",
+     "title": "Magical-girl intern",
+     "detail": "The transformation is still in beta. The bow is sincere."
+    },
+    {
+     "id": "anime.character.pilot",
+     "title": "Escalator-shy mecha pilot",
+     "detail": "Fine with cockpit ladders. Escalators feel like a betrayal."
+    },
+    {
+     "id": "anime.character.chef",
+     "title": "Broth-stand mediator",
+     "detail": "Serves bowls until both sides remember they were hungry."
+    },
+    {
+     "id": "anime.character.monitor",
+     "title": "Hall monitor of destiny",
+     "detail": "Writes people up for running, including fate."
+    },
+    {
+     "id": "anime.character.friend",
+     "title": "Map-keeping childhood friend",
+     "detail": "The map is of a summer that has not finished."
+    },
+    {
+     "id": "anime.character.alternate",
+     "title": "Tournament alternate",
+     "detail": "Listed as maybe. Shows up in full uniform anyway."
+    },
+    {
+     "id": "anime.character.fox",
+     "title": "Spirit-fox errand runner",
+     "detail": "Delivers packages, plus unsolicited life advice."
+    },
+    {
+     "id": "anime.character.philosopher",
+     "title": "Rooftop philosopher",
+     "detail": "Eats bread and explains the sky to anyone who sits."
+    },
+    {
+     "id": "anime.character.manager",
+     "title": "Manager of a tiny duo",
+     "detail": "Believes in the chorus. The chorus believes back."
+    },
+    {
+     "id": "anime.character.assistant",
+     "title": "Dojo plant assistant",
+     "detail": "Waters the plants. The plants are undefeated."
+    },
+    {
+     "id": "anime.character.hero",
+     "title": "Weekend-pass hero",
+     "detail": "Saves the day, then catches the last train."
+    },
+    {
+     "id": "anime.character.prodigy",
+     "title": "Notebook prodigy",
+     "detail": "Strategies in the margins. Doodles in the plan."
+    },
+    {
+     "id": "anime.character.mascot",
+     "title": "Mascot who lifts",
+     "detail": "The costume has pockets. The pockets have resolve."
+    },
+    {
+     "id": "anime.character.keeper",
+     "title": "Alley shrine keeper",
+     "detail": "Sweeps the steps. The steps remember."
+    },
+    {
+     "id": "anime.character.sibling",
+     "title": "Rival's younger sibling",
+     "detail": "Came to watch, then stayed to win."
+    },
+    {
+     "id": "anime.character.summoner",
+     "title": "Art-club summoner",
+     "detail": "Draws a helper. It climbs off the page, cranky and loyal."
+    },
+    {
+     "id": "anime.character.runner",
+     "title": "Closing-credits runner",
+     "detail": "Always in frame when the music swells, even at a bus stop."
+    },
+    {
+     "id": "anime.character.spiky",
+     "title": "A spiky-haired anime fighter",
+     "detail": "The hair enters the fight first."
+    },
+    {
+     "id": "anime.character.spark",
+     "title": "An electric pocket monster",
+     "detail": "Fits in a pocket. The pocket regrets it."
+    },
+    {
+     "id": "anime.character.street-fighter",
+     "title": "Street Fighter",
+     "detail": "The special move has a longer name than you."
+    }
+   ],
+   "powers": [
+    {
+     "id": "anime.attribute.song",
+     "title": "Theme-song pocket",
+     "detail": "May start a chorus. Allies stand up straighter."
+    },
+    {
+     "id": "anime.attribute.crumb",
+     "title": "Montage crumb",
+     "detail": "One bite contains a summer of practice."
+    },
+    {
+     "id": "anime.attribute.clipboard",
+     "title": "Friendship clipboard",
+     "detail": "Names on the list fight harder when read aloud."
+    },
+    {
+     "id": "anime.attribute.pin",
+     "title": "Transformation hairpin",
+     "detail": "A click, a glow, and slightly more confident shoes."
+    },
+    {
+     "id": "anime.attribute.band",
+     "title": "Spare headband",
+     "detail": "Worn, it refuses to quit before the other person does."
+    },
+    {
+     "id": "anime.attribute.mallet",
+     "title": "Speech-bubble mallet",
+     "detail": "Emphasis only. It bonks pride, not people."
+    },
+    {
+     "id": "anime.attribute.bento",
+     "title": "Typed bento",
+     "detail": "Each compartment answers a different kind of problem."
+    },
+    {
+     "id": "anime.attribute.leap",
+     "title": "Slow-motion leap",
+     "detail": "Time stretches for the cool part, then sends a bill."
+    },
+    {
+     "id": "anime.attribute.stamp",
+     "title": "Catchphrase stamp",
+     "detail": "Saying it once makes the next try count double in spirit."
+    },
+    {
+     "id": "anime.attribute.pager",
+     "title": "Spirit pager",
+     "detail": "Something fluffy arrives. Breaks are in the contract."
+    },
+    {
+     "id": "anime.attribute.wind",
+     "title": "Recap wind",
+     "detail": "A breeze that retells the situation more kindly."
+    },
+    {
+     "id": "anime.attribute.showing",
+     "title": "Power of showing up",
+     "detail": "Being present helps. Leaving early cancels it."
+    },
+    {
+     "id": "anime.attribute.pose",
+     "title": "Duo pose",
+     "detail": "Two people, one stance. The stance is the argument."
+    },
+    {
+     "id": "anime.attribute.ticket",
+     "title": "Flashback ticket",
+     "detail": "May replay one kinder memory and borrow its nerve."
+    },
+    {
+     "id": "anime.attribute.pencil",
+     "title": "Bracket pencil",
+     "detail": "Can redraw a single matchup, once, in graphite."
+    },
+    {
+     "id": "anime.attribute.echo",
+     "title": "Monologue echo",
+     "detail": "The quiet plan becomes audible to allies."
+    },
+    {
+     "id": "anime.attribute.scarf",
+     "title": "Long-arc scarf",
+     "detail": "Frays a little each fight and still holds."
+    },
+    {
+     "id": "anime.attribute.can",
+     "title": "Lucky vending can",
+     "detail": "The right drink drops. It is almost what you wanted."
+    },
+    {
+     "id": "anime.attribute.courtesy",
+     "title": "Announced finisher",
+     "detail": "Calls the big moment early enough for everyone to brace."
+    },
+    {
+     "id": "anime.attribute.umbrella",
+     "title": "Credits umbrella",
+     "detail": "When it opens, the scene agrees to end well."
+    }
+   ],
+   "blurb": "Rivals, theme songs, and one more training arc."
+  },
+  {
+   "id": "everyday",
+   "title": "Everyday Chaos",
+   "optional": true,
+   "characters": [
+    {
+     "id": "everyday.character.admin",
+     "title": "Group-chat admin",
+     "detail": "Mutes nobody. Reminds everybody. Loves them anyway."
+    },
+    {
+     "id": "everyday.character.sheet",
+     "title": "Picnic spreadsheet",
+     "detail": "Brought columns to a blanket. The columns are correct."
+    },
+    {
+     "id": "everyday.character.neighbor",
+     "title": "Extension-cord neighbor",
+     "detail": "Owns the block's electricity and lends it with labels."
+    },
+    {
+     "id": "everyday.character.parent",
+     "title": "Block snack parent",
+     "detail": "The bag has a juice box with your name on it."
+    },
+    {
+     "id": "everyday.character.manual",
+     "title": "Person who read the manual",
+     "detail": "Will summarize it. Will try not to gloat."
+    },
+    {
+     "id": "everyday.character.diplomat",
+     "title": "Parking-lot diplomat",
+     "detail": "Settles disputes with blinkers and a calm hand."
+    },
+    {
+     "id": "everyday.character.captain",
+     "title": "Birthday-cake captain",
+     "detail": "Knows the allergies, the candles, and who hates singing."
+    },
+    {
+     "id": "everyday.character.philosopher",
+     "title": "Laundromat philosopher",
+     "detail": "Folds shirts, and other people's afternoons."
+    },
+    {
+     "id": "everyday.character.regular",
+     "title": "Bus-stop regular",
+     "detail": "Holds the door with a look. The driver understands."
+    },
+    {
+     "id": "everyday.character.oracle",
+     "title": "Hardware-store oracle",
+     "detail": "Points at the right aisle before you finish asking."
+    },
+    {
+     "id": "everyday.character.general",
+     "title": "Potluck general",
+     "detail": "Assigns spoons like ranks. Nobody leaves hungry."
+    },
+    {
+     "id": "everyday.character.romantic",
+     "title": "Clean-inbox romantic",
+     "detail": "Loves a finished list, and still brings flowers."
+    },
+    {
+     "id": "everyday.character.maestro",
+     "title": "Crosswalk maestro",
+     "detail": "Conducts strollers, dogs, and people staring at phones."
+    },
+    {
+     "id": "everyday.character.vigilante",
+     "title": "Polite recycling vigilante",
+     "detail": "Rinses the jar, then rinses the argument."
+    },
+    {
+     "id": "everyday.character.cartographer",
+     "title": "Reunion cartographer",
+     "detail": "Knows who is not speaking, and seats them near the pie."
+    },
+    {
+     "id": "everyday.character.negotiator",
+     "title": "Morning dog negotiator",
+     "detail": "The leash is a suggestion. The treats are law."
+    },
+    {
+     "id": "everyday.character.mediator",
+     "title": "Self-checkout mediator",
+     "detail": "Apologizes to the machine until it apologizes back."
+    },
+    {
+     "id": "everyday.character.library",
+     "title": "Neighborhood tool library",
+     "detail": "Lends the drill, and a story about the drill."
+    },
+    {
+     "id": "everyday.character.pen",
+     "title": "Person who brought a pen",
+     "detail": "Also paper, and the will to make a list."
+    },
+    {
+     "id": "everyday.character.coordinator",
+     "title": "Car-line coordinator",
+     "detail": "Waves with two fingers. The morning continues."
+    },
+    {
+     "id": "everyday.character.grandma",
+     "title": "Your grandma",
+     "detail": "Brought a sweater you do not need and will wear."
+    },
+    {
+     "id": "everyday.character.mallcop",
+     "title": "A mall cop",
+     "detail": "The food court is under their jurisdiction."
+    },
+    {
+     "id": "everyday.character.toddler",
+     "title": "A toddler",
+     "detail": "Has a plan. The plan is loud."
+    },
+    {
+     "id": "everyday.character.goose",
+     "title": "A goose",
+     "detail": "Owns the path. You are visiting."
+    },
+    {
+     "id": "everyday.character.soccermom",
+     "title": "A soccer mom",
+     "detail": "The minivan is already in position."
+    },
+    {
+     "id": "everyday.character.greeter",
+     "title": "A big-box store greeter",
+     "detail": "Knows the aisle, and that you are welcome."
+    },
+    {
+     "id": "everyday.character.vegan",
+     "title": "Vegan",
+     "detail": "Brought a dish, and will mention it twice."
+    },
+    {
+     "id": "everyday.character.hipster",
+     "title": "Hipster",
+     "detail": "Liked this fight before it was decided."
+    },
+    {
+     "id": "everyday.character.marching-band",
+     "title": "High School Marching Band",
+     "detail": "One hundred people, one tuba, and no brakes."
+    },
+    {
+     "id": "everyday.character.pageant",
+     "title": "Child Beauty Pageant Queen",
+     "detail": "The wave is tiny. The ambition is not."
+    },
+    {
+     "id": "everyday.character.bowling",
+     "title": "Senior Citizen Bowling Team",
+     "detail": "The ball is slow. The trash talk is vintage."
+    },
+    {
+     "id": "everyday.character.significant-other",
+     "title": "My Significant Other",
+     "detail": "Knows where you keep the good comeback."
+    },
+    {
+     "id": "everyday.character.acappella",
+     "title": "College A Cappella Group",
+     "detail": "The beat is a mouth, and the mouth is committed."
+    },
+    {
+     "id": "everyday.character.boss",
+     "title": "My Boss",
+     "detail": "Schedules the showdown during your lunch."
+    },
+    {
+     "id": "everyday.character.cat-lady",
+     "title": "Crazy Cat Lady",
+     "detail": "The cats vote with her. They have the numbers."
+    },
+    {
+     "id": "everyday.character.nudist",
+     "title": "Nudist",
+     "detail": "Nothing to hide, including the strategy."
+    },
+    {
+     "id": "everyday.character.redneck",
+     "title": "Redneck",
+     "detail": "The truck is part of the argument."
+    },
+    {
+     "id": "everyday.character.kindergarten",
+     "title": "Kindergarten Class",
+     "detail": "Twenty tiny dictators and one snack policy."
+    },
+    {
+     "id": "everyday.character.sweater-neighbor",
+     "title": "Kindly Sweater Neighbor",
+     "detail": "The cardigan is a peace treaty you will take."
+    },
+    {
+     "id": "everyday.character.your-mom",
+     "title": "Your Mom",
+     "detail": "Asks if you ate, then ends the fight."
+    },
+    {
+     "id": "everyday.character.ex",
+     "title": "My Ex",
+     "detail": "Remembers the password and the weak point."
+    },
+    {
+     "id": "everyday.character.hobo",
+     "title": "Hobo",
+     "detail": "The bindle holds a plan and a very good stick."
+    },
+    {
+     "id": "everyday.character.boy-scout",
+     "title": "Boy Scout",
+     "detail": "Prepared for weather, bears, and your excuse."
+    },
+    {
+     "id": "everyday.character.girl-scout",
+     "title": "Girl Scout",
+     "detail": "The cookies are a door. She is already inside."
+    },
+    {
+     "id": "everyday.character.twins",
+     "title": "Identical Twins",
+     "detail": "You cannot tell them apart. They can."
+    },
+    {
+     "id": "everyday.character.mime",
+     "title": "Mime",
+     "detail": "The wall is invisible. The point is not."
+    }
+   ],
+   "powers": [
+    {
+     "id": "everyday.attribute.calendar",
+     "title": "Shared calendar",
+     "detail": "Everyone can see the plan. The plan can see them back."
+    },
+    {
+     "id": "everyday.attribute.labels",
+     "title": "Label maker",
+     "detail": "Puts a name on the problem, which makes it smaller."
+    },
+    {
+     "id": "everyday.attribute.charger",
+     "title": "Legendary spare charger",
+     "detail": "Fits the phone you swore was a different brand."
+    },
+    {
+     "id": "everyday.attribute.mute",
+     "title": "Surgical mute",
+     "detail": "Silences one thread, not the friendship."
+    },
+    {
+     "id": "everyday.attribute.grip",
+     "title": "Grocery-bag grip",
+     "detail": "Can carry one more awkward thing than physics prefers."
+    },
+    {
+     "id": "everyday.attribute.honk",
+     "title": "Polite honk",
+     "detail": "A sound that means your turn, and does not start a feud."
+    },
+    {
+     "id": "everyday.attribute.coffee",
+     "title": "Coffee for the table",
+     "detail": "Arrives hot, labeled, and on the right side of the argument."
+    },
+    {
+     "id": "everyday.attribute.tape",
+     "title": "Measuring tape of truth",
+     "detail": "Numbers that end an it-will-fit debate."
+    },
+    {
+     "id": "everyday.attribute.chair",
+     "title": "Spare chair",
+     "detail": "There is always one more seat. It was in the car."
+    },
+    {
+     "id": "everyday.attribute.glasses",
+     "title": "Read-the-room glasses",
+     "detail": "Optional. When worn, the volume drops."
+    },
+    {
+     "id": "everyday.attribute.leftovers",
+     "title": "Leftover tupperware",
+     "detail": "Yesterday's plan, improved by a night in the fridge."
+    },
+    {
+     "id": "everyday.attribute.pen",
+     "title": "Pen that works",
+     "detail": "The first pen. It simply works. People notice."
+    },
+    {
+     "id": "everyday.attribute.keys",
+     "title": "Key carabiner",
+     "detail": "Opens the shed, the cabin, and the conversation."
+    },
+    {
+     "id": "everyday.attribute.crackers",
+     "title": "Snack diplomacy",
+     "detail": "An offer of crackers that pauses the fight."
+    },
+    {
+     "id": "everyday.attribute.timer",
+     "title": "Two-minute timer",
+     "detail": "Anyone may call time. The timer is respected."
+    },
+    {
+     "id": "everyday.attribute.table",
+     "title": "Folding table",
+     "detail": "Turns a patch of floor into a headquarters."
+    },
+    {
+     "id": "everyday.attribute.names",
+     "title": "Name-tag memory",
+     "detail": "Remembers what people asked to be called."
+    },
+    {
+     "id": "everyday.attribute.umbrella",
+     "title": "Two-argument umbrella",
+     "detail": "Both sides stay dry. Neither has to admit they needed it."
+    },
+    {
+     "id": "everyday.attribute.spot",
+     "title": "Parking karma",
+     "detail": "A spot appears, slightly far, exactly in time."
+    },
+    {
+     "id": "everyday.attribute.scissors",
+     "title": "The good scissors",
+     "detail": "They cut the thing. They do not wander off."
+    },
+    {
+     "id": "everyday.attribute.shampoo",
+     "title": "Has shampoo in eyes",
+     "detail": "Eyes shut. The point gets slippery."
+    },
+    {
+     "id": "everyday.attribute.cries",
+     "title": "Cries uncontrollably",
+     "detail": "Tears on tap. Suddenly you feel like the villain."
+    }
+   ],
+   "blurb": "Ordinary life, turned up one notch past convenient."
+  },
+  {
+   "id": "absurd",
+   "title": "Absurd / Silly",
+   "optional": true,
+   "characters": [
+    {
+     "id": "absurd.character.cone",
+     "title": "Sentient parking cone",
+     "detail": "Has opinions about lanes, and a soft spot for parades."
+    },
+    {
+     "id": "absurd.character.goose",
+     "title": "Goose attorney",
+     "detail": "Honks objections. They are, annoyingly, often sustained."
+    },
+    {
+     "id": "absurd.character.cloud",
+     "title": "Cloud with Tuesdays off",
+     "detail": "Will not rain on its day off. Will hover judgmentally."
+    },
+    {
+     "id": "absurd.character.sandwich",
+     "title": "Well-traveled sandwich",
+     "detail": "Between the bread: lettuce, a map, and a long story."
+    },
+    {
+     "id": "absurd.character.meeting",
+     "title": "Meeting, given legs",
+     "detail": "Walks into rooms and sits at the head of itself."
+    },
+    {
+     "id": "absurd.character.shoe",
+     "title": "Left shoe of destiny",
+     "detail": "The right shoe is away on a personal journey."
+    },
+    {
+     "id": "absurd.character.elevator",
+     "title": "Joke-telling elevator",
+     "detail": "The doors close on the punchline. People stay for the next floor."
+    },
+    {
+     "id": "absurd.character.bureau",
+     "title": "Bureau of lost umbrellas",
+     "detail": "The clerk may also be an umbrella. It is hard to tell."
+    },
+    {
+     "id": "absurd.character.pigeon",
+     "title": "Clipboard pigeon",
+     "detail": "Inspects crumbs for compliance."
+    },
+    {
+     "id": "absurd.character.echo",
+     "title": "Employed echo",
+     "detail": "Repeats you, then adds a suggestion."
+    },
+    {
+     "id": "absurd.character.tuesday",
+     "title": "Tuesday, in person",
+     "detail": "Wears a lanyard. Is tired. Is somehow everywhere."
+    },
+    {
+     "id": "absurd.character.bar",
+     "title": "Sentient loading bar",
+     "detail": "Stuck at 97 percent, and emotionally available."
+    },
+    {
+     "id": "absurd.character.peel",
+     "title": "Prophetic banana peel",
+     "detail": "Someone will slip. The peel has already apologized."
+    },
+    {
+     "id": "absurd.character.chair",
+     "title": "Chair of every meeting",
+     "detail": "It remembers them all, and would like a different job."
+    },
+    {
+     "id": "absurd.character.poet",
+     "title": "Foghorn poet",
+     "detail": "Loud, brief, and weirdly moving."
+    },
+    {
+     "id": "absurd.character.puppet",
+     "title": "Sock-puppet ambassador",
+     "detail": "Speaks for the laundry. The laundry has demands."
+    },
+    {
+     "id": "absurd.character.roundabout",
+     "title": "Roundabout philosopher",
+     "detail": "You may leave whenever. You will not."
+    },
+    {
+     "id": "absurd.character.alarm",
+     "title": "Vacationing alarm clock",
+     "detail": "Rings from a postcard. The postcard is loud."
+    },
+    {
+     "id": "absurd.character.intern",
+     "title": "Gravity's intern",
+     "detail": "Still learning which way is down. Very eager."
+    },
+    {
+     "id": "absurd.character.shortcut",
+     "title": "Shortcut, made flesh",
+     "detail": "Looks shorter. Measures longer. Smiles anyway."
+    },
+    {
+     "id": "absurd.character.mouse",
+     "title": "A famous cartoon mouse",
+     "detail": "Gloves on. Smile ready. The shorts are policy."
+    },
+    {
+     "id": "absurd.character.sponge",
+     "title": "A square yellow sea sponge",
+     "detail": "Square, yellow, and enthusiastic about the tide."
+    },
+    {
+     "id": "absurd.character.ogre",
+     "title": "A grumpy swamp ogre",
+     "detail": "Wants the swamp quiet and the mud left alone."
+    },
+    {
+     "id": "absurd.character.reggae",
+     "title": "Reggae Band",
+     "detail": "The bassline arrives late and wins anyway."
+    },
+    {
+     "id": "absurd.character.carnie",
+     "title": "Carnie",
+     "detail": "Guesses your weight, then your whole deal."
+    },
+    {
+     "id": "absurd.character.canada",
+     "title": "Canada",
+     "detail": "Apologizes, then takes the entire map."
+    },
+    {
+     "id": "absurd.character.search-engine",
+     "title": "The Search Engine",
+     "detail": "Finishes your sentence, then sells the draft."
+    },
+    {
+     "id": "absurd.character.purple-dinosaur",
+     "title": "Purple Dinosaur",
+     "detail": "Hugs first. The hug has a theme song."
+    },
+    {
+     "id": "absurd.character.pet-rock",
+     "title": "Pet Rock",
+     "detail": "Loyal, quiet, and impossible to outlast."
+    },
+    {
+     "id": "absurd.character.cactus",
+     "title": "Cactus",
+     "detail": "Huggable, if you enjoy the consequences."
+    },
+    {
+     "id": "absurd.character.illuminati",
+     "title": "The Illuminati",
+     "detail": "The triangle already knows, and is not telling."
+    },
+    {
+     "id": "absurd.character.boy-band",
+     "title": "Boy Band",
+     "detail": "Four-part harmony. One-part hair product."
+    },
+    {
+     "id": "absurd.character.head",
+     "title": "Disembodied Head",
+     "detail": "No body, and still has notes on the meeting."
+    },
+    {
+     "id": "absurd.character.clown-posse",
+     "title": "Literally Insane Clown Posse",
+     "detail": "The face paint showed up with a manifesto."
+    },
+    {
+     "id": "absurd.character.prince",
+     "title": "Nigerian Prince",
+     "detail": "The fortune is in your inbox. So is the prince."
+    },
+    {
+     "id": "absurd.character.fainting-goat",
+     "title": "Fainting Goat",
+     "detail": "Startles, goes rigid, and is still present."
+    },
+    {
+     "id": "absurd.character.burning-man",
+     "title": "Everyone at Burning Man",
+     "detail": "Dusty, glittering, and late to their own theme."
+    },
+    {
+     "id": "absurd.character.lineup",
+     "title": "Music Festival Lineup",
+     "detail": "Twelve acts, one portable toilet, and no mercy."
+    },
+    {
+     "id": "absurd.character.liberty",
+     "title": "The Statue of Liberty",
+     "detail": "The torch is a suggestion you can see for miles."
+    },
+    {
+     "id": "absurd.character.puppies",
+     "title": "101 Spotted Puppies",
+     "detail": "Too many spots to count, and they know it."
+    },
+    {
+     "id": "absurd.character.un",
+     "title": "The U.N.",
+     "detail": "Calls a vote. The vote calls a subcommittee."
+    },
+    {
+     "id": "absurd.character.marshmallow",
+     "title": "Giant Marshmallow Man",
+     "detail": "Squishy, city-sized, and blocking the avenue."
+    },
+    {
+     "id": "absurd.character.reality-tv",
+     "title": "Reality TV Family",
+     "detail": "The confession camera is already rolling."
+    }
+   ],
+   "powers": [
+    {
+     "id": "absurd.attribute.honk",
+     "title": "Honk of order",
+     "detail": "One honk. The room reorganizes into a line."
+    },
+    {
+     "id": "absurd.attribute.forecast",
+     "title": "Confetti forecast",
+     "detail": "Predicts a celebration. Sometimes causes it."
+    },
+    {
+     "id": "absurd.attribute.cushion",
+     "title": "Tension cushion",
+     "detail": "A rude noise that ends a standoff and starts a grin."
+    },
+    {
+     "id": "absurd.attribute.insurance",
+     "title": "Slip insurance",
+     "detail": "If you stumble, you land in a better argument."
+    },
+    {
+     "id": "absurd.attribute.echo",
+     "title": "Echo upgrade",
+     "detail": "Your last sentence returns with a drum fill."
+    },
+    {
+     "id": "absurd.attribute.conviction",
+     "title": "Inflatable conviction",
+     "detail": "An opinion that gets larger when squeezed."
+    },
+    {
+     "id": "absurd.attribute.string",
+     "title": "Silly-string barrier",
+     "detail": "A bright line nobody respectable will cross."
+    },
+    {
+     "id": "absurd.attribute.shield",
+     "title": "Punchline shield",
+     "detail": "The next insult arrives as a joke and loses its teeth."
+    },
+    {
+     "id": "absurd.attribute.car",
+     "title": "Clown-car capacity",
+     "detail": "One more ally can fit. They were already in there."
+    },
+    {
+     "id": "absurd.attribute.pie",
+     "title": "Thesis pie",
+     "detail": "A cream pie that hits the weak point of a speech."
+    },
+    {
+     "id": "absurd.attribute.balance",
+     "title": "Unicycle balance",
+     "detail": "Stay upright on a point that should not hold."
+    },
+    {
+     "id": "absurd.attribute.maracas",
+     "title": "Emphasis maracas",
+     "detail": "Every third word gets a shake. The shake is persuasive."
+    },
+    {
+     "id": "absurd.attribute.mustache",
+     "title": "Authority mustache",
+     "detail": "A disguise so thin it becomes a leadership style."
+    },
+    {
+     "id": "absurd.attribute.spring",
+     "title": "Spring-loaded handshake",
+     "detail": "Surprises the other hand into agreeing."
+    },
+    {
+     "id": "absurd.attribute.armor",
+     "title": "Bubble-wrap armor",
+     "detail": "Loud when struck, and weirdly effective."
+    },
+    {
+     "id": "absurd.attribute.whoops",
+     "title": "Sincere whoops",
+     "detail": "May undo one small disaster by admitting it out loud."
+    },
+    {
+     "id": "absurd.attribute.permit",
+     "title": "Parade permit",
+     "detail": "A crowd forms because the paperwork says it can."
+    },
+    {
+     "id": "absurd.attribute.gavel",
+     "title": "Rubber-chicken gavel",
+     "detail": "Calls order. The room is confused, and listening."
+    },
+    {
+     "id": "absurd.attribute.hat",
+     "title": "Infinite hat",
+     "detail": "Another hat under the hat. The fifth one has a plan."
+    },
+    {
+     "id": "absurd.attribute.track",
+     "title": "Selective laugh track",
+     "detail": "Plays only when you were actually funny. It has standards."
+    },
+    {
+     "id": "absurd.attribute.unseen",
+     "title": "Invisible, but only when no one's looking",
+     "detail": "The trick ends the moment anyone checks."
+    },
+    {
+     "id": "absurd.attribute.trex",
+     "title": "Rides a T-rex",
+     "detail": "The dinosaur has opinions about traffic."
+    },
+    {
+     "id": "absurd.attribute.bees",
+     "title": "Has 1,000 bees",
+     "detail": "They have a group chat and a destination."
+    },
+    {
+     "id": "absurd.attribute.immortal",
+     "title": "Immortal but allergic to everything",
+     "detail": "Forever, between sneezes."
+    },
+    {
+     "id": "absurd.attribute.teleport",
+     "title": "Can teleport, but only 3 feet",
+     "detail": "Arrives slightly to the left of the point."
+    },
+    {
+     "id": "absurd.attribute.tall",
+     "title": "Is 50 feet tall",
+     "detail": "Ducks through doorways that were not the plan."
+    },
+    {
+     "id": "absurd.attribute.shotgun-shotguns",
+     "title": "Armed with a shotgun that shoots shotguns",
+     "detail": "Each blast files its own paperwork, loudly."
+    },
+    {
+     "id": "absurd.attribute.superglue",
+     "title": "Armed with a superglue fire hose",
+     "detail": "The hose is committed. So is everyone it hits."
+    },
+    {
+     "id": "absurd.attribute.sausage",
+     "title": "Armed with an infinite sausage lasso",
+     "detail": "A lasso with seasoning and no upper limit."
+    },
+    {
+     "id": "absurd.attribute.shark-cage",
+     "title": "Locked in a shark cage",
+     "detail": "Safe, wet, and unable to reach the snacks."
+    },
+    {
+     "id": "absurd.attribute.guacamole",
+     "title": "Made of guacamole",
+     "detail": "Delicious, and structurally a suggestion."
+    },
+    {
+     "id": "absurd.attribute.believes-invisible",
+     "title": "Believes they are invisible",
+     "detail": "Waves. Everyone waves back. The bit continues."
+    },
+    {
+     "id": "absurd.attribute.stupid",
+     "title": "Really stupid",
+     "detail": "The plan is bold because the plan is missing."
+    },
+    {
+     "id": "absurd.attribute.no-bones",
+     "title": "No bones",
+     "detail": "Collapses with confidence, and keeps talking."
+    },
+    {
+     "id": "absurd.attribute.molasses",
+     "title": "Flying at the speed of molasses",
+     "detail": "Airborne, technically. The calendar disagrees."
+    },
+    {
+     "id": "absurd.attribute.unicycle-half",
+     "title": "Bottom half is a unicycle",
+     "detail": "The top has ideas. The wheel has one."
+    },
+    {
+     "id": "absurd.attribute.kazoo",
+     "title": "Constantly playing a kazoo",
+     "detail": "Every speech gets a solo nobody requested."
+    }
+   ],
+   "blurb": "Logic left the room, and it took the door."
+  }
+ ],
+ "tiebreakers": [
+  {
+   "id": "tiebreaker.basketball",
+   "title": "A team of your character vs. a team of theirs in basketball",
+   "detail": "Five of each. The hoop has agreed to stay neutral."
+  },
+  {
+   "id": "tiebreaker.baseball",
+   "title": "A team of your character vs. a team of theirs in baseball",
+   "detail": "Nine innings. The mascot is also them."
+  },
+  {
+   "id": "tiebreaker.soccer",
+   "title": "A team of your character vs. a team of theirs in soccer",
+   "detail": "The ball is round. The grudge is not."
+  },
+  {
+   "id": "tiebreaker.hockey",
+   "title": "Your character vs. theirs in a hockey game",
+   "detail": "The ice is fair. The elbows are only a rumor."
+  },
+  {
+   "id": "tiebreaker.tennis",
+   "title": "Your character vs. theirs in a tennis match",
+   "detail": "Love means zero, and it feels personal."
+  },
+  {
+   "id": "tiebreaker.golf",
+   "title": "Your character vs. theirs in golf",
+   "detail": "Eighteen holes. A whisper still counts as trash talk."
+  },
+  {
+   "id": "tiebreaker.bowling",
+   "title": "Your character vs. theirs in bowling",
+   "detail": "Ten pins. The gutter is a personality test."
+  },
+  {
+   "id": "tiebreaker.race",
+   "title": "Your character vs. theirs in a foot race",
+   "detail": "First to the cone. Nobody may tackle the cone."
+  },
+  {
+   "id": "tiebreaker.swim",
+   "title": "Your character vs. theirs in a swimming race",
+   "detail": "The lane is straight. The splash is an opinion."
+  },
+  {
+   "id": "tiebreaker.marathon",
+   "title": "Your character vs. theirs in a marathon",
+   "detail": "Twenty-six miles of refusing to look tired."
+  },
+  {
+   "id": "tiebreaker.cooking",
+   "title": "Your character vs. theirs in a cooking contest",
+   "detail": "One stove, two egos, and judges who are hungry."
+  },
+  {
+   "id": "tiebreaker.baking",
+   "title": "Your character vs. theirs in a baking contest",
+   "detail": "The timer dings. The frosting tells the truth."
+  },
+  {
+   "id": "tiebreaker.dance",
+   "title": "Your character vs. theirs in a dance-off",
+   "detail": "The floor is the argument. Nobody may punch it."
+  },
+  {
+   "id": "tiebreaker.karaoke",
+   "title": "Your character vs. theirs in karaoke",
+   "detail": "One microphone. The key is a fight about pitch."
+  },
+  {
+   "id": "tiebreaker.chess",
+   "title": "Your character vs. theirs in chess",
+   "detail": "Quiet pieces. Extremely loud regrets."
+  },
+  {
+   "id": "tiebreaker.hotdogs",
+   "title": "Your character vs. theirs in a hot dog eating contest",
+   "detail": "The buns are the clock. Chewing is the strategy."
+  },
+  {
+   "id": "tiebreaker.spelling",
+   "title": "Your character vs. theirs in a spelling bee",
+   "detail": "The word is long. The pride is longer."
+  },
+  {
+   "id": "tiebreaker.trivia",
+   "title": "Your character vs. theirs in a trivia contest",
+   "detail": "The buzzer rewards whoever actually read the plaque."
+  },
+  {
+   "id": "tiebreaker.poetry",
+   "title": "Your character vs. theirs in a poetry slam",
+   "detail": "Two minutes. The metaphor may not throw hands."
+  },
+  {
+   "id": "tiebreaker.talent",
+   "title": "Your character vs. theirs in a talent show",
+   "detail": "One act each. The crowd came hoping for a disaster."
+  }
+ ]
+}
