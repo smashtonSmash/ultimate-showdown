@@ -111,7 +111,7 @@ function Rules({ onClose }: { onClose: () => void }) {
   return (
     <Sheet title="How to play" onClose={onClose}>
       <ol className="rules">
-        <li>Seat 3 to 8 players on one phone.</li>
+        <li>Seat 3 to 12 players on one phone.</li>
         <li>Each fighter is privately dealt 3 characters and 3 powers, and keeps one of each. Pass the phone so nobody else sees the hand.</li>
         <li>The fighters are revealed. Argue why your combination wins.</li>
         <li>Everyone else is a judge and votes in secret. The winner gets a point. In 2v2, both teammates score.</li>
@@ -155,7 +155,7 @@ function Seats({ state, update }: ScreenProps) {
       }
     >
       <h1 className="h1">Who's playing?</h1>
-      <p className="muted">3 to 8 players. Everyone who isn't fighting judges.</p>
+      <p className="muted">3 to 12 players. Everyone who isn't fighting judges.</p>
       <ol className="seats">
         {names.map((name, i) => (
           <li key={i} className="seat">

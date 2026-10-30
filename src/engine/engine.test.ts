@@ -50,7 +50,8 @@ test('deck counts match the catalog', () => {
 test('name validation, in order', () => {
   assert.equal(validateNames(['A', ' ', 'C']), 'Every seat needs a name.');
   assert.equal(validateNames(['A', 'B']), 'Add at least 3 players. Someone has to judge.');
-  assert.equal(validateNames(['1', '2', '3', '4', '5', '6', '7', '8', '9']), 'Keep the table to 8 players.');
+  assert.equal(validateNames(Array.from({ length: 13 }, (_, i) => `P${i}`)), 'Keep the table to 12 players.');
+  assert.equal(validateNames(Array.from({ length: 12 }, (_, i) => `P${i}`)), null);
   assert.equal(validateNames(['A', 'B', 'x'.repeat(19)]), 'Keep each name to 18 characters.');
   assert.equal(validateNames(['Ann', 'ann', 'C']), 'Two players cannot share a name.');
   assert.equal(validateNames(['Ann', 'Bo', 'x'.repeat(18)]), null);
@@ -181,8 +182,8 @@ test('tournament of 5: bracket of 8, 3 byes, stages, champion', () => {
   assert.equal(g.players.reduce((n, p) => n + p.score, 0), 4);
 });
 
-test('tournament of 3 and 8 finish', () => {
-  for (const names of [['A', 'B', 'C'], ['1', '2', '3', '4', '5', '6', '7', '8']]) {
+test('tournaments of 3, 8, 9, and 12 finish', () => {
+  for (const names of [3, 8, 9, 12].map((n) => Array.from({ length: n }, (_, i) => `P${i}`))) {
     let g = newGame({ names, decks: ['house'], style: 'tournament', mode: '1v1', opening: [] }, rng);
     let n = 0;
     while (g.phase.type !== 'champion' && n < 20) {
@@ -211,6 +212,17 @@ test('skip judge: never leaves a ballot empty, and sits out revotes', () => {
   g = voteAll(g, () => 'player-1');
   assert.equal(g.history[0].winnerId, 'player-1');
   assert.deepEqual(g.history[0].satOut, ['player-3', 'player-4']);
+});
+
+test('12 players: bracket of 16 with 4 byes and a Round of 16', () => {
+  const ids = Array.from({ length: 12 }, (_, i) => `p${i}`);
+  const b = buildBracket(ids);
+  assert.equal(roundCount(b), 4);
+  assert.equal(b.matches.filter((m) => m.bye).length, 4);
+  assert.equal(stageName(0, 4), 'Round of 16');
+  assert.ok(modeFits('2v2', 12));
+  const g = newGame({ names: ids, decks: ['house'], style: 'free', mode: '2v2', opening: ids.slice(0, 4) }, rng);
+  assert.equal(judgesOf(g).length, 8);
 });
 
 test('the game survives a save and load', () => {

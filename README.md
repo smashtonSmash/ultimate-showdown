@@ -1,6 +1,6 @@
 # The Ultimate Showdown
 
-A pass-and-play party game for one phone and 3 to 8 people. Each fighter is privately dealt three characters and three powers, keeps one of each, and argues that the combination would win. Everyone else judges in secret. A tied vote draws a tiebreaker contest, and the judges vote again between the tied sides.
+A pass-and-play party game for one phone and 3 to 12 people. Each fighter is privately dealt three characters and three powers, keeps one of each, and argues that the combination would win. Everyone else judges in secret. A tied vote draws a tiebreaker contest, and the judges vote again between the tied sides.
 
 Ways to play: free play (1v1, 1v1v1, 2v2), tournament bracket, and king of the hill.
 
