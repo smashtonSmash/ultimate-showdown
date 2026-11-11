@@ -12,9 +12,9 @@ export function Table({ game, setGame, onEnd }: Props) {
   const [sheet, setSheet] = useState<'scores' | 'end' | null>(null);
   const ph = game.phase;
 
-  // Each phase starts at the top of the page.
+  // Each phase starts at the top of its scrolling area.
   useEffect(() => {
-    window.scrollTo(0, 0);
+    document.querySelector('.screen .content')?.scrollTo(0, 0);
   }, [ph.type, 'fighter' in ph ? ph.fighter : 0, 'judge' in ph ? ph.judge : 0]);
 
   const view = (() => {

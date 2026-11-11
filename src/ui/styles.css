@@ -19,6 +19,12 @@
 }
 
 * { box-sizing: border-box; }
+/*
+ * The page itself never scrolls: each screen is exactly one viewport tall and only
+ * its middle (.content) scrolls. iPhone home-screen apps misplace taps on pinned
+ * buttons when the whole page scrolls, so this keeps every button where it's drawn.
+ */
+html, body, #root { height: 100%; overflow: hidden; }
 html { -webkit-text-size-adjust: 100%; }
 body {
   margin: 0;
@@ -26,8 +32,7 @@ body {
   color: var(--chalk);
   font: 400 16px/1.5 var(--body);
   -webkit-font-smoothing: antialiased;
-  min-height: 100dvh;
-  overscroll-behavior-y: none;
+  overscroll-behavior: none;
 }
 button, input { font: inherit; color: inherit; }
 button { cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -37,17 +42,25 @@ b { font-weight: 700; }
 
 /* ---------- frame ---------- */
 .screen {
-  min-height: 100dvh;
+  height: 100vh;
+  height: 100dvh;
   max-width: 560px;
   margin: 0 auto;
   display: flex;
   flex-direction: column;
+  overflow: hidden;
 }
 .content {
-  flex: 1;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
   padding: 8px var(--gutter) 24px;
 }
 .topbar {
+  flex: none;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -63,14 +76,25 @@ b { font-weight: 700; }
 .topbar-step { color: var(--haze); font-size: 14px; }
 
 .dock {
-  position: sticky;
-  bottom: 0;
+  position: relative;
+  flex: none;
   display: flex;
   flex-direction: column;
   gap: 8px;
-  padding: 14px var(--gutter) calc(env(safe-area-inset-bottom) + 14px);
-  background: linear-gradient(to bottom, rgba(26, 37, 128, 0), var(--ring) 22%);
+  padding: 10px var(--gutter) calc(env(safe-area-inset-bottom) + 14px);
+  background: var(--ring);
   z-index: 5;
+}
+/* soft fade over the bottom of the scrolling content; never catches taps */
+.dock::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 100%;
+  height: 24px;
+  background: linear-gradient(to bottom, rgba(26, 37, 128, 0), var(--ring));
+  pointer-events: none;
 }
 
 .btn {
@@ -222,6 +246,7 @@ b { font-weight: 700; }
 .mode-blurb { font-size: 13px; color: var(--haze); text-align: center; line-height: 1.25; }
 .decks { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
 .deck {
+  position: relative;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -266,8 +291,8 @@ b { font-weight: 700; }
 
 /* ---------- table chrome ---------- */
 .tablebar {
-  position: sticky;
-  top: 0;
+  flex: none;
+  position: relative;
   z-index: 6;
   display: flex;
   align-items: center;
@@ -307,10 +332,13 @@ b { font-weight: 700; }
 
 /* ---------- curtain ---------- */
 .curtain {
-  min-height: 100dvh;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;
+  justify-content: safe center;
   padding: calc(env(safe-area-inset-top) + 24px) var(--gutter) calc(env(safe-area-inset-bottom) + 24px);
   background:
     radial-gradient(ellipse 120% 60% at 50% 0%, rgba(127, 216, 255, 0.16), transparent 70%),
