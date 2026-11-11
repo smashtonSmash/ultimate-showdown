@@ -115,7 +115,8 @@ function Rules({ onClose }: { onClose: () => void }) {
         <li>Each fighter is privately dealt 3 characters and 3 powers, and keeps one of each. Pass the phone so nobody else sees the hand.</li>
         <li>The fighters are revealed. Argue why your combination wins.</li>
         <li>Everyone else is a judge and votes in secret. The winner gets a point. In 2v2, both teammates score.</li>
-        <li>A tied vote draws a tiebreaker contest, like karaoke or a bake-off. Judges vote again between the tied sides until one wins.</li>
+        <li>While they argue, each fighter can tap their secret power once per round to reveal a random extra power.</li>
+        <li>A tied vote means someone hits TIEBREAKER to draw a contest, like a dance-off or who gets more followers in 24 hours. The judges vote again between the tied sides until one wins. If the judges can't decide before voting, they can hit TIEBREAKER right away.</li>
       </ol>
       <h3>Ways to play</h3>
       <p><b>Free play.</b> Choose who fights each round. The next rotation is picked for you.</p>

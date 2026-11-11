@@ -5,7 +5,7 @@ import { player, roundCount, stageName } from '../engine/engine';
 export function Btn(props: {
   children: ReactNode;
   onClick?: () => void;
-  tone?: 'main' | 'quiet' | 'line';
+  tone?: 'main' | 'quiet' | 'line' | 'tb';
   disabled?: boolean;
 }) {
   return (
@@ -39,8 +39,11 @@ export function GameCard(props: { card: Card; selected?: boolean; dim?: boolean;
   );
 }
 
-/** A fighter on the bill: name, then the character and power they kept. */
-export function Bill({ name, build, compact }: { name: string; build: Build; compact?: boolean }) {
+/**
+ * A fighter on the bill: name, then the character and power they kept, then their
+ * secret power if they revealed it. `onSecret` shows the face-down secret-power button.
+ */
+export function Bill({ name, build, compact, onSecret }: { name: string; build: Build; compact?: boolean; onSecret?: () => void }) {
   return (
     <div className={`bill${compact ? ' is-compact' : ''}`}>
       <div className="bill-name">{name}</div>
@@ -54,6 +57,21 @@ export function Bill({ name, build, compact }: { name: string; build: Build; com
           <p>{build.character.detail}</p>
           <p>{build.power.detail}</p>
         </div>
+      ) : null}
+      {build.secret ? (
+        <div className="bill-secret">
+          <span className="bill-secret-kind">Secret power</span>
+          <span className="bill-secret-title">{build.secret.title}</span>
+          {!compact ? <span className="bill-secret-detail">{build.secret.detail}</span> : null}
+        </div>
+      ) : onSecret ? (
+        <button type="button" className="secret-btn" onClick={onSecret}>
+          <span className="secret-btn-mark" aria-hidden>?</span>
+          <span className="secret-btn-text">
+            <b>{name}'s secret power</b>
+            <span>Tap to reveal. One per round.</span>
+          </span>
+        </button>
       ) : null}
     </div>
   );

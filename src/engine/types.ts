@@ -14,7 +14,8 @@ export type Side = { id: string; playerIds: string[] };
 
 export type Hand = { characters: Card[]; powers: Card[] };
 export type Picks = { character?: string; power?: string };
-export type Build = { playerId: string; character: Card; power: Card };
+/** `secret` is the extra power a fighter revealed while arguing, if they used it this round. */
+export type Build = { playerId: string; character: Card; power: Card; secret?: Card };
 
 export type RoundResult = {
   round: number;
@@ -46,6 +47,7 @@ export type Phase =
   | { type: 'matchup' }
   | { type: 'judge-handoff'; judge: number }
   | { type: 'ballot'; judge: number }
+  | { type: 'tie' } // vote tied; waiting for someone to hit TIEBREAKER
   | { type: 'contest' }
   | { type: 'result' }
   | { type: 'lineup' }
@@ -92,6 +94,8 @@ export type Action =
   | { type: 'vote'; sideId: string }
   | { type: 'skip-judge' }
   | { type: 'revote' }
+  | { type: 'tiebreaker' } // draw a contest card: after a tie, or before voting when judges can't decide
+  | { type: 'secret'; playerId: string } // a fighter reveals a random extra power while arguing
   | { type: 'continue' } // result -> lineup / announce / champion
   | { type: 'set-lineup'; fighterIds: string[] }
   | { type: 'begin-match' };

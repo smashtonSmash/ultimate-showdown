@@ -741,6 +741,131 @@
      "id": "house.attribute.impact",
      "title": "Unaffected by impact",
      "detail": "Gets hit, checks a watch, and continues."
+    },
+    {
+     "id": "house.power.time-freeze",
+     "title": "Time freeze",
+     "detail": "Stops the clock for everyone else. Snack breaks included."
+    },
+    {
+     "id": "house.power.super-speed",
+     "title": "Super speed",
+     "detail": "Wins the fight before the other side finishes their sentence."
+    },
+    {
+     "id": "house.power.telekinesis",
+     "title": "Telekinesis",
+     "detail": "Moves anything with their mind, mostly the remote."
+    },
+    {
+     "id": "house.power.mind-reading",
+     "title": "Mind reading",
+     "detail": "Hears every thought in the room, including the rude ones."
+    },
+    {
+     "id": "house.power.shapeshifting",
+     "title": "Shapeshifting",
+     "detail": "Can become anyone, but keeps their own voice."
+    },
+    {
+     "id": "house.power.healing-factor",
+     "title": "Healing factor",
+     "detail": "Every scratch closes in seconds. Grudges take longer."
+    },
+    {
+     "id": "house.power.force-field",
+     "title": "Force field",
+     "detail": "A bubble nothing gets through, including good advice."
+    },
+    {
+     "id": "house.power.duplication",
+     "title": "Duplication",
+     "detail": "Splits into ten copies who all want to be in charge."
+    },
+    {
+     "id": "house.power.controls-lightning",
+     "title": "Controls lightning",
+     "detail": "Points at the problem, and the sky handles the rest."
+    },
+    {
+     "id": "house.power.controls-ice",
+     "title": "Controls ice",
+     "detail": "Turns any floor into a rink and any argument cold."
+    },
+    {
+     "id": "house.power.controls-water",
+     "title": "Controls water",
+     "detail": "Every puddle in the zip code is on their side."
+    },
+    {
+     "id": "house.power.controls-plants",
+     "title": "Controls plants",
+     "detail": "The houseplants finally have a leader."
+    },
+    {
+     "id": "house.power.super-stretchy",
+     "title": "Super stretchy",
+     "detail": "Reaches the top shelf from the next town over."
+    },
+    {
+     "id": "house.power.walks-through-walls",
+     "title": "Walks through walls",
+     "detail": "Doors are a suggestion. So are personal bubbles."
+    },
+    {
+     "id": "house.power.sees-10-seconds-ahead",
+     "title": "Sees 10 seconds ahead",
+     "detail": "Always knows what's coming. Always says \"called it.\""
+    },
+    {
+     "id": "house.power.earthquake-stomp",
+     "title": "Earthquake stomp",
+     "detail": "One stomp and the whole room relocates."
+    },
+    {
+     "id": "house.power.gravity-control",
+     "title": "Gravity control",
+     "detail": "Decides which way is down today."
+    },
+    {
+     "id": "house.power.size-shifting",
+     "title": "Size shifting",
+     "detail": "Ant to skyscraper and back, depending on the mood."
+    },
+    {
+     "id": "house.power.night-vision",
+     "title": "Night vision",
+     "detail": "Sees perfectly in the dark. Hates when you turn the lights on."
+    },
+    {
+     "id": "house.power.super-hearing",
+     "title": "Super hearing",
+     "detail": "Hears a whisper three counties away, and your snack wrapper too."
+    },
+    {
+     "id": "house.power.energy-blasts",
+     "title": "Energy blasts",
+     "detail": "Fires glowing beams from their palms. Recharges with a nap."
+    },
+    {
+     "id": "house.power.controls-shadows",
+     "title": "Controls shadows",
+     "detail": "Every shadow in the room is a henchman."
+    },
+    {
+     "id": "house.power.unbreakable-skin",
+     "title": "Unbreakable skin",
+     "detail": "Bullets bounce off. Paper cuts still somehow work."
+    },
+    {
+     "id": "house.power.talks-to-animals",
+     "title": "Talks to animals",
+     "detail": "Every squirrel in town is an informant."
+    },
+    {
+     "id": "house.power.super-leap",
+     "title": "Super leap",
+     "detail": "Clears a building in one jump. The landing is a work in progress."
     }
    ],
    "blurb": "The table's own cards. Always shuffled in."
@@ -1051,6 +1176,66 @@
      "id": "fantasy.attribute.centaur",
      "title": "Riding a depressed centaur",
      "detail": "Half horse, fully over it, still on the clock."
+    },
+    {
+     "id": "fantasy.power.bottomless-spellbook",
+     "title": "Bottomless spellbook",
+     "detail": "Has a spell for everything, filed in no order at all."
+    },
+    {
+     "id": "fantasy.power.dragon-on-retainer",
+     "title": "Dragon on retainer",
+     "detail": "Shows up when called. Sends an invoice later."
+    },
+    {
+     "id": "fantasy.power.turns-enemies-into-frogs",
+     "title": "Turns enemies into frogs",
+     "detail": "Usually works. Sometimes it's a very confident newt."
+    },
+    {
+     "id": "fantasy.power.raises-a-skeleton-army",
+     "title": "Raises a skeleton army",
+     "detail": "Loyal to the bone. Terrible at standing still."
+    },
+    {
+     "id": "fantasy.power.speaks-with-the-dead",
+     "title": "Speaks with the dead",
+     "detail": "The dead have notes. So many notes."
+    },
+    {
+     "id": "fantasy.power.ring-of-vanishing",
+     "title": "Ring of vanishing",
+     "detail": "Disappears on command. The ring wants a thank-you every time."
+    },
+    {
+     "id": "fantasy.power.glowing-wizard-staff",
+     "title": "Glowing wizard staff",
+     "detail": "Lights up when danger is near, and when snacks are."
+    },
+    {
+     "id": "fantasy.power.unicorn-horn",
+     "title": "Unicorn horn",
+     "detail": "Heals anything it touches. Pokes everything else."
+    },
+    {
+     "id": "fantasy.power.potion-belt",
+     "title": "Potion belt",
+     "detail": "Twelve potions, no labels, endless confidence."
+    },
+    {
+     "id": "fantasy.power.speaks-every-language",
+     "title": "Speaks every language",
+     "detail": "Including dragon, goblin, and passive-aggressive."
+    },
+    {
+     "id": "fantasy.power.three-wishes-two-already-used",
+     "title": "Three wishes, two already used",
+     "detail": "One left. Hasn't decided. Keeps hinting."
+    },
+    {
+     "id": "fantasy.power.cursed-with-good-luck",
+     "title": "Cursed with good luck",
+     "detail": "Everything goes right, which is deeply suspicious."
     }
    ],
    "blurb": "Courts, curses, and creatures who still keep receipts."
@@ -1331,6 +1516,66 @@
      "id": "sci-fi.attribute.jet-pack",
      "title": "Wearing a jet-pack",
      "detail": "Up is a personality now."
+    },
+    {
+     "id": "sci-fi.power.robot-battle-suit",
+     "title": "Robot battle suit",
+     "detail": "Ten tons of armor with the turning radius of a couch."
+    },
+    {
+     "id": "sci-fi.power.cloning-machine",
+     "title": "Cloning machine",
+     "detail": "Makes a perfect copy. The copy thinks you're the copy."
+    },
+    {
+     "id": "sci-fi.power.one-way-time-machine",
+     "title": "One-way time machine",
+     "detail": "Can go back in time. The trip home is still in beta."
+    },
+    {
+     "id": "sci-fi.power.hacks-anything",
+     "title": "Hacks anything",
+     "detail": "Any screen, any lock, any smart fridge."
+    },
+    {
+     "id": "sci-fi.power.gravity-boots",
+     "title": "Gravity boots",
+     "detail": "Walks on walls and ceilings. Walking normally is now hard."
+    },
+    {
+     "id": "sci-fi.power.plasma-cannon-arm",
+     "title": "Plasma cannon arm",
+     "detail": "The arm is the cannon. High fives are off the table."
+    },
+    {
+     "id": "sci-fi.power.nanobot-swarm",
+     "title": "Nanobot swarm",
+     "detail": "A cloud of tiny robots that fix things and sometimes argue."
+    },
+    {
+     "id": "sci-fi.power.mind-control-headset",
+     "title": "Mind-control headset",
+     "detail": "Works on anyone, as long as they're wearing the matching headset."
+    },
+    {
+     "id": "sci-fi.power.portal-gun",
+     "title": "Portal gun",
+     "detail": "Opens a door to anywhere. Forgets where it left the last one."
+    },
+    {
+     "id": "sci-fi.power.alien-roommate",
+     "title": "Alien roommate",
+     "detail": "A goo lives in their arm. It's very strong and very nosy."
+    },
+    {
+     "id": "sci-fi.power.hologram-decoys",
+     "title": "Hologram decoys",
+     "detail": "Projects fake copies of themselves that wave at the wrong moment."
+    },
+    {
+     "id": "sci-fi.power.hoverboard",
+     "title": "Hoverboard",
+     "detail": "Floats over anything. Still falls off."
     }
    ],
    "blurb": "Ships, stations, and futures that run on hold music."
@@ -1656,6 +1901,66 @@
      "id": "horror.attribute.mist",
      "title": "Can become mist while holding breath",
      "detail": "Gone while the breath lasts. Back with notes."
+    },
+    {
+     "id": "horror.power.vampire-bite",
+     "title": "Vampire bite",
+     "detail": "Drains the strength of anyone they bite. Dreads garlic-bread night."
+    },
+    {
+     "id": "horror.power.werewolf-on-a-full-moon",
+     "title": "Werewolf on a full moon",
+     "detail": "Unstoppable one night a month. Very itchy the rest."
+    },
+    {
+     "id": "horror.power.can-t-die-but-keeps-falling-apart",
+     "title": "Can't die, but keeps falling apart",
+     "detail": "Pieces fall off and get put back. Mostly the right way."
+    },
+    {
+     "id": "horror.power.possesses-objects",
+     "title": "Possesses objects",
+     "detail": "Can live inside anything, including the toaster."
+    },
+    {
+     "id": "horror.power.haunted-doll-sidekick",
+     "title": "Haunted doll sidekick",
+     "detail": "It blinks when nobody's looking. It's always on their side."
+    },
+    {
+     "id": "horror.power.summons-a-rat-swarm",
+     "title": "Summons a rat swarm",
+     "detail": "Hundreds of rats. All loyal. None house-trained."
+    },
+    {
+     "id": "horror.power.invisible-to-cameras",
+     "title": "Invisible to cameras",
+     "detail": "Never shows up in photos or mirrors. No selfies, ever."
+    },
+    {
+     "id": "horror.power.smells-fear",
+     "title": "Smells fear",
+     "detail": "Knows exactly who's scared. It's a lot of smells."
+    },
+    {
+     "id": "horror.power.creepy-lullaby",
+     "title": "Creepy lullaby",
+     "detail": "Puts anyone to sleep. Gets stuck in everyone's head forever."
+    },
+    {
+     "id": "horror.power.shadow-with-a-mind-of-its-own",
+     "title": "Shadow with a mind of its own",
+     "detail": "Their shadow fights for them, and with them."
+    },
+    {
+     "id": "horror.power.cursed-chainsaw",
+     "title": "Cursed chainsaw",
+     "detail": "Never runs out of gas. Never turns off, either."
+    },
+    {
+     "id": "horror.power.ghost-hands",
+     "title": "Ghost hands",
+     "detail": "Reaches through anything and grabs what's on the other side."
     }
    ],
    "blurb": "Creeping dread, with the lights left on."
@@ -1881,6 +2186,66 @@
      "id": "anime.attribute.umbrella",
      "title": "Credits umbrella",
      "detail": "When it opens, the scene agrees to end well."
+    },
+    {
+     "id": "anime.power.power-up-scream",
+     "title": "Power-up scream",
+     "detail": "Gets stronger the longer they yell. The yell takes three episodes."
+    },
+    {
+     "id": "anime.power.hidden-final-form",
+     "title": "Hidden final form",
+     "detail": "Has a secret form. Will not explain the hair."
+    },
+    {
+     "id": "anime.power.sword-bigger-than-they-are",
+     "title": "Sword bigger than they are",
+     "detail": "Swings a blade the size of a car. Nobody asks how."
+    },
+    {
+     "id": "anime.power.power-of-friendship",
+     "title": "Power of friendship",
+     "detail": "Gets stronger for every friend cheering them on."
+    },
+    {
+     "id": "anime.power.spirit-beast-summon",
+     "title": "Spirit beast summon",
+     "detail": "Calls a glowing guardian beast with its own theme song."
+    },
+    {
+     "id": "anime.power.eyes-that-see-every-move",
+     "title": "Eyes that see every move",
+     "detail": "The eyes glow and everything slows to half speed."
+    },
+    {
+     "id": "anime.power.ninja-smoke-bomb",
+     "title": "Ninja smoke bomb",
+     "detail": "Vanishes in a puff, then reappears right behind you."
+    },
+    {
+     "id": "anime.power.charged-energy-ball",
+     "title": "Charged energy ball",
+     "detail": "Cups their hands, charges up, and nobody interrupts."
+    },
+    {
+     "id": "anime.power.copies-any-move",
+     "title": "Copies any move",
+     "detail": "Sees it once, does it better."
+    },
+    {
+     "id": "anime.power.unlimited-power-constant-nosebleeds",
+     "title": "Unlimited power, constant nosebleeds",
+     "detail": "The power is real. So is the tissue budget."
+    },
+    {
+     "id": "anime.power.giant-robot-pilot",
+     "title": "Giant robot pilot",
+     "detail": "Must give a speech before every launch."
+    },
+    {
+     "id": "anime.power.tragic-backstory-boost",
+     "title": "Tragic backstory boost",
+     "detail": "Gets stronger every time they remember their past. Takes a while."
     }
    ],
    "blurb": "Rivals, theme songs, and one more training arc."
@@ -2231,6 +2596,76 @@
      "id": "everyday.attribute.cries",
      "title": "Cries uncontrollably",
      "detail": "Tears on tap. Suddenly you feel like the villain."
+    },
+    {
+     "id": "everyday.power.never-gets-lost",
+     "title": "Never gets lost",
+     "detail": "Knows every shortcut and will tell you about all of them."
+    },
+    {
+     "id": "everyday.power.mom-voice",
+     "title": "Mom voice",
+     "detail": "Says one full name and the whole room freezes."
+    },
+    {
+     "id": "everyday.power.customer-service-voice",
+     "title": "Customer service voice",
+     "detail": "Calms anyone down while dying inside."
+    },
+    {
+     "id": "everyday.power.knows-every-wi-fi-password",
+     "title": "Knows every Wi-Fi password",
+     "detail": "Online anywhere, instantly. Nobody knows how."
+    },
+    {
+     "id": "everyday.power.infinite-phone-battery",
+     "title": "Infinite phone battery",
+     "detail": "Never below 100 percent. Gloats about it."
+    },
+    {
+     "id": "everyday.power.phone-always-at-1-percent",
+     "title": "Phone always at 1 percent",
+     "detail": "Every important moment, the screen goes black."
+    },
+    {
+     "id": "everyday.power.can-open-any-jar",
+     "title": "Can open any jar",
+     "detail": "No lid has ever won."
+    },
+    {
+     "id": "everyday.power.remembers-every-coffee-order",
+     "title": "Remembers every coffee order",
+     "detail": "Uses this as leverage."
+    },
+    {
+     "id": "everyday.power.falls-asleep-anywhere",
+     "title": "Falls asleep anywhere",
+     "detail": "Out cold in two seconds, any place, mid-fight."
+    },
+    {
+     "id": "everyday.power.hiccups-since-tuesday",
+     "title": "Hiccups since Tuesday",
+     "detail": "Every big moment gets a \"hic.\""
+    },
+    {
+     "id": "everyday.power.always-stubs-their-toe",
+     "title": "Always stubs their toe",
+     "detail": "Finds every table corner in the building, with feeling."
+    },
+    {
+     "id": "everyday.power.allergic-to-the-sun",
+     "title": "Allergic to the sun",
+     "detail": "Fights from under a patio umbrella."
+    },
+    {
+     "id": "everyday.power.group-chat-screenshot",
+     "title": "Group-chat screenshot",
+     "detail": "Has proof of something embarrassing you said. Every time."
+    },
+    {
+     "id": "everyday.power.dad-joke-barrage",
+     "title": "Dad joke barrage",
+     "detail": "Fires dad jokes until the opponent gives up."
     }
    ],
    "blurb": "Ordinary life, turned up one notch past convenient."
@@ -2641,6 +3076,71 @@
      "id": "absurd.attribute.kazoo",
      "title": "Constantly playing a kazoo",
      "detail": "Every speech gets a solo nobody requested."
+    },
+    {
+     "id": "absurd.power.shoots-spaghetti-from-fingers",
+     "title": "Shoots spaghetti from fingers",
+     "detail": "Ten noodle streams. Sauce sold separately."
+    },
+    {
+     "id": "absurd.power.turns-into-a-couch",
+     "title": "Turns into a couch",
+     "detail": "Very comfortable. Cannot move."
+    },
+    {
+     "id": "absurd.power.every-step-squeaks",
+     "title": "Every step squeaks",
+     "detail": "Like a dog toy. Sneak attacks are out."
+    },
+    {
+     "id": "absurd.power.followed-by-a-mariachi-band",
+     "title": "Followed by a mariachi band",
+     "detail": "They play the dramatic parts, loudly."
+    },
+    {
+     "id": "absurd.power.only-speaks-in-rhymes",
+     "title": "Only speaks in rhymes",
+     "detail": "Every threat is a little poem. It loses some menace."
+    },
+    {
+     "id": "absurd.power.head-is-a-lamp",
+     "title": "Head is a lamp",
+     "detail": "Lights up any room. Moths are a serious problem."
+    },
+    {
+     "id": "absurd.power.sneezes-glitter",
+     "title": "Sneezes glitter",
+     "detail": "Blinds enemies. Ruins carpets."
+    },
+    {
+     "id": "absurd.power.noodle-arms",
+     "title": "Noodle arms",
+     "detail": "Wet-noodle arms. Very flexible, zero grip."
+    },
+    {
+     "id": "absurd.power.shopping-cart-at-highway-speed",
+     "title": "Shopping cart at highway speed",
+     "detail": "Rides it everywhere. One wheel squeaks."
+    },
+    {
+     "id": "absurd.power.pet-rain-cloud",
+     "title": "Pet rain cloud",
+     "detail": "Rains on enemies. Sometimes on them, out of spite."
+    },
+    {
+     "id": "absurd.power.teleports-but-always-into-a-lake",
+     "title": "Teleports, but always into a lake",
+     "detail": "Arrives instantly. Arrives wet."
+    },
+    {
+     "id": "absurd.power.controls-only-the-color-beige",
+     "title": "Controls only the color beige",
+     "detail": "Total command of one very boring color."
+    },
+    {
+     "id": "absurd.power.turns-into-a-pigeon-when-nervous",
+     "title": "Turns into a pigeon when nervous",
+     "detail": "The more nervous they get, the more pigeon."
     }
    ],
    "blurb": "Logic left the room, and it took the door."
@@ -2746,6 +3246,506 @@
    "id": "tiebreaker.talent",
    "title": "Your character vs. theirs in a talent show",
    "detail": "One act each. The crowd came hoping for a disaster."
+  },
+  {
+   "id": "tiebreaker.football",
+   "title": "A team of your character vs. a team of theirs in football",
+   "detail": "Eleven on each side. Nobody reads the playbook."
+  },
+  {
+   "id": "tiebreaker.beach-volleyball",
+   "title": "Your character vs. theirs in beach volleyball",
+   "detail": "The sand gets into everything, including the argument."
+  },
+  {
+   "id": "tiebreaker.dodgeball",
+   "title": "A team of your character vs. a team of theirs in dodgeball",
+   "detail": "Last one standing wins. Headshots are frowned upon, loudly."
+  },
+  {
+   "id": "tiebreaker.a-three-round-boxing-match",
+   "title": "Your character vs. theirs in a three-round boxing match",
+   "detail": "Gloves only. No powers, no weapons, no excuses."
+  },
+  {
+   "id": "tiebreaker.pro-wrestling",
+   "title": "Your character vs. theirs in pro wrestling",
+   "detail": "The entrance music counts for half the score."
+  },
+  {
+   "id": "tiebreaker.sumo-wrestling",
+   "title": "Your character vs. theirs in sumo wrestling",
+   "detail": "Push them out of the circle. Dignity optional."
+  },
+  {
+   "id": "tiebreaker.ping-pong",
+   "title": "Your character vs. theirs in ping-pong",
+   "detail": "First to 21. The paddle is small. The trash talk is not."
+  },
+  {
+   "id": "tiebreaker.badminton",
+   "title": "Your character vs. theirs in badminton",
+   "detail": "The birdie is innocent in all this."
+  },
+  {
+   "id": "tiebreaker.a-skateboard-trick-contest",
+   "title": "Your character vs. theirs in a skateboard trick contest",
+   "detail": "Three tricks each. Falling with style still counts."
+  },
+  {
+   "id": "tiebreaker.a-surfing-contest",
+   "title": "Your character vs. theirs in a surfing contest",
+   "detail": "Biggest wave wins. The ocean is judging too."
+  },
+  {
+   "id": "tiebreaker.downhill-skiing",
+   "title": "Your character vs. theirs in downhill skiing",
+   "detail": "One mountain, two egos, zero brakes."
+  },
+  {
+   "id": "tiebreaker.a-snowball-fight",
+   "title": "A team of your character vs. a team of theirs in a snowball fight",
+   "detail": "Fort building starts now."
+  },
+  {
+   "id": "tiebreaker.arm-wrestling",
+   "title": "Your character vs. theirs in arm wrestling",
+   "detail": "Elbows on the table. No powers, just pride."
+  },
+  {
+   "id": "tiebreaker.tug-of-war",
+   "title": "A team of your character vs. a team of theirs in tug-of-war",
+   "detail": "One rope, one mud pit, one very bad day for somebody."
+  },
+  {
+   "id": "tiebreaker.paintball",
+   "title": "A team of your character vs. a team of theirs in paintball",
+   "detail": "Bring goggles. Bring grudges."
+  },
+  {
+   "id": "tiebreaker.laser-tag",
+   "title": "Your character vs. theirs in laser tag",
+   "detail": "The fog machine is on everyone's side."
+  },
+  {
+   "id": "tiebreaker.mini-golf",
+   "title": "Your character vs. theirs in mini golf",
+   "detail": "The windmill is the real final boss."
+  },
+  {
+   "id": "tiebreaker.darts",
+   "title": "Your character vs. theirs in darts",
+   "detail": "Bullseye wins. Steady hands not included."
+  },
+  {
+   "id": "tiebreaker.a-game-of-pool",
+   "title": "Your character vs. theirs in a game of pool",
+   "detail": "Call your shots. Blame the table."
+  },
+  {
+   "id": "tiebreaker.kickball",
+   "title": "A team of your character vs. a team of theirs in kickball",
+   "detail": "Recess rules. The red ball shows no mercy."
+  },
+  {
+   "id": "tiebreaker.cornhole",
+   "title": "Your character vs. theirs in cornhole",
+   "detail": "Bags in the hole. Excuses in the grass."
+  },
+  {
+   "id": "tiebreaker.a-free-throw-contest",
+   "title": "Your character vs. theirs in a free-throw contest",
+   "detail": "Ten shots each. The crowd is allowed to be annoying."
+  },
+  {
+   "id": "tiebreaker.a-home-run-derby",
+   "title": "Your character vs. theirs in a home run derby",
+   "detail": "Ten swings. The parking lot is in danger."
+  },
+  {
+   "id": "tiebreaker.gymnastics",
+   "title": "Your character vs. theirs in gymnastics",
+   "detail": "Stick the landing. Wobbles cost points."
+  },
+  {
+   "id": "tiebreaker.a-jousting-match",
+   "title": "Your character vs. theirs in a jousting match",
+   "detail": "One lance, one horse, one very long day."
+  },
+  {
+   "id": "tiebreaker.a-go-kart-race",
+   "title": "Your character vs. theirs in a go-kart race",
+   "detail": "Three laps. Bumping is legal-ish."
+  },
+  {
+   "id": "tiebreaker.a-stock-car-race",
+   "title": "Your character vs. theirs in a stock car race",
+   "detail": "Two hundred laps of turning left."
+  },
+  {
+   "id": "tiebreaker.a-bike-race",
+   "title": "Your character vs. theirs in a bike race",
+   "detail": "Uphill both ways. Training wheels allowed."
+  },
+  {
+   "id": "tiebreaker.an-obstacle-course",
+   "title": "Your character vs. theirs in an obstacle course",
+   "detail": "Walls, mud, monkey bars, and a lot of regret."
+  },
+  {
+   "id": "tiebreaker.a-sack-race",
+   "title": "Your character vs. theirs in a sack race",
+   "detail": "Hop to the finish. Faceplants are part of the sport."
+  },
+  {
+   "id": "tiebreaker.an-egg-and-spoon-race",
+   "title": "Your character vs. theirs in an egg-and-spoon race",
+   "detail": "Drop the egg, start over."
+  },
+  {
+   "id": "tiebreaker.a-three-legged-race-tied-to-a-stranger",
+   "title": "Your character vs. theirs in a three-legged race, tied to a stranger",
+   "detail": "Teamwork with someone they just met."
+  },
+  {
+   "id": "tiebreaker.a-piggyback-race",
+   "title": "Your character vs. theirs in a piggyback race",
+   "detail": "Each one carries a judge. The judges are heavy."
+  },
+  {
+   "id": "tiebreaker.the-hurdles",
+   "title": "Your character vs. theirs in the hurdles",
+   "detail": "Ten hurdles. Knocking them over counts as style."
+  },
+  {
+   "id": "tiebreaker.a-relay-race",
+   "title": "A team of your character vs. a team of theirs in a relay race",
+   "detail": "Four legs, one baton, zero dropped passes."
+  },
+  {
+   "id": "tiebreaker.a-rowing-race",
+   "title": "Your character vs. theirs in a rowing race",
+   "detail": "Paddle together or spin in circles."
+  },
+  {
+   "id": "tiebreaker.a-horse-race-riding-the-horses",
+   "title": "Your character vs. theirs in a horse race, riding the horses",
+   "detail": "The horses have opinions about this."
+  },
+  {
+   "id": "tiebreaker.a-shopping-cart-race",
+   "title": "Your character vs. theirs in a shopping cart race",
+   "detail": "Down the parking lot hill. The bottom has a lamppost."
+  },
+  {
+   "id": "tiebreaker.a-crawling-race",
+   "title": "Your character vs. theirs in a crawling race",
+   "detail": "Hands and knees only. No standing, no shame."
+  },
+  {
+   "id": "tiebreaker.a-race-running-backwards",
+   "title": "Your character vs. theirs in a race, running backwards",
+   "detail": "First to the finish without looking."
+  },
+  {
+   "id": "tiebreaker.who-gets-more-girlfriends-in-24-hours",
+   "title": "Who gets more girlfriends in 24 hours",
+   "detail": "Real ones. Phone numbers will be checked."
+  },
+  {
+   "id": "tiebreaker.who-gets-more-followers-in-24-hours",
+   "title": "Who gets more followers in 24 hours",
+   "detail": "Brand-new account each. Go viral or go home."
+  },
+  {
+   "id": "tiebreaker.who-makes-more-money-in-24-hours",
+   "title": "Who makes more money in 24 hours",
+   "detail": "Starting with five dollars and a dream."
+  },
+  {
+   "id": "tiebreaker.who-makes-more-friends-in-24-hours",
+   "title": "Who makes more friends in 24 hours",
+   "detail": "Dropped in a new city. Friendship bracelets count."
+  },
+  {
+   "id": "tiebreaker.who-gets-elected-mayor-first",
+   "title": "Who gets elected mayor first",
+   "detail": "Campaign starts now. Baby-kissing is allowed."
+  },
+  {
+   "id": "tiebreaker.who-gets-hired-first",
+   "title": "Who gets hired first",
+   "detail": "Same job interview, same awkward handshake."
+  },
+  {
+   "id": "tiebreaker.who-sells-more-lemonade-in-a-day",
+   "title": "Who sells more lemonade in a day",
+   "detail": "One stand each. Same corner."
+  },
+  {
+   "id": "tiebreaker.who-gets-famous-faster",
+   "title": "Who gets famous faster",
+   "detail": "Anything goes, except using their powers."
+  },
+  {
+   "id": "tiebreaker.who-gets-a-second-date",
+   "title": "Who gets a second date",
+   "detail": "Same blind date, same restaurant, same awkward candle."
+  },
+  {
+   "id": "tiebreaker.whose-video-goes-viral-first",
+   "title": "Whose video goes viral first",
+   "detail": "One phone, one idea, one shot."
+  },
+  {
+   "id": "tiebreaker.a-presidential-debate",
+   "title": "Your character vs. theirs in a presidential debate",
+   "detail": "Two podiums. The moderator has given up."
+  },
+  {
+   "id": "tiebreaker.who-survives-longer-on-a-desert-island",
+   "title": "Who survives longer on a desert island",
+   "detail": "One coconut, one rock, zero Wi-Fi."
+  },
+  {
+   "id": "tiebreaker.who-survives-a-week-in-the-woods",
+   "title": "Who survives a week in the woods",
+   "detail": "No food packed. The raccoons are watching."
+  },
+  {
+   "id": "tiebreaker.who-survives-longer-in-a-zombie-apocalypse",
+   "title": "Who survives longer in a zombie apocalypse",
+   "detail": "No powers. Just a backpack and bad luck."
+  },
+  {
+   "id": "tiebreaker.who-escapes-from-jail-first",
+   "title": "Who escapes from jail first",
+   "detail": "Same cell block. Same spoon."
+  },
+  {
+   "id": "tiebreaker.who-lasts-longer-in-a-haunted-house",
+   "title": "Who lasts longer in a haunted house",
+   "detail": "All night. Screaming is allowed. Leaving is not."
+  },
+  {
+   "id": "tiebreaker.who-babysits-five-toddlers-better",
+   "title": "Who babysits five toddlers better",
+   "detail": "Two hours. Everyone ends fed and in one piece."
+  },
+  {
+   "id": "tiebreaker.who-grandma-likes-more",
+   "title": "Who grandma likes more",
+   "detail": "One Sunday dinner. She notices everything."
+  },
+  {
+   "id": "tiebreaker.whose-side-the-dog-picks",
+   "title": "Whose side the dog picks",
+   "detail": "Both call the dog at the same time."
+  },
+  {
+   "id": "tiebreaker.hide-and-seek",
+   "title": "Your character vs. theirs in hide-and-seek",
+   "detail": "One house, ten minutes, one very obvious closet."
+  },
+  {
+   "id": "tiebreaker.a-rap-battle",
+   "title": "Your character vs. theirs in a rap battle",
+   "detail": "Three rounds. The beat drops. So does the shade."
+  },
+  {
+   "id": "tiebreaker.a-stand-up-comedy-set",
+   "title": "Your character vs. theirs in a stand-up comedy set",
+   "detail": "Five minutes. The crowd is tough."
+  },
+  {
+   "id": "tiebreaker.a-staring-contest",
+   "title": "Your character vs. theirs in a staring contest",
+   "detail": "First to blink loses. No eye drops."
+  },
+  {
+   "id": "tiebreaker.rock-paper-scissors",
+   "title": "Your character vs. theirs in rock-paper-scissors",
+   "detail": "Best of five. Mind games encouraged."
+  },
+  {
+   "id": "tiebreaker.a-video-game-tournament",
+   "title": "Your character vs. theirs in a video game tournament",
+   "detail": "Same game. The controller cord is too short for both."
+  },
+  {
+   "id": "tiebreaker.a-drawing-contest",
+   "title": "Your character vs. theirs in a drawing contest",
+   "detail": "Draw each other. Accurately."
+  },
+  {
+   "id": "tiebreaker.a-sandcastle-contest",
+   "title": "Your character vs. theirs in a sandcastle contest",
+   "detail": "One hour before the tide comes in."
+  },
+  {
+   "id": "tiebreaker.a-pumpkin-carving-contest",
+   "title": "Your character vs. theirs in a pumpkin carving contest",
+   "detail": "One pumpkin, one spoon, ten minutes."
+  },
+  {
+   "id": "tiebreaker.a-pizza-eating-contest",
+   "title": "Your character vs. theirs in a pizza eating contest",
+   "detail": "Whole pies. No napkins until the end."
+  },
+  {
+   "id": "tiebreaker.a-hot-pepper-challenge",
+   "title": "Your character vs. theirs in a hot-pepper challenge",
+   "detail": "Every bite gets hotter. Milk is a forfeit."
+  },
+  {
+   "id": "tiebreaker.a-pie-eating-contest",
+   "title": "Your character vs. theirs in a pie-eating contest",
+   "detail": "Hands behind the back. Face first."
+  },
+  {
+   "id": "tiebreaker.a-fashion-show",
+   "title": "Your character vs. theirs in a fashion show",
+   "detail": "One runway walk in outfits made from whatever's in the room."
+  },
+  {
+   "id": "tiebreaker.a-magic-show",
+   "title": "Your character vs. theirs in a magic show",
+   "detail": "One trick each. The rabbit has a union."
+  },
+  {
+   "id": "tiebreaker.a-lie-detector-test",
+   "title": "Your character vs. theirs in a lie-detector test",
+   "detail": "Ten questions. The machine is very sensitive."
+  },
+  {
+   "id": "tiebreaker.a-prank-war",
+   "title": "Your character vs. theirs in a prank war",
+   "detail": "One week. Everything is fair except the car."
+  },
+  {
+   "id": "tiebreaker.giant-jenga",
+   "title": "Your character vs. theirs in giant Jenga",
+   "detail": "The tower is taller than both of them."
+  },
+  {
+   "id": "tiebreaker.a-limbo-contest",
+   "title": "Your character vs. theirs in a limbo contest",
+   "detail": "How low can they go? Lower than that."
+  },
+  {
+   "id": "tiebreaker.a-hula-hoop-contest",
+   "title": "Your character vs. theirs in a hula-hoop contest",
+   "detail": "Longest spin wins."
+  },
+  {
+   "id": "tiebreaker.a-burping-contest",
+   "title": "Your character vs. theirs in a burping contest",
+   "detail": "Loudest and longest. The judges take one step back."
+  },
+  {
+   "id": "tiebreaker.a-no-laughing-contest",
+   "title": "Your character vs. theirs in a no-laughing contest",
+   "detail": "The judges tell their worst jokes. First smile loses."
+  },
+  {
+   "id": "tiebreaker.who-cooks-a-better-thanksgiving-dinner",
+   "title": "Who cooks a better Thanksgiving dinner",
+   "detail": "Twelve guests, one oven, one cousin who's late."
+  },
+  {
+   "id": "tiebreaker.who-cleans-a-messy-room-faster",
+   "title": "Who cleans a messy room faster",
+   "detail": "One teenager's bedroom. Do not look under the bed."
+  },
+  {
+   "id": "tiebreaker.who-builds-flat-pack-furniture-faster",
+   "title": "Who builds flat-pack furniture faster",
+   "detail": "One bookshelf, no instructions, one leftover screw."
+  },
+  {
+   "id": "tiebreaker.who-sets-up-a-tent-faster",
+   "title": "Who sets up a tent faster",
+   "detail": "In the rain, in the dark. The poles aren't labeled."
+  },
+  {
+   "id": "tiebreaker.who-parallel-parks-better",
+   "title": "Who parallel parks better",
+   "detail": "One tight spot. A crowd is watching."
+  },
+  {
+   "id": "tiebreaker.who-wins-more-on-a-game-show",
+   "title": "Who wins more on a game show",
+   "detail": "Three rounds, one buzzer, a host who talks too long."
+  },
+  {
+   "id": "tiebreaker.who-gets-a-cat-out-of-a-tree-faster",
+   "title": "Who gets a cat out of a tree faster",
+   "detail": "The cat does not want help."
+  },
+  {
+   "id": "tiebreaker.who-trains-a-puppy-faster",
+   "title": "Who trains a puppy faster",
+   "detail": "Sit, stay, and roll over by dinnertime."
+  },
+  {
+   "id": "tiebreaker.who-stays-awake-longer-at-a-sleepover",
+   "title": "Who stays awake longer at a sleepover",
+   "detail": "Lights out at midnight. Snoring is a loss."
+  },
+  {
+   "id": "tiebreaker.who-s-the-better-road-trip-buddy",
+   "title": "Who's the better road-trip buddy",
+   "detail": "Twelve hours in a car. Snacks and playlist both count."
+  },
+  {
+   "id": "tiebreaker.who-s-the-better-wedding-dj",
+   "title": "Who's the better wedding DJ",
+   "detail": "One reception. One aunt with a lot of requests."
+  },
+  {
+   "id": "tiebreaker.who-s-the-better-substitute-teacher",
+   "title": "Who's the better substitute teacher",
+   "detail": "One day, thirty sixth-graders, no lesson plan."
+  },
+  {
+   "id": "tiebreaker.who-s-the-better-waiter",
+   "title": "Who's the better waiter",
+   "detail": "Lunch rush, eight tables, one customer who's never happy."
+  },
+  {
+   "id": "tiebreaker.who-pulls-off-a-museum-heist",
+   "title": "Who pulls off a museum heist",
+   "detail": "One diamond, one laser grid, one very bored guard."
+  },
+  {
+   "id": "tiebreaker.who-solves-a-mystery-faster",
+   "title": "Who solves a mystery faster",
+   "detail": "One stolen cookie. Everyone's a suspect."
+  },
+  {
+   "id": "tiebreaker.who-wins-a-water-balloon-fight",
+   "title": "Who wins a water balloon fight",
+   "detail": "One bucket each. Nobody stays dry."
+  },
+  {
+   "id": "tiebreaker.who-does-a-bigger-cannonball",
+   "title": "Who does a bigger cannonball",
+   "detail": "One diving board. Biggest splash wins."
+  },
+  {
+   "id": "tiebreaker.who-lasts-longer-on-a-mechanical-bull",
+   "title": "Who lasts longer on a mechanical bull",
+   "detail": "Eight seconds is the goal. The bull disagrees."
+  },
+  {
+   "id": "tiebreaker.who-wins-a-game-of-simon-says",
+   "title": "Who wins a game of Simon says",
+   "detail": "A judge is Simon. Simon is tricky."
+  },
+  {
+   "id": "tiebreaker.who-gives-a-better-wedding-toast",
+   "title": "Who gives a better wedding toast",
+   "detail": "Two minutes. Don't mention the ex."
   }
  ]
 }

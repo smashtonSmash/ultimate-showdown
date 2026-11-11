@@ -261,6 +261,18 @@ export function step(game: Game, action: Action, rng: Rng = Math.random): Game {
       return { ...game, queue, votes: {}, phase: { type: 'judge-handoff', judge: 0 } };
     }
 
+    case 'tiebreaker':
+      // After a tied vote, only the tied sides are in it.
+      if (ph.type === 'tie') return drawContest(game, rng);
+      // Before voting, when the judges can't decide: every side is in it.
+      if (ph.type === 'matchup' && game.fighters.every((id) => game.builds[id])) {
+        return drawContest({ ...game, contenders: [] }, rng);
+      }
+      return game;
+
+    case 'secret':
+      return revealSecret(game, action.playerId, rng);
+
     case 'continue':
       if (ph.type !== 'result') return game;
       if (game.style === 'tournament') return advanceBracket(game);
@@ -286,7 +298,8 @@ function settle(game: Game, rng: Rng): Game {
   const ids = ballot(game).map((s) => s.id);
   const t = tally(game.votes, ids);
   const top = leaders(t, ids);
-  if (top.length > 1) return drawContest({ ...game, contenders: top }, rng);
+  // A tie waits on the TIEBREAKER button. The votes stay so the tie screen can show the split.
+  if (top.length > 1) return { ...game, contenders: top, phase: { type: 'tie' } };
 
   const winnerId = top[0];
   const winners = game.sides.find((s) => s.id === winnerId)!.playerIds;
@@ -317,6 +330,29 @@ function settle(game: Game, rng: Rng): Game {
     kingId, kingStreak, hillCursor,
     phase: { type: 'result' },
   };
+}
+
+/** Phases where fighters are arguing and may reveal a secret power. */
+const ARGUING = new Set<Phase['type']>(['matchup', 'tie', 'contest']);
+
+export function canRevealSecret(game: Game, playerId: string): boolean {
+  if (!ARGUING.has(game.phase.type)) return false;
+  const build = game.builds[playerId];
+  if (!build || build.secret || !game.fighters.includes(playerId)) return false;
+  // During a tiebreaker, only fighters still on the ballot can use theirs.
+  return ballot(game).some((s) => s.playerIds.includes(playerId));
+}
+
+/** One secret power per fighter per round: a random power nobody was dealt or has revealed. */
+function revealSecret(game: Game, playerId: string, rng: Rng): Game {
+  if (!canRevealSecret(game, playerId)) return game;
+  const taken = new Set<string>();
+  for (const hand of Object.values(game.hands)) for (const c of hand.powers) taken.add(c.id);
+  for (const b of Object.values(game.builds)) if (b.secret) taken.add(b.secret.id);
+  const open = cardPool(game.decks).powers.filter((c) => !taken.has(c.id));
+  if (open.length === 0) return game;
+  const secret = open[Math.min(open.length - 1, Math.floor(rng() * open.length))];
+  return { ...game, builds: { ...game.builds, [playerId]: { ...game.builds[playerId], secret } } };
 }
 
 function drawContest(game: Game, rng: Rng): Game {

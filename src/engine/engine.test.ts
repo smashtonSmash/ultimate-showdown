@@ -2,7 +2,7 @@ import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { CONTESTS, DECKS, cardPool } from './decks';
 import {
-  ballot, buildBracket, canSkip, champion, judgesOf, modeFits, newGame, roundCount, stageName, step, validateNames,
+  ballot, buildBracket, canRevealSecret, canSkip, champion, judgesOf, modeFits, newGame, roundCount, stageName, step, validateNames,
   type NewTable,
 } from './engine';
 import type { Game } from './types';
@@ -41,9 +41,10 @@ function voteAll(g: Game, choose: (i: number, g: Game) => string): Game {
 test('deck counts match the catalog', () => {
   const counts = Object.fromEntries(DECKS.map((d) => [d.id, [d.characters.length, d.powers.length]]));
   assert.deepEqual(counts, {
-    house: [113, 34], fantasy: [36, 24], 'sci-fi': [31, 23], horror: [42, 21], anime: [23, 20], everyday: [46, 22], absurd: [43, 37],
+    house: [113, 59], fantasy: [36, 36], 'sci-fi': [31, 35], horror: [42, 33], anime: [23, 32], everyday: [46, 36], absurd: [43, 50],
   });
-  assert.equal(CONTESTS.length, 20);
+  assert.equal(CONTESTS.length, 120);
+  assert.equal(new Set(CONTESTS.map((c) => c.id)).size, 120);
   assert.equal(cardPool(['absurd', 'fantasy']).characters[0].id.startsWith('house.'), true);
 });
 
@@ -97,17 +98,24 @@ test('picks outside the hand and locks without picks are ignored', () => {
   assert.deepEqual(g.phase, { type: 'build', fighter: 0, step: 'character' });
 });
 
-test('a 1-1 split draws a contest and the revote only has the tied sides', () => {
+test('a 1-1 split waits for TIEBREAKER, and the revote only has the tied sides', () => {
   let g = newGame(table({ mode: '1v1v1', opening: ['Ann', 'Bo', 'Cy'] }), rng);
   g = step(buildAll(g), { type: 'call-vote' });
   // judges Di, Ed split between Ann and Bo; Cy gets nothing
   g = voteAll(g, (i) => (i === 0 ? 'player-1' : 'player-2'));
+  assert.equal(g.phase.type, 'tie');
+  assert.equal(g.contests.length, 0);
+  assert.deepEqual(Object.values(g.votes).sort(), ['player-1', 'player-2']);
+  assert.equal(step(g, { type: 'revote' }), g);
+  g = step(g, { type: 'tiebreaker' }, rng);
   assert.equal(g.phase.type, 'contest');
   assert.equal(g.contests.length, 1);
   assert.deepEqual(ballot(g).map((s) => s.id), ['player-1', 'player-2']);
   g = step(g, { type: 'revote' });
   assert.equal(step(step(g, { type: 'judge-ready' }), { type: 'vote', sideId: 'player-3' }).phase.type, 'ballot');
   g = voteAll(g, (i) => (i === 0 ? 'player-1' : 'player-2'));
+  assert.equal(g.phase.type, 'tie');
+  g = step(g, { type: 'tiebreaker' }, rng);
   assert.equal(g.contests.length, 2);
   assert.notEqual(g.contests[0].id, g.contests[1].id);
   g = voteAll(step(g, { type: 'revote' }), () => 'player-2');
@@ -125,9 +133,10 @@ test('contest pile reshuffles when it runs out', () => {
   assert.ok(g.phase.type === 'result');
   let h = { ...newGame(table({ names: ['Ann', 'Bo', 'Cy', 'Di'] }), rng), contestPile: [] };
   h = voteAll(step(buildAll(h), { type: 'call-vote' }), (i) => (i === 0 ? 'player-1' : 'player-2'));
+  h = step(h, { type: 'tiebreaker' }, rng);
   assert.equal(h.phase.type, 'contest');
   assert.equal(h.contests.length, 1);
-  assert.equal(h.contestPile.length, 19);
+  assert.equal(h.contestPile.length, CONTESTS.length - 1);
 });
 
 test('2v2 win scores both teammates', () => {
@@ -203,8 +212,8 @@ test('skip judge: never leaves a ballot empty, and sits out revotes', () => {
   assert.equal(canSkip(g), true);
   g = step(g, { type: 'skip-judge' }); // Cy out
   g = voteAll(g, (i) => (i === 1 ? 'player-1' : 'player-2'));
-  assert.equal(g.phase.type, 'contest');
-  g = step(g, { type: 'revote' });
+  assert.equal(g.phase.type, 'tie');
+  g = step(step(g, { type: 'tiebreaker' }, rng), { type: 'revote' });
   assert.deepEqual(g.queue, ['player-4', 'player-5']);
   g = step(g, { type: 'skip-judge' });
   assert.equal(canSkip(g), false);
@@ -223,6 +232,50 @@ test('12 players: bracket of 16 with 4 byes and a Round of 16', () => {
   assert.ok(modeFits('2v2', 12));
   const g = newGame({ names: ids, decks: ['house'], style: 'free', mode: '2v2', opening: ids.slice(0, 4) }, rng);
   assert.equal(judgesOf(g).length, 8);
+});
+
+test('judges who cannot decide hit TIEBREAKER before voting; everyone stays on the ballot', () => {
+  let g = buildAll(newGame(table({ mode: '1v1v1', opening: ['Ann', 'Bo', 'Cy'] }), rng));
+  assert.equal(g.phase.type, 'matchup');
+  g = step(g, { type: 'tiebreaker' }, rng);
+  assert.equal(g.phase.type, 'contest');
+  assert.equal(g.contests.length, 1);
+  assert.equal(ballot(g).length, 3);
+  assert.equal(step(g, { type: 'tiebreaker' }, rng), g);
+  g = voteAll(step(g, { type: 'revote' }), () => 'player-3');
+  assert.equal(g.phase.type, 'result');
+  assert.equal(g.history[0].winnerId, 'player-3');
+  assert.equal(g.history[0].contests.length, 1);
+  assert.equal(step(newGame(table(), rng), { type: 'tiebreaker' }).phase.type, 'handoff');
+});
+
+test('secret power: once per fighter per round, never a dealt card, kept in the result', () => {
+  let g = buildAll(newGame(table({ mode: '2v2', opening: ['Ann', 'Bo', 'Cy', 'Di'] }), rng));
+  assert.equal(canRevealSecret(g, 'player-5'), false); // a judge
+  assert.equal(canRevealSecret(g, 'player-1'), true);
+  for (const id of g.fighters) g = step(g, { type: 'secret', playerId: id }, rng);
+  const dealt = new Set(Object.values(g.hands).flatMap((h) => h.powers.map((c) => c.id)));
+  const secrets = g.fighters.map((id) => g.builds[id].secret!);
+  assert.ok(secrets.every((c) => c && c.kind === 'power' && !dealt.has(c.id)));
+  assert.equal(new Set(secrets.map((c) => c.id)).size, 4);
+  assert.equal(step(g, { type: 'secret', playerId: 'player-1' }, rng), g); // already used
+  g = voteAll(step(g, { type: 'call-vote' }), (_, x) => x.sides[0].id);
+  assert.equal(g.history[0].builds[0].secret?.id, secrets[0].id);
+  g = step(step(g, { type: 'continue' }), { type: 'set-lineup', fighterIds: ['player-2', 'player-3', 'player-4', 'player-5'] }, rng);
+  g = buildAll(g);
+  assert.equal(g.builds['player-2'].secret, undefined); // fresh round, fresh secret
+  assert.equal(canRevealSecret(g, 'player-2'), true);
+});
+
+test('after a tie, only fighters still on the ballot can use a secret power', () => {
+  let g = buildAll(newGame(table({ mode: '1v1v1', opening: ['Ann', 'Bo', 'Cy'] }), rng));
+  g = voteAll(step(g, { type: 'call-vote' }), (i) => (i === 0 ? 'player-1' : 'player-2'));
+  assert.equal(g.phase.type, 'tie');
+  assert.equal(canRevealSecret(g, 'player-1'), true);
+  assert.equal(canRevealSecret(g, 'player-3'), false);
+  g = step(g, { type: 'tiebreaker' }, rng);
+  assert.equal(canRevealSecret(g, 'player-2'), true);
+  assert.equal(canRevealSecret(g, 'player-3'), false);
 });
 
 test('the game survives a save and load', () => {

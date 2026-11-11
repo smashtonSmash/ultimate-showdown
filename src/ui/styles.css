@@ -549,3 +549,106 @@ b { font-weight: 700; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }
 }
+
+/* ---------- TIEBREAKER button ---------- */
+.btn-tb {
+  background: var(--red);
+  color: var(--chalk);
+  box-shadow: 0 4px 0 var(--red-deep);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+}
+.tb-label { font: 400 24px/1 var(--display); text-transform: uppercase; letter-spacing: 0.04em; }
+.tb-sub { font-size: 13px; font-weight: 600; opacity: 0.9; }
+
+.tie-score { display: flex; flex-wrap: wrap; gap: 6px 10px; align-items: baseline; font-weight: 700; font-size: 18px; margin: 4px 0 12px; }
+.tie-score b { font: 400 30px/1 var(--display); color: var(--gold); margin-left: 4px; }
+.tie-score i { font: 400 18px/1 var(--display); text-transform: uppercase; color: var(--red); font-style: normal; margin-right: 10px; }
+
+/* the face-down tiebreaker card */
+.tb-card {
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  max-height: 46dvh;
+  border: 6px solid var(--chalk);
+  border-radius: 22px;
+  margin: 8px 0 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.1) 0 12px, transparent 12px 24px),
+    var(--red);
+  box-shadow: 0 8px 0 var(--red-deep);
+  transform: rotate(-2deg);
+  animation: wobble 2.4s ease-in-out infinite;
+}
+.tb-card:active { transform: rotate(-2deg) scale(0.97); }
+.tb-card-word {
+  font: 400 clamp(46px, 15vw, 76px) / 0.9 var(--display);
+  text-transform: uppercase;
+  color: var(--gold);
+  text-shadow: 4px 4px 0 var(--ink);
+  hyphens: manual;
+}
+.tb-card-hint { font-weight: 800; font-size: 15px; background: var(--ink); padding: 4px 12px; border-radius: 999px; }
+@keyframes wobble { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(1.5deg) scale(1.02); } }
+
+/* the drawn card flips over */
+.contest { animation: flip 0.55s cubic-bezier(0.2, 1.3, 0.4, 1) both; }
+@keyframes flip {
+  from { transform: perspective(900px) rotateY(100deg) rotate(-1.5deg); opacity: 0; }
+  to { transform: perspective(900px) rotateY(0) rotate(-1.5deg); opacity: 1; }
+}
+.phase-contest .bill-list { margin-top: 18px; }
+
+/* ---------- secret power ---------- */
+.secret-btn {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  margin-top: 10px;
+  text-align: left;
+  padding: 10px 14px 10px 10px;
+  border-radius: 12px;
+  border: 2px dashed var(--sky);
+  background: rgba(127, 216, 255, 0.12);
+}
+.secret-btn:active { transform: scale(0.98); }
+.secret-btn-mark {
+  flex: none;
+  width: 40px;
+  height: 52px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+  font: 400 30px/1 var(--display);
+  color: var(--ink);
+  background: repeating-linear-gradient(45deg, var(--sky) 0 6px, #a9e6ff 6px 12px);
+  transform: rotate(-6deg);
+}
+.secret-btn-text { display: flex; flex-direction: column; }
+.secret-btn-text b { font-size: 16px; }
+.secret-btn-text span { font-size: 13px; color: var(--haze); }
+
+.bill-secret {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  background: var(--sky);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+.bill-secret-kind { font-size: 12px; font-weight: 800; }
+.bill-secret-title { font: 400 22px/1.05 var(--display); text-transform: uppercase; }
+.bill-secret-detail { font-size: 14px; line-height: 1.35; }
+.phase-matchup .bill-secret, .phase-tie .bill-secret, .phase-contest .bill-secret { animation: reveal 0.5s cubic-bezier(0.2, 1.4, 0.4, 1) both; }
+@keyframes reveal { from { transform: perspective(700px) rotateX(85deg); opacity: 0; } to { transform: none; opacity: 1; } }
+.side-pick .bill-secret { background: rgba(127, 216, 255, 0.9); }

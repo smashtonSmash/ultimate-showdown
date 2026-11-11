@@ -1,6 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 import {
-  ballot, canSkip, champion, fighterCount, judgesOf, lastResult, matchupLabel, player, roundCount, sideName, stageName, step,
+  ballot, canRevealSecret, canSkip, champion, fighterCount, judgesOf, lastResult, matchupLabel, player, roundCount, sideName, stageName, step,
 } from '../engine/engine';
 import type { Action, Game, RoundResult, Side } from '../engine/types';
 import { BracketBoard, Bill, Btn, Confetti, Curtain, Dock, GameCard, Sheet, Vs } from './bits';
@@ -29,6 +29,8 @@ export function Table({ game, setGame, onEnd }: Props) {
         return <JudgeHandoff game={game} act={act} />;
       case 'ballot':
         return <Ballot key={`${game.contests.length}-${ph.judge}`} game={game} act={act} />;
+      case 'tie':
+        return <TieView game={game} act={act} />;
       case 'contest':
         return <ContestView game={game} act={act} />;
       case 'result':
@@ -80,6 +82,12 @@ export function Table({ game, setGame, onEnd }: Props) {
 }
 
 type PhaseProps = { game: Game; act: (a: Action) => void };
+
+/** "A", "A and B", "A, B, and C". */
+function andList(names: string[]): string {
+  if (names.length <= 2) return names.join(' and ');
+  return `${names.slice(0, -1).join(', ')}, and ${names[names.length - 1]}`;
+}
 
 function roundLabel(game: Game): string {
   if (game.style === 'tournament' && game.bracket) {
@@ -199,12 +207,14 @@ function Build({ game, act }: PhaseProps) {
 
 // ---------- the fight ----------
 
-function SideBlock({ game, side, builds, onClick, selected, badge }: {
+function SideBlock({ game, side, builds, onClick, selected, badge, onSecret }: {
   game: Game; side: Side; builds?: RoundResult['builds']; onClick?: () => void; selected?: boolean; badge?: string;
+  onSecret?: (playerId: string) => void;
 }) {
   const plates = side.playerIds.map((id) => {
     const b = builds ? builds.find((x) => x.playerId === id) : game.builds[id];
-    return b ? <Bill key={id} name={player(game, id).name} build={b} /> : null;
+    const secret = onSecret && canRevealSecret(game, id) ? () => onSecret(id) : undefined;
+    return b ? <Bill key={id} name={player(game, id).name} build={b} onSecret={secret} /> : null;
   });
   const inner = (
     <>
@@ -221,13 +231,19 @@ function SideBlock({ game, side, builds, onClick, selected, badge }: {
   );
 }
 
-function SideList(props: { game: Game; sides: Side[]; pick?: (id: string) => void; chosen?: string | null }) {
+function SideList(props: { game: Game; sides: Side[]; pick?: (id: string) => void; chosen?: string | null; onSecret?: (playerId: string) => void }) {
   return (
     <div className="bill-list">
       {props.sides.map((s, k) => (
         <div key={s.id}>
           {k > 0 ? <Vs /> : null}
-          <SideBlock game={props.game} side={s} onClick={props.pick ? () => props.pick!(s.id) : undefined} selected={props.chosen === s.id} />
+          <SideBlock
+            game={props.game}
+            side={s}
+            onClick={props.pick ? () => props.pick!(s.id) : undefined}
+            selected={props.chosen === s.id}
+            onSecret={props.onSecret}
+          />
         </div>
       ))}
     </div>
@@ -240,11 +256,17 @@ function Matchup({ game, act }: PhaseProps) {
     <>
       <main className="content">
         <h1 className="h1 h1-fight">Tonight's fight</h1>
-        <p className="muted">Fighters, make your case. Judges ({judges.join(', ')}), listen up.</p>
-        <SideList game={game} sides={game.sides} />
+        <p className="muted">
+          Fighters, make your case. Each of you has one secret power to reveal while you argue. Judges ({judges.join(', ')}), listen up.
+        </p>
+        <SideList game={game} sides={game.sides} onSecret={(id) => act({ type: 'secret', playerId: id })} />
       </main>
       <Dock>
         <Btn onClick={() => act({ type: 'call-vote' })}>Call the vote</Btn>
+        <Btn tone="tb" onClick={() => act({ type: 'tiebreaker' })}>
+          <span className="tb-label">Tiebreaker</span>
+          <span className="tb-sub">Judges can't decide? Draw a contest.</span>
+        </Btn>
       </Dock>
     </>
   );
@@ -311,27 +333,66 @@ function Ballot({ game, act }: PhaseProps) {
   );
 }
 
+function TieView({ game, act }: PhaseProps) {
+  const sides = ballot(game);
+  const counts = sides.map((s) => Object.values(game.votes).filter((v) => v === s.id).length);
+  const again = game.contests.length > 0;
+  const draw = () => act({ type: 'tiebreaker' });
+  return (
+    <>
+      <main className="content">
+        <h1 className="h1 h1-fight">{again ? 'Tied again' : "It's a tie"}</h1>
+        <div className="tie-score">
+          {sides.map((s, k) => (
+            <span key={s.id}>
+              {k > 0 ? <i>vs</i> : null}
+              {sideName(game, s)} <b>{counts[k]}</b>
+            </span>
+          ))}
+        </div>
+        <p className="muted">
+          Hit the tiebreaker to draw a contest. Only {andList(sides.map((s) => sideName(game, s)))} {sides.length > 1 ? 'are' : 'is'} in it.
+        </p>
+        <button type="button" className="tb-card" onClick={draw} aria-label="Draw a tiebreaker card">
+          <span className="tb-card-word">Tie&shy;breaker</span>
+          <span className="tb-card-hint">Tap to draw</span>
+        </button>
+      </main>
+      <Dock>
+        <Btn tone="tb" onClick={draw}>
+          <span className="tb-label">Tiebreaker</span>
+        </Btn>
+      </Dock>
+    </>
+  );
+}
+
 function ContestView({ game, act }: PhaseProps) {
   const contest = game.contests[game.contests.length - 1];
   const sides = ballot(game);
   if (!contest) return <main className="content"><p className="error">The contest card is missing.</p></main>;
+  // An empty queue means nobody has voted yet: the judges hit TIEBREAKER before voting.
+  const beforeVote = game.queue.length === 0;
+  const names = andList(sides.map((s) => sideName(game, s)));
   return (
     <>
       <main className="content">
-        <h1 className="h1 h1-fight">It's a tie</h1>
+        <h1 className="h1 h1-fight">{beforeVote ? 'Tiebreaker' : game.contests.length > 1 ? `Tiebreaker ${game.contests.length}` : 'Tiebreaker'}</h1>
         <p className="muted">
-          {game.contests.length > 1 ? `Tied again. Contest number ${game.contests.length}. ` : ''}
-          Same {game.mode === '2v2' ? 'teams' : 'fighters'}, no fighting. Only {sides.map((s) => sideName(game, s)).join(' and ')} are on the ballot.
+          {beforeVote
+            ? `The judges couldn't decide. Forget the fight. ${names} go head to head in this instead.`
+            : `No fighting this time. Only ${names} are on the ballot.`}
         </p>
-        <div className="contest">
+        <div className="contest" key={contest.id}>
           <span className="contest-kind">Tiebreaker</span>
           <h2 className="contest-title">{contest.title}</h2>
           <p className="contest-detail">{contest.detail}</p>
         </div>
-        <p className="muted small">Argue this one, then the judges vote again.</p>
+        <p className="muted small">Argue this one, then the judges vote{beforeVote ? '' : ' again'}.</p>
+        <SideList game={game} sides={sides} onSecret={(id) => act({ type: 'secret', playerId: id })} />
       </main>
       <Dock>
-        <Btn onClick={() => act({ type: 'revote' })}>Judges, vote again</Btn>
+        <Btn onClick={() => act({ type: 'revote' })}>{beforeVote ? 'Judges, vote' : 'Judges, vote again'}</Btn>
       </Dock>
     </>
   );
@@ -351,6 +412,7 @@ function Splash(props: { kicker: string; names: string; builds: RoundResult['bui
           <div key={b.playerId} className="splash-build">
             {props.builds.length > 1 ? <b>{player(props.game, b.playerId).name}: </b> : null}
             {b.character.title} <span>with</span> {b.power.title}
+            {b.secret ? <> <span>and secretly</span> {b.secret.title}</> : null}
           </div>
         ))}
       </div>
@@ -592,7 +654,7 @@ function Champion({ game, onEnd }: { game: Game; onEnd: (again: boolean) => void
 
 function recordLine(game: Game, r: RoundResult): string {
   const win = r.sides.find((s) => s.id === r.winnerId)!;
-  const losers = r.sides.filter((s) => s.id !== r.winnerId).map((s) => sideName(game, s)).join(' and ');
+  const losers = andList(r.sides.filter((s) => s.id !== r.winnerId).map((s) => sideName(game, s)));
   const score = r.sides.filter((s) => r.tally[s.id] !== undefined).map((s) => r.tally[s.id]).join('–');
   const tb = r.contests.length ? ` after ${r.contests.length === 1 ? 'a tiebreaker' : `${r.contests.length} tiebreakers`}` : '';
   return `${sideName(game, win)} beat ${losers}, ${score}${tb}`;
